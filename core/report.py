@@ -2,7 +2,6 @@
 import glob
 import json
 import os
-import sys
 
 from core.rules import load_rules
 
@@ -15,6 +14,8 @@ def summarize(project_dir: str) -> dict:
                 try:
                     entry = json.loads(line)
                 except ValueError:
+                    continue
+                if not isinstance(entry, dict):
                     continue
                 rule_counts = counts.setdefault(entry.get("rule", "?"), {})
                 decision = entry.get("decision", "?")

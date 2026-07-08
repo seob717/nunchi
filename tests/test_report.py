@@ -24,3 +24,16 @@ def test_summarize_counts_and_dead_rules():
 def test_summarize_empty_project():
     d = tempfile.mkdtemp()
     assert summarize(d) == {"rules": {}, "never_triggered": []}
+
+def test_summarize_skips_corrupted_lines():
+    d = tempfile.mkdtemp()
+    log_dir = os.path.join(d, ".claude", "ziptie", "logs")
+    os.makedirs(log_dir)
+    with open(os.path.join(log_dir, "2026-07-09.jsonl"), "w") as f:
+        f.write("not json\n")
+        f.write("null\n")
+        f.write("[1, 2]\n")
+        f.write(json.dumps({"ts": "t", "session": "s", "rule": "pr-rules",
+                            "tool": "Bash", "decision": "deny"}) + "\n")
+    result = summarize(d)
+    assert result["rules"] == {"pr-rules": {"deny": 1}}
