@@ -67,7 +67,12 @@ def parse_rule_file(path: str) -> Optional[Rule]:
             return None
         strength = meta.get("strength", "require-read")
         if strength not in ("require-read", "block"):
-            return None
+            print(
+                f"ziptie: rule {name}: unsupported strength '{strength}' — "
+                "require-read로 폴백",
+                file=sys.stderr,
+            )
+            strength = "require-read"
         enabled = str(meta.get("enabled", "true")).lower() != "false"
         return Rule(
             name=name,

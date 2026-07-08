@@ -31,7 +31,7 @@ PR 생성 전 docs/pr-rules.md를 반영해.
 
 - `trigger.tool` / `trigger.pattern`: 어떤 도구 호출을, 어떤 정규식으로 가로챌지.
 - `source`: 배달 시점에 그 자리에서 읽어올 원본 문서 경로. 원본이 바뀌면 다음 배달부터 자동 반영된다.
-- `strength`: `require-read`(세션 최초 1회 차단 후 이유를 배달, 재시도는 통과) / `block`(항상 차단) / `inject`(로드맵, 아래 참고).
+- `strength`: `require-read`(세션 최초 1회 차단 후 이유를 배달, 재시도는 통과) / `block`(항상 차단). `inject`는 v2 로드맵(아래 참고) — 현재 버전에서 지정하면 지원 이벤트가 없어 `require-read`로 자동 폴백되고, stderr에 경고가 남는다.
 - 본문: 원본 문서 대신 또는 원본에 더해 배달할 요약문.
 
 ## 실측 결과

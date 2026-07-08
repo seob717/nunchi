@@ -51,6 +51,14 @@ def test_parse_defaults():
     assert rule.source is None
 
 
+def test_unknown_strength_falls_back_to_require_read():
+    injected = VALID.replace("strength: require-read", "strength: inject")
+    with tempfile.TemporaryDirectory() as d:
+        rule = parse_rule_file(_write(d, "r.md", injected))
+    assert rule is not None
+    assert rule.strength == "require-read"
+
+
 def test_load_rules_filters_disabled_and_broken():
     with tempfile.TemporaryDirectory() as d:
         rules_dir = os.path.join(d, ".claude", "rules")
