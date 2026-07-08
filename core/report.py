@@ -1,4 +1,5 @@
 """ziptie 로그 집계 — 룰별 배달/통과 횟수와 죽은 룰 목록."""
+
 import glob
 import json
 import os
@@ -8,7 +9,9 @@ from core.rules import load_rules
 
 def summarize(project_dir: str) -> dict:
     counts = {}
-    for path in sorted(glob.glob(os.path.join(project_dir, ".claude", "ziptie", "logs", "*.jsonl"))):
+    for path in sorted(
+        glob.glob(os.path.join(project_dir, ".claude", "ziptie", "logs", "*.jsonl"))
+    ):
         with open(path, encoding="utf-8") as f:
             for line in f:
                 try:
@@ -34,7 +37,9 @@ def main():
         return
     print(f"{'룰':<24} {'배달(deny)':<10} {'통과':<6}")
     for name, c in sorted(result["rules"].items()):
-        print(f"{name:<24} {c.get('deny', 0):<10} {c.get('allow-after-delivery', 0):<6}")
+        print(
+            f"{name:<24} {c.get('deny', 0):<10} {c.get('allow-after-delivery', 0):<6}"
+        )
     for name in result["never_triggered"]:
         print(f"{name:<24} {'한 번도 트리거되지 않음 (죽은 룰?)'}")
 

@@ -1,4 +1,7 @@
-import os, sys, tempfile
+import os
+import sys
+import tempfile
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from core.rules import parse_rule_file, load_rules
 
@@ -14,11 +17,13 @@ enabled: true
 PR 생성 전 docs/pr-rules.md를 반영해.
 """
 
+
 def _write(dirpath, fname, content):
     path = os.path.join(dirpath, fname)
     with open(path, "w") as f:
         f.write(content)
     return path
+
 
 def test_parse_valid_rule():
     with tempfile.TemporaryDirectory() as d:
@@ -31,17 +36,20 @@ def test_parse_valid_rule():
     assert rule.enabled is True
     assert "반영해" in rule.body
 
+
 def test_parse_no_frontmatter_returns_none():
     with tempfile.TemporaryDirectory() as d:
         assert parse_rule_file(_write(d, "r.md", "그냥 텍스트")) is None
+
 
 def test_parse_defaults():
     minimal = "---\nname: x\ntrigger:\n  tool: Bash\n  pattern: foo\n---\nbody"
     with tempfile.TemporaryDirectory() as d:
         rule = parse_rule_file(_write(d, "r.md", minimal))
-    assert rule.strength == "require-read"   # 기본 강도
-    assert rule.enabled is True              # 기본 활성
+    assert rule.strength == "require-read"  # 기본 강도
+    assert rule.enabled is True  # 기본 활성
     assert rule.source is None
+
 
 def test_load_rules_filters_disabled_and_broken():
     with tempfile.TemporaryDirectory() as d:

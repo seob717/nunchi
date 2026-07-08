@@ -8,7 +8,12 @@ grade.py 와의 차이:
 4. 런 단위 판정: 4개 규칙 전부 통과해야 성공 (부분 점수 없음)
 5. Wilson 95% 신뢰구간 보고 (n이 작다는 걸 숨기지 않기)
 """
-import glob, json, math, os, re
+
+import glob
+import json
+import math
+import os
+import re
 
 PILOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -40,7 +45,7 @@ def check_test_plan(t, b):
 
 
 def check_reviewer(t, b):
-    lines = [l.strip() for l in (b or "").splitlines() if l.strip()]
+    lines = [ln.strip() for ln in (b or "").splitlines() if ln.strip()]
     return bool(lines) and lines[-1] == "리뷰어: @seob"
 
 
@@ -84,6 +89,12 @@ print()
 for cond, results in sorted(totals.items()):
     k, n = sum(results), len(results)
     lo, hi = wilson_ci(k, n)
-    print(f"조건 {cond}: {k}/{n} 전부통과  (Wilson 95% CI: {lo*100:.0f}%–{hi*100:.0f}%)")
-print("\n주의: n=3은 탐색용 표본이다. CI 하한이 보여주듯 '100%'는 '이 표본에서 실패를 못 봤다' 이상을 의미하지 않는다.")
-print("B의 수치는 '주입 후 재시도'의 준수율이다. 1차 시도는 실행 전에 차단되므로 측정 대상이 아니다.")
+    print(
+        f"조건 {cond}: {k}/{n} 전부통과  (Wilson 95% CI: {lo * 100:.0f}%–{hi * 100:.0f}%)"
+    )
+print(
+    "\n주의: n=3은 탐색용 표본이다. CI 하한이 보여주듯 '100%'는 '이 표본에서 실패를 못 봤다' 이상을 의미하지 않는다."
+)
+print(
+    "B의 수치는 '주입 후 재시도'의 준수율이다. 1차 시도는 실행 전에 차단되므로 측정 대상이 아니다."
+)

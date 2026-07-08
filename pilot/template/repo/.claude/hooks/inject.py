@@ -4,7 +4,11 @@
 세션 최초의 `gh pr create` 시도를 한 번 막고, deny 사유에 PR 규칙 전문을 실어
 모델에게 전달한다. 같은 세션의 재시도는 통과시킨다 (require-read 강도).
 """
-import sys, json, os, re
+
+import sys
+import json
+import os
+import re
 
 data = json.load(sys.stdin)
 if data.get("tool_name") != "Bash":
@@ -29,11 +33,16 @@ reason = (
     "PR 생성 전 점검: 아래 PR 규칙을 빠짐없이 반영한 뒤 다시 gh pr create를 실행해.\n\n"
     + rules
 )
-print(json.dumps({
-    "hookSpecificOutput": {
-        "hookEventName": "PreToolUse",
-        "permissionDecision": "deny",
-        "permissionDecisionReason": reason,
-    }
-}, ensure_ascii=False))
+print(
+    json.dumps(
+        {
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "deny",
+                "permissionDecisionReason": reason,
+            }
+        },
+        ensure_ascii=False,
+    )
+)
 sys.exit(0)

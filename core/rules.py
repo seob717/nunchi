@@ -1,4 +1,5 @@
 """ziptie 룰 파일 로더 — .claude/rules/*.md (frontmatter + body)."""
+
 import glob
 import os
 import sys
@@ -57,7 +58,11 @@ def parse_rule_file(path: str) -> Optional[Rule]:
         if not meta:
             return None
         trigger = meta.get("trigger", {})
-        name, tool, pattern = meta.get("name"), trigger.get("tool"), trigger.get("pattern")
+        name, tool, pattern = (
+            meta.get("name"),
+            trigger.get("tool"),
+            trigger.get("pattern"),
+        )
         if not (name and tool and pattern) or "[" in name:
             return None
         strength = meta.get("strength", "require-read")
@@ -65,9 +70,14 @@ def parse_rule_file(path: str) -> Optional[Rule]:
             return None
         enabled = str(meta.get("enabled", "true")).lower() != "false"
         return Rule(
-            name=name, tool=tool, pattern=pattern,
+            name=name,
+            tool=tool,
+            pattern=pattern,
             source=meta.get("source") or None,
-            strength=strength, enabled=enabled, body=body, path=path,
+            strength=strength,
+            enabled=enabled,
+            body=body,
+            path=path,
         )
     except Exception as e:  # 안전 기본값: 절대 세션을 죽이지 않는다
         print(f"ziptie: rule parse error {path}: {e}", file=sys.stderr)
@@ -76,7 +86,9 @@ def parse_rule_file(path: str) -> Optional[Rule]:
 
 def load_rules(project_dir: str) -> List[Rule]:
     rules = []
-    for path in sorted(glob.glob(os.path.join(project_dir, ".claude", "rules", "*.md"))):
+    for path in sorted(
+        glob.glob(os.path.join(project_dir, ".claude", "rules", "*.md"))
+    ):
         rule = parse_rule_file(path)
         if rule and rule.enabled:
             rules.append(rule)

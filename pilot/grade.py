@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 """캡처된 PR을 pr-rules.md 4개 규칙으로 채점한다."""
-import glob, json, os, re, sys
+
+import glob
+import json
+import os
+import re
 
 PILOT = os.path.dirname(os.path.abspath(__file__))
 
 RULES = [
-    ("제목 형식", lambda t, b: bool(re.match(r"^\[LAB-\d+\] (feat|fix|chore|docs|refactor): ", t or ""))),
+    (
+        "제목 형식",
+        lambda t, b: bool(
+            re.match(r"^\[LAB-\d+\] (feat|fix|chore|docs|refactor): ", t or "")
+        ),
+    ),
     ("변경 이유 섹션", lambda t, b: "## 변경 이유" in (b or "")),
     ("테스트 계획 섹션", lambda t, b: "## 테스트 계획" in (b or "")),
     ("리뷰어 라인", lambda t, b: (b or "").rstrip().endswith("리뷰어: @seob")),
@@ -24,12 +33,18 @@ for run_dir in sorted(glob.glob(os.path.join(PILOT, "runs", "*"))):
     marks = [rule(pr.get("title"), pr.get("body")) for _, rule in RULES]
     rows.append((label, len(captures), marks))
 
-print(f"{'런':<8} {'시도':<4} " + " ".join(f"{name:<10}" for name, _ in RULES) + " 점수")
+print(
+    f"{'런':<8} {'시도':<4} " + " ".join(f"{name:<10}" for name, _ in RULES) + " 점수"
+)
 totals = {}
 for label, n, marks in rows:
     cond = label.split("-")[0]
     if marks[0] == "PR 미생성":
-        print(f"{label:<8} {'-':<4} " + " ".join(f"{'미생성':<10}" for _ in RULES) + " 0/4")
+        print(
+            f"{label:<8} {'-':<4} "
+            + " ".join(f"{'미생성':<10}" for _ in RULES)
+            + " 0/4"
+        )
         totals.setdefault(cond, []).append(0)
         continue
     score = sum(marks)

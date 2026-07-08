@@ -1,4 +1,5 @@
 """ziptie 배달 엔진 — 매칭, 강도 결정, 세션 상태, 로깅."""
+
 import datetime
 import json
 import os
@@ -41,7 +42,10 @@ def _log(project_dir: str, session: str, rule: Rule, tool: str, decision: str):
         os.makedirs(log_dir, exist_ok=True)
         entry = {
             "ts": datetime.datetime.now().isoformat(timespec="seconds"),
-            "session": session, "rule": rule.name, "tool": tool, "decision": decision,
+            "session": session,
+            "rule": rule.name,
+            "tool": tool,
+            "decision": decision,
         }
         with open(os.path.join(log_dir, f"{datetime.date.today()}.jsonl"), "a") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
@@ -55,7 +59,9 @@ def _deny(rule: Rule, content: str) -> dict:
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
             "permissionDecision": "deny",
-            "permissionDecisionReason": template.format(name=rule.name, content=content),
+            "permissionDecisionReason": template.format(
+                name=rule.name, content=content
+            ),
         }
     }
 
