@@ -1,10 +1,15 @@
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
 
 HOOK = os.path.join(os.path.dirname(__file__), "..", "hooks", "pretooluse.py")
+SESSIONSTART_HOOK = os.path.join(
+    os.path.dirname(__file__), "..", "hooks", "sessionstart.py"
+)
+REPO_ROOT = os.path.dirname(os.path.dirname(__file__))
 RULE = """---
 name: pr-rules
 trigger:
@@ -88,3 +93,85 @@ def test_garbage_stdin_exits_zero_silently():
         timeout=10,
     )
     assert r.returncode == 0 and r.stdout.strip() == ""
+
+
+def test_sessionstart_compact_source_rearms_and_stays_silent():
+    tmp = tempfile.mkdtemp()
+    try:
+        state = os.path.join(tmp, ".claude", "ziptie", "state")
+        os.makedirs(state)
+
+        marker_file = os.path.join(state, "s1--pr-rules")
+        with open(marker_file, "w") as f:
+            f.write("delivered")
+
+        env = {k: v for k, v in os.environ.items() if k != "CLAUDE_PROJECT_DIR"}
+        env["CLAUDE_PROJECT_DIR"] = tmp
+        payload = {
+            "session_id": "s1",
+            "source": "compact",
+            "hook_event_name": "SessionStart",
+        }
+
+        r = subprocess.run(
+            [sys.executable, SESSIONSTART_HOOK],
+            input=json.dumps(payload),
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=10,
+        )
+
+        assert r.returncode == 0
+        assert r.stdout == ""
+        assert not os.path.exists(marker_file)
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_sessionstart_non_compact_source_is_noop():
+    tmp = tempfile.mkdtemp()
+    try:
+        state = os.path.join(tmp, ".claude", "ziptie", "state")
+        os.makedirs(state)
+
+        marker_file = os.path.join(state, "s1--pr-rules")
+        with open(marker_file, "w") as f:
+            f.write("delivered")
+
+        env = {k: v for k, v in os.environ.items() if k != "CLAUDE_PROJECT_DIR"}
+        env["CLAUDE_PROJECT_DIR"] = tmp
+        payload = {
+            "session_id": "s1",
+            "source": "startup",
+            "hook_event_name": "SessionStart",
+        }
+
+        r = subprocess.run(
+            [sys.executable, SESSIONSTART_HOOK],
+            input=json.dumps(payload),
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=10,
+        )
+
+        assert r.returncode == 0
+        assert r.stdout == ""
+        assert os.path.exists(marker_file)
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_sessionstart_garbage_stdin_exits_zero_silent():
+    env = {k: v for k, v in os.environ.items() if k != "CLAUDE_PROJECT_DIR"}
+    r = subprocess.run(
+        [sys.executable, SESSIONSTART_HOOK],
+        input="not json",
+        capture_output=True,
+        text=True,
+        env=env,
+        timeout=10,
+    )
+    assert r.returncode == 0
+    assert r.stdout == ""
