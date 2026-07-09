@@ -15,7 +15,7 @@ A rule you write in CLAUDE.md is loaded once, at t=0 when the session starts, an
 
 1. **`/ziptie:compile`** — Reads CLAUDE.md and the `@referenced` documents inside it, extracts rules, infers a trigger (tool, regex pattern) for each rule, and compiles them into `.claude/rules/*.md`.
 2. **Review the rule files** — The compiled output is plain-text files you can read and edit. Check that the trigger, strength, and source document path are correct, and fix them by hand if needed. These files are the source of truth.
-3. **Just-in-time delivery at the moment of action** — A PreToolUse hook intercepts tool calls and matches them against triggers. On a match, it reads the `source` document directly at that moment (the original, not a pasted copy) and delivers it.
+3. **Just-in-time delivery at the moment of action** — A PreToolUse hook intercepts tool calls and matches them against triggers. On a match, it reads the `source` document directly at that moment (the original, not a pasted copy) and delivers it. When several rules match the same tool call, their contents are delivered together in a single block, so one action costs at most one retry.
 
 ## Rule file format
 
@@ -32,6 +32,7 @@ enabled: true
 Reflect docs/pr-rules.md before creating a PR.
 ```
 
+- `name`: lowercase letters, digits, and hyphens only (`[a-z0-9][a-z0-9-]*`). A file with an invalid name is rejected with a stderr warning instead of silently misbehaving.
 - `trigger.tool` / `trigger.pattern`: which tool call to intercept, and with what regex.
 - `source`: the path to the original document, read on the spot at delivery time. If the original changes, the change is reflected automatically from the next delivery on.
 - `strength`: `require-read` (block once per session and deliver the reason, let the retry through) / `block` (always block). `inject` is on the v2 roadmap (see below) — specifying it in the current version falls back to `require-read` automatically because there is no supporting event, and a warning is written to stderr.
@@ -55,7 +56,7 @@ What this table shows is *not* an edge of "JIT has a higher compliance rate than
 2. **The JIT delivery mechanism itself works and does not hurt the task.** In the E2E with the real ziptie engine attached (condition Z), the hook fired 3/3 normally, and all 3 runs — blocked, then given the reason and retried — completed the task.
 3. **Source-document sync and delivery logging actually work.** Because `source` is read every time at delivery, the rule and its original never drift apart, and every trigger, delivery, and block is recorded as JSONL and aggregated by `/ziptie:report`.
 
-Whether JIT shows an edge under stronger pressure (a weaker model, dozens of rules, multitasking, a session after compaction) has not been verified yet, and we don't make that claim until it is.
+**Pressure re-verification (pre-registered):** we then scaled the pressure to 24 rules behind a 3-level `@reference` structure plus the same ~268KB long-context task and re-ran the CLAUDE.md-only condition (design and results: `pilot/DESIGN-pressure.md`, `pilot/RESULTS-pressure.md`). The ceiling held — all-pass stayed 100% across 5 valid runs (40/40 graded checkpoints), so the pre-registered gate for a confirmatory JIT-vs-CLAUDE.md comparison was not met and we did not run it. Whether JIT shows an edge under stronger pressure (a session after compaction, a weaker model, multitasking) remains unverified, and we don't make that claim until it is.
 
 ## Requirements
 
@@ -95,12 +96,13 @@ Issues and PRs are welcome. Commit messages must follow [Conventional Commits](h
 
 The MVP supports only the two strengths on the PreToolUse hook: `require-read` and `block`. The following are not implemented yet and are on the roadmap.
 
+- **Compaction survival (PreCompact)**: keeping rules alive across a context compaction — the pressure axis closest to the real pain, paired with a compaction-pressure compliance experiment. This is the next item up.
 - **`inject` strength**: injects only the rule's original text into context without blocking. It has to be preceded by an investigation into whether per-event `additionalContext` is supported.
 - **Semantic judging**: inspecting output content with an LLM to catch rule violations, rather than a regex trigger. This needs a latency/cost tradeoff review.
 - **Stop-event rules**: rules that check "was this condition satisfied before the task completed?" at session-end time.
 - **Compliance report UI**: right now `/ziptie:report` only aggregates the log into a table; more sophisticated analysis is in the backlog.
 
-Also, these results are based on an n=3 pilot. Statistically, "100%" means no more than "we observed no failure in this sample," and it needs re-verification with a larger sample and stronger pressure conditions.
+Also, these results come from an n=3-per-condition pilot plus a pre-registered pressure preflight (6 runs). Statistically, "100%" means no more than "we observed no failure in this sample," and any claim of a JIT compliance edge still awaits a pressure level that actually breaks the baseline.
 
 ## License
 
