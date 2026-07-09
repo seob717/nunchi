@@ -15,7 +15,12 @@ for i in $(seq 1 "$COUNT"); do
   RUN="$PILOT/runs/$COND-$i"
   rm -rf "$RUN"
   mkdir -p "$RUN/capture"
-  cp -R "$PILOT/template/repo" "$RUN/repo"
+  TEMPLATE=repo
+  case "$COND" in AP*|ZP) TEMPLATE=repo-pressure ;; esac
+  cp -R "$PILOT/template/$TEMPLATE" "$RUN/repo"
+  if [ "$COND" = "AP12" ]; then
+    cp "$PILOT/template/code-style-12.md" "$RUN/repo/docs/code-style.md"
+  fi
   case "$COND" in
     A|AL)
       cp "$PILOT/template/settings-A.json" "$RUN/repo/.claude/settings.json"
@@ -47,8 +52,28 @@ with open(path, "w") as f:
     json.dump(conf, f, indent=2)
 PYEOF
       ;;
+    AP|AP12)
+      cp "$PILOT/template/settings-A.json" "$RUN/repo/.claude/settings.json"
+      ;;
+    ZP)
+      cp "$PILOT/template/settings-A.json" "$RUN/repo/.claude/settings.json"
+      mkdir -p "$RUN/repo/.claude/rules"
+      cp "$PILOT/template/rules-pressure-pr.md" "$RUN/repo/.claude/rules/pr-rules.md"
+      cp "$PILOT/template/rules-pressure-commit.md" "$RUN/repo/.claude/rules/commit-rules.md"
+      ZIPTIE_HOOK="$(cd "$PILOT/.." && pwd)/hooks/pretooluse.py"
+      python3 - "$RUN/repo/.claude/settings.json" "$ZIPTIE_HOOK" <<'PYEOF'
+import json, sys
+path, hook = sys.argv[1], sys.argv[2]
+with open(path) as f:
+    conf = json.load(f)
+conf["hooks"] = {"PreToolUse": [{"matcher": "Bash", "hooks": [
+    {"type": "command", "command": 'python3 "%s"' % hook, "timeout": 10}]}]}
+with open(path, "w") as f:
+    json.dump(conf, f, indent=2)
+PYEOF
+      ;;
     *)
-      echo "알 수 없는 조건: $COND (A|B|AL|BL|HW|HB|Z)" >&2; exit 1
+      echo "알 수 없는 조건: $COND (A|B|AL|BL|HW|HB|Z|AP|AP12|ZP)" >&2; exit 1
       ;;
   esac
   # B 계열이 아니면 JIT 훅 스크립트 제거 (settings에서 참조 안 함)
@@ -57,9 +82,9 @@ PYEOF
   # 롱컨텍스트(L) 조건: 로그 분석 선행 과제로 컨텍스트를 부풀린 뒤 PR 과제 수행
   RUN_TASK="$TASK"
   MAX_TURNS=25
-  case "$COND" in *L) RUN_TASK="$LONG_TASK"; MAX_TURNS=50 ;; esac
+  case "$COND" in *L|AP*|ZP) RUN_TASK="$LONG_TASK"; MAX_TURNS=50 ;; esac
   # 숏 조건에는 로그 파일이 불필요 (조건 간 유일한 차이를 과제로 한정)
-  case "$COND" in *L) ;; *) rm -rf "$RUN/repo/data" ;; esac
+  case "$COND" in *L|AP*|ZP) ;; *) rm -rf "$RUN/repo/data" ;; esac
 
   # 로컬 bare 리모트 — push가 네트워크 없이 성공하도록
   git init -q --bare "$RUN/remote.git"
