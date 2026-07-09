@@ -110,6 +110,53 @@ def test_engine_never_raises_on_garbage_input():
     assert decide({"tool_name": "Bash"}, d) == {}
 
 
+def test_multiple_require_read_rules_merge_in_single_deny():
+    d = make_project()
+    rule2 = RULE.replace("name: pr-rules", "name: pr-rules-2").replace(
+        "docs/pr-rules.md", "docs/pr-rules-2.md"
+    )
+    with open(os.path.join(d, ".claude", "rules", "pr2.md"), "w") as f:
+        f.write(rule2)
+    with open(os.path.join(d, "docs", "pr-rules-2.md"), "w") as f:
+        f.write("# PR 규칙2\n2. 두번째 규칙 내용")
+
+    out = decide(hook_input(session="s10"), d)
+    hso = out["hookSpecificOutput"]
+    assert hso["permissionDecision"] == "deny"
+    reason = hso["permissionDecisionReason"]
+    assert "[LAB-123]" in reason
+    assert "두번째 규칙 내용" in reason
+    assert "pr-rules" in reason and "pr-rules-2" in reason
+    assert "\n\n---\n\n" in reason
+
+    state_dir = os.path.join(d, ".claude", "ziptie", "state")
+    assert os.path.exists(os.path.join(state_dir, "s10--pr-rules"))
+    assert os.path.exists(os.path.join(state_dir, "s10--pr-rules-2"))
+
+    assert decide(hook_input(session="s10"), d) == {}
+
+
+def test_block_and_require_read_mixed_second_call_denies_with_block_only():
+    d = make_project()
+    block_rule = RULE.replace("name: pr-rules", "name: pr-block")
+    block_rule = block_rule.replace("strength: require-read", "strength: block")
+    block_rule = block_rule.replace("docs/pr-rules.md", "docs/pr-block.md")
+    with open(os.path.join(d, ".claude", "rules", "pr-block.md"), "w") as f:
+        f.write(block_rule)
+    with open(os.path.join(d, "docs", "pr-block.md"), "w") as f:
+        f.write("# 차단 규칙\n절대 금지")
+
+    first = decide(hook_input(session="s11"), d)
+    reason1 = first["hookSpecificOutput"]["permissionDecisionReason"]
+    assert "pr-rules" in reason1 and "pr-block" in reason1
+
+    second = decide(hook_input(session="s11"), d)
+    assert second["hookSpecificOutput"]["permissionDecision"] == "deny"
+    reason2 = second["hookSpecificOutput"]["permissionDecisionReason"]
+    assert "pr-block" in reason2
+    assert "pr-rules" not in reason2
+
+
 def test_broken_rule_warning_once_per_session(capsys):
     broken = "---\nname: a/b\ntrigger:\n  tool: Bash\n  pattern: foo\n---\nbody"
     d = make_project()

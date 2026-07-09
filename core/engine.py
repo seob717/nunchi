@@ -5,6 +5,7 @@ import json
 import os
 import re
 import sys
+from typing import List
 
 from core.rules import Rule, load_rules
 
@@ -53,15 +54,20 @@ def _log(project_dir: str, session: str, rule: Rule, tool: str, decision: str):
         print(f"ziptie: log write failed: {e}", file=sys.stderr)
 
 
-def _deny(rule: Rule, content: str) -> dict:
+def _reason(rule: Rule, content: str) -> str:
     template = BLOCK_TEMPLATE if rule.strength == "block" else REQUIRE_READ_TEMPLATE
+    return template.format(name=rule.name, content=content)
+
+
+def _deny(rules: List[Rule], project_dir: str) -> dict:
+    reason = "\n\n---\n\n".join(
+        _reason(rule, _content(rule, project_dir)) for rule in rules
+    )
     return {
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
             "permissionDecision": "deny",
-            "permissionDecisionReason": template.format(
-                name=rule.name, content=content
-            ),
+            "permissionDecisionReason": reason,
         }
     }
 
@@ -79,6 +85,7 @@ def decide(input_data: dict, project_dir: str) -> dict:
             os.makedirs(state_dir, exist_ok=True)
             with open(warned_marker, "w") as f:
                 f.write("warned")
+        to_deliver = []
         for rule in load_rules(project_dir, quiet=quiet):
             field = _match_field(rule, tool_name, tool_input)
             if field is None:
@@ -91,7 +98,6 @@ def decide(input_data: dict, project_dir: str) -> dict:
             if not matched:
                 continue
             if rule.strength == "require-read":
-                state_dir = os.path.join(project_dir, ".claude", "ziptie", "state")
                 os.makedirs(state_dir, exist_ok=True)
                 marker = os.path.join(state_dir, f"{session}--{rule.name}")
                 if os.path.exists(marker):
@@ -100,8 +106,10 @@ def decide(input_data: dict, project_dir: str) -> dict:
                 with open(marker, "w") as f:
                     f.write("delivered")
             _log(project_dir, session, rule, tool_name, "deny")
-            return _deny(rule, _content(rule, project_dir))
-        return {}
+            to_deliver.append(rule)
+        if not to_deliver:
+            return {}
+        return _deny(to_deliver, project_dir)
     except Exception as e:  # 안전 기본값
         print(f"ziptie: engine error: {e}", file=sys.stderr)
         return {}
