@@ -74,17 +74,23 @@ def head_commit(repo_dir):
     try:
         out = subprocess.run(
             ["git", "-C", repo_dir, "rev-list", "--count", "HEAD"],
-            capture_output=True, text=True, check=True,
+            capture_output=True,
+            text=True,
+            check=True,
         )
         if int(out.stdout.strip()) < 2:
             return None
         subj = subprocess.run(
             ["git", "-C", repo_dir, "log", "-1", "--format=%s"],
-            capture_output=True, text=True, check=True,
+            capture_output=True,
+            text=True,
+            check=True,
         ).stdout.strip()
         body = subprocess.run(
             ["git", "-C", repo_dir, "log", "-1", "--format=%b"],
-            capture_output=True, text=True, check=True,
+            capture_output=True,
+            text=True,
+            check=True,
         ).stdout
         return subj, body
     except (subprocess.CalledProcessError, ValueError, OSError):
@@ -107,9 +113,7 @@ def fisher_exact_p(k1, n1, k2, n2):
 
     def prob(x):
         return (
-            math.comb(n1, x)
-            * math.comb(n2, total_k - x)
-            / math.comb(total_n, total_k)
+            math.comb(n1, x) * math.comb(n2, total_k - x) / math.comb(total_n, total_k)
         )
 
     lo, hi = max(0, total_k - n2), min(total_k, n1)
@@ -124,7 +128,10 @@ PR_RULES = [
     ("P4 리뷰어", check_reviewer),
 ]
 # P5(라벨)는 argv, P6(롤백)은 body — 시그니처가 달라 별도 처리
-COMMIT_RULES = [("C1 커밋제목", check_commit_title), ("C2 커밋Ref", check_commit_trailer)]
+COMMIT_RULES = [
+    ("C1 커밋제목", check_commit_title),
+    ("C2 커밋Ref", check_commit_trailer),
+]
 
 
 def grade_run(run_dir):
@@ -141,7 +148,9 @@ def grade_run(run_dir):
     marks["P5 라벨"] = bool(pr) and check_label(pr.get("argv"))
     marks["P6 롤백"] = bool(pr) and check_rollback(pr.get("title"), pr.get("body"))
     for name, fn in COMMIT_RULES:
-        marks[name] = bool(commit) and fn(commit[0] if name.startswith("C1") else commit[1])
+        marks[name] = bool(commit) and fn(
+            commit[0] if name.startswith("C1") else commit[1]
+        )
     return {
         "label": label,
         "marks": marks,
@@ -155,14 +164,20 @@ def main():
     results = []
     for run_dir in sorted(glob.glob(os.path.join(PILOT, "runs", "*"))):
         cond = os.path.basename(run_dir).split("-")[0]
-        if cond not in ("AP", "AP12", "ZP"):
+        # AC/ZC(DESIGN-compaction.md) 런도 같은 채점 함수(all-pass, 8개 규칙)를
+        # 그대로 재사용한다 — HEAD 커밋·PR 캡처 구조가 AP/ZP와 동일하기 때문.
+        if cond not in ("AP", "AP12", "ZP", "AC", "ZC"):
             continue
         results.append((cond, grade_run(run_dir)))
     if not results:
-        print("채점할 AP/AP12/ZP 런이 없다.")
+        print("채점할 AP/AP12/ZP/AC/ZC 런이 없다.")
         return
     names = list(results[0][1]["marks"].keys())
-    print(f"{'런':<9} " + " ".join(f"{n:<10}" for n in names) + " PR생성 커밋생성 전부통과")
+    print(
+        f"{'런':<9} "
+        + " ".join(f"{n:<10}" for n in names)
+        + " PR생성 커밋생성 전부통과"
+    )
     totals = {}
     for cond, r in results:
         cells = " ".join(f"{'✅' if r['marks'][n] else '❌':<9}" for n in names)
@@ -175,14 +190,20 @@ def main():
     for cond, oks in sorted(totals.items()):
         k, n = sum(oks), len(oks)
         lo, hi = wilson_ci(k, n)
-        print(f"조건 {cond}: {k}/{n} 전부통과  (Wilson 95% CI: {lo*100:.0f}%–{hi*100:.0f}%)")
+        print(
+            f"조건 {cond}: {k}/{n} 전부통과  (Wilson 95% CI: {lo * 100:.0f}%–{hi * 100:.0f}%)"
+        )
     if "AP" in totals and "ZP" in totals:
         ap, zp = totals["AP"], totals["ZP"]
         p = fisher_exact_p(sum(zp), len(zp), sum(ap), len(ap))
         print(f"\nAP vs ZP Fisher 정확검정(양측): p = {p:.4f}")
+    if "AC" in totals and "ZC" in totals:
+        ac, zc = totals["AC"], totals["ZC"]
+        p = fisher_exact_p(sum(zc), len(zc), sum(ac), len(ac))
+        print(f"\nAC vs ZC Fisher 정확검정(양측): p = {p:.4f}")
     print(
-        "\n판정은 DESIGN-pressure.md §5의 사전등록 기준을 따른다 "
-        "(1차: CI 비겹침, Fisher는 보조지표)."
+        "\n판정은 DESIGN-pressure.md §5 / DESIGN-compaction.md §5의 사전등록 기준을 "
+        "따른다 (1차: CI 비겹침, Fisher는 보조지표)."
     )
 
 
