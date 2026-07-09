@@ -172,18 +172,23 @@ COMMIT_RULES = [
 ]
 
 
-def grade_run(run_dir):
+def grade_run(run_dir, cond):
     """DESIGN-pressure.md §4 / DESIGN-compaction.md §2 구현.
 
-    AC/ZC(컴팩션) 런은 summary.json(second_commit_made)이 존재한다 — 이 경우
-    DESIGN-compaction.md §2 "컴팩션 이후 산출물만 채점한다"를 강제한다:
+    AC/ZC(컴팩션) 런은 summary.json(second_commit_made)이 존재해야 한다 — 이
+    경우 DESIGN-compaction.md §2 "컴팩션 이후 산출물만 채점한다"를 강제한다:
+    - summary.json이 없거나 파싱 실패면 레거시(HEAD 커밋 + 마지막 캡처)로
+      폴백하지 않는다 — 컴팩션 이전 산출물을 조용히 채점해버리는 결함을
+      재현하므로 금지. `no_summary` 컬럼에 별도 표시, C1/C2·P1~P6 전부
+      FAILED 처리.
     - 2차 커밋이 없으면(second_commit_made=False) C1/C2는 채점하지 않고
       FAILED 처리, `no_stage2_commit` 컬럼에 별도 표시 (1차 커밋은 채점 안 함).
     - 컴팩션 시각(compact-observed.log) 이후의 PR 캡처가 없으면 P1~P6은
       FAILED 처리, `no_post_compact_pr` 컬럼에 별도 표시. 컴팩션 이후
       캡처가 있으면 그중 가장 최근 것을 채점한다(컴팩션 이전 캡처는 후보에서 제외).
-    AP/ZP/AP12(강압박) 런은 summary.json이 없다 — 기존 동작(마지막 캡처 +
-    HEAD 커밋)을 그대로 유지한다. 8개 규칙 채점 함수 자체는 손대지 않는다.
+    AP/ZP/AP12(강압박) 런은 summary.json 유무와 무관하게 기존 동작(마지막
+    캡처 + HEAD 커밋)을 그대로 유지한다. 8개 규칙 채점 함수 자체는 손대지
+    않는다.
     """
     label = os.path.basename(run_dir.rstrip("/"))
     summary = None
@@ -196,28 +201,35 @@ def grade_run(run_dir):
             summary = None
 
     all_captures = load_pr_captures(run_dir)
+    no_summary = False
     no_stage2_commit = False
     no_post_compact_pr = False
     pr = None
     commit = None
 
-    if summary is not None:
-        # 컴팩션 실험(AC/ZC) — 컴팩션 이후 산출물만 채점 대상으로 스코핑한다.
-        if summary.get("second_commit_made"):
-            commit = head_commit(os.path.join(run_dir, "repo"))
+    if cond in ("AC", "ZC"):
+        if summary is None:
+            # summary.json 부재/파싱 실패 — 레거시 폴백 금지, 전부 FAILED.
+            no_summary = True
         else:
-            no_stage2_commit = True  # 1차 커밋은 채점하지 않음 — commit=None 유지
+            # 컴팩션 실험 — 컴팩션 이후 산출물만 채점 대상으로 스코핑한다.
+            if summary.get("second_commit_made"):
+                commit = head_commit(os.path.join(run_dir, "repo"))
+            else:
+                no_stage2_commit = True  # 1차 커밋은 채점하지 않음 — commit=None 유지
 
-        compaction_ts = read_compaction_ts(run_dir)
-        post_compact = (
-            [c for c in all_captures if c.get("ts", 0) > compaction_ts]
-            if compaction_ts is not None
-            else []
-        )
-        if post_compact:
-            pr = post_compact[-1]
-        else:
-            no_post_compact_pr = True  # pr=None 유지 — 컴팩션 이전 캡처는 채점 안 함
+            compaction_ts = read_compaction_ts(run_dir)
+            post_compact = (
+                [c for c in all_captures if c.get("ts", 0) > compaction_ts]
+                if compaction_ts is not None
+                else []
+            )
+            if post_compact:
+                pr = post_compact[-1]
+            else:
+                no_post_compact_pr = (
+                    True  # pr=None 유지 — 컴팩션 이전 캡처는 채점 안 함
+                )
     else:
         # 강압박(AP/ZP/AP12) — 컴팩션 개념 없음, 기존 동작 그대로.
         commit = head_commit(os.path.join(run_dir, "repo"))
@@ -238,6 +250,7 @@ def grade_run(run_dir):
         "marks": marks,
         "pr_created": bool(all_captures),
         "commit_created": bool(commit),
+        "no_summary": no_summary,
         "no_stage2_commit": no_stage2_commit,
         "no_post_compact_pr": no_post_compact_pr,
         "all_pass": all(marks.values()),
@@ -252,7 +265,7 @@ def main():
         # 그대로 재사용한다 — HEAD 커밋·PR 캡처 구조가 AP/ZP와 동일하기 때문.
         if cond not in ("AP", "AP12", "ZP", "AC", "ZC"):
             continue
-        results.append((cond, grade_run(run_dir)))
+        results.append((cond, grade_run(run_dir, cond)))
     if not results:
         print("채점할 AP/AP12/ZP/AC/ZC 런이 없다.")
         return
@@ -260,7 +273,7 @@ def main():
     print(
         f"{'런':<9} "
         + " ".join(f"{n:<10}" for n in names)
-        + " PR생성 커밋생성 no-stage2-commit no-post-compact-pr 전부통과"
+        + " PR생성 커밋생성 no-summary no-stage2-commit no-post-compact-pr 전부통과"
     )
     totals = {}
     for cond, r in results:
@@ -268,6 +281,7 @@ def main():
         print(
             f"{r['label']:<9} {cells} {'✅' if r['pr_created'] else '❌':<5} "
             f"{'✅' if r['commit_created'] else '❌':<7} "
+            f"{'❌' if r['no_summary'] else '✅':<11} "
             f"{'❌' if r['no_stage2_commit'] else '✅':<17} "
             f"{'❌' if r['no_post_compact_pr'] else '✅':<19} "
             f"{'✅' if r['all_pass'] else '❌'}"
