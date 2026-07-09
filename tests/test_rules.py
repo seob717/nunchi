@@ -59,6 +59,26 @@ def test_unknown_strength_falls_back_to_require_read():
     assert rule.strength == "require-read"
 
 
+def test_invalid_name_with_slash_returns_none_with_warning(capsys):
+    injected = VALID.replace("name: pr-rules", "name: a/b")
+    with tempfile.TemporaryDirectory() as d:
+        rule = parse_rule_file(_write(d, "r.md", injected))
+    assert rule is None
+    err = capsys.readouterr().err
+    assert "invalid name" in err
+    assert "a/b" in err
+
+
+def test_invalid_name_uppercase_returns_none_with_warning(capsys):
+    injected = VALID.replace("name: pr-rules", "name: PR-Rules")
+    with tempfile.TemporaryDirectory() as d:
+        rule = parse_rule_file(_write(d, "r.md", injected))
+    assert rule is None
+    err = capsys.readouterr().err
+    assert "invalid name" in err
+    assert "PR-Rules" in err
+
+
 def test_load_rules_filters_disabled_and_broken():
     with tempfile.TemporaryDirectory() as d:
         rules_dir = os.path.join(d, ".claude", "rules")

@@ -2,9 +2,12 @@
 
 import glob
 import os
+import re
 import sys
 from dataclasses import dataclass
 from typing import List, Optional
+
+_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
 
 @dataclass
@@ -63,7 +66,13 @@ def parse_rule_file(path: str) -> Optional[Rule]:
             trigger.get("tool"),
             trigger.get("pattern"),
         )
-        if not (name and tool and pattern) or "[" in name:
+        if not (name and tool and pattern):
+            return None
+        if not _NAME_RE.match(name):
+            print(
+                f"ziptie: rule {path}: invalid name '{name}' — [a-z0-9-]만 허용",
+                file=sys.stderr,
+            )
             return None
         strength = meta.get("strength", "require-read")
         if strength not in ("require-read", "block"):
