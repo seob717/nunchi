@@ -93,7 +93,8 @@ def decide(input_data: dict, project_dir: str) -> dict:
             try:
                 matched = re.search(rule.pattern, field)
             except re.error as e:
-                print(f"ziptie: rule {rule.name} match error: {e}", file=sys.stderr)
+                if not quiet:
+                    print(f"ziptie: rule {rule.name} match error: {e}", file=sys.stderr)
                 continue
             if not matched:
                 continue

@@ -176,6 +176,24 @@ def test_broken_rule_warning_once_per_session(capsys):
     assert os.path.exists(marker)
 
 
+def test_bad_regex_warning_once_per_session(capsys):
+    broken = (
+        "---\nname: broken-re\ntrigger:\n  tool: Bash\n  pattern: (unbalanced\n---\nb"
+    )
+    d = make_project()
+    with open(os.path.join(d, ".claude", "rules", "aa-broken.md"), "w") as f:
+        f.write(broken)  # 정렬상 pr.md보다 먼저 로드되도록 aa- 접두
+    capsys.readouterr()  # 이전 출력 비우기
+
+    decide(hook_input(session="s21"), d)
+    first_err = capsys.readouterr().err
+    assert "match error" in first_err
+
+    decide(hook_input(session="s21"), d)
+    second_err = capsys.readouterr().err
+    assert second_err == ""
+
+
 def test_broken_regex_rule_does_not_disable_others():
     broken = (
         "---\nname: broken-re\ntrigger:\n  tool: Bash\n  pattern: (unbalanced\n---\nb"
