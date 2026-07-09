@@ -110,6 +110,25 @@ def test_engine_never_raises_on_garbage_input():
     assert decide({"tool_name": "Bash"}, d) == {}
 
 
+def test_broken_rule_warning_once_per_session(capsys):
+    broken = "---\nname: a/b\ntrigger:\n  tool: Bash\n  pattern: foo\n---\nbody"
+    d = make_project()
+    with open(os.path.join(d, ".claude", "rules", "aa-broken.md"), "w") as f:
+        f.write(broken)
+    capsys.readouterr()  # 이전 출력 비우기
+
+    decide(hook_input(session="s9"), d)
+    first_err = capsys.readouterr().err
+    assert "invalid name" in first_err
+
+    decide(hook_input(session="s9"), d)
+    second_err = capsys.readouterr().err
+    assert second_err == ""
+
+    marker = os.path.join(d, ".claude", "ziptie", "state", "warned--s9")
+    assert os.path.exists(marker)
+
+
 def test_broken_regex_rule_does_not_disable_others():
     broken = (
         "---\nname: broken-re\ntrigger:\n  tool: Bash\n  pattern: (unbalanced\n---\nb"

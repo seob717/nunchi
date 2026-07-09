@@ -72,7 +72,14 @@ def decide(input_data: dict, project_dir: str) -> dict:
         tool_name = input_data.get("tool_name", "")
         tool_input = input_data.get("tool_input", {}) or {}
         session = input_data.get("session_id", "nosession")
-        for rule in load_rules(project_dir):
+        state_dir = os.path.join(project_dir, ".claude", "ziptie", "state")
+        warned_marker = os.path.join(state_dir, f"warned--{session}")
+        quiet = os.path.exists(warned_marker)
+        if not quiet:
+            os.makedirs(state_dir, exist_ok=True)
+            with open(warned_marker, "w") as f:
+                f.write("warned")
+        for rule in load_rules(project_dir, quiet=quiet):
             field = _match_field(rule, tool_name, tool_input)
             if field is None:
                 continue

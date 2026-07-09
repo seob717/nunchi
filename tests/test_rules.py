@@ -88,6 +88,24 @@ def test_enabled_typo_value_warns_and_stays_true(capsys):
     assert "flase" in err
 
 
+def test_parse_rule_file_quiet_suppresses_stderr(capsys):
+    injected = VALID.replace("name: pr-rules", "name: a/b")
+    with tempfile.TemporaryDirectory() as d:
+        rule = parse_rule_file(_write(d, "r.md", injected), quiet=True)
+    assert rule is None
+    assert capsys.readouterr().err == ""
+
+
+def test_load_rules_quiet_suppresses_stderr(capsys):
+    injected = VALID.replace("name: pr-rules", "name: a/b")
+    with tempfile.TemporaryDirectory() as d:
+        rules_dir = os.path.join(d, ".claude", "rules")
+        os.makedirs(rules_dir)
+        _write(rules_dir, "broken.md", injected)
+        load_rules(d, quiet=True)
+    assert capsys.readouterr().err == ""
+
+
 def test_load_rules_filters_disabled_and_broken():
     with tempfile.TemporaryDirectory() as d:
         rules_dir = os.path.join(d, ".claude", "rules")

@@ -53,8 +53,11 @@ def _parse_frontmatter(text: str):
     return meta, body
 
 
-def parse_rule_file(path: str) -> Optional[Rule]:
-    """룰 파일 하나를 파싱한다. 어떤 실패든 None (예외를 밖으로 내지 않는다)."""
+def parse_rule_file(path: str, quiet: bool = False) -> Optional[Rule]:
+    """룰 파일 하나를 파싱한다. 어떤 실패든 None (예외를 밖으로 내지 않는다).
+
+    quiet=True면 stderr 경고를 억제한다 (반환값은 동일).
+    """
     try:
         with open(path, encoding="utf-8") as f:
             meta, body = _parse_frontmatter(f.read())
@@ -69,27 +72,30 @@ def parse_rule_file(path: str) -> Optional[Rule]:
         if not (name and tool and pattern):
             return None
         if not _NAME_RE.match(name):
-            print(
-                f"ziptie: rule {path}: invalid name '{name}' — [a-z0-9-]만 허용",
-                file=sys.stderr,
-            )
+            if not quiet:
+                print(
+                    f"ziptie: rule {path}: invalid name '{name}' — [a-z0-9-]만 허용",
+                    file=sys.stderr,
+                )
             return None
         strength = meta.get("strength", "require-read")
         if strength not in ("require-read", "block"):
-            print(
-                f"ziptie: rule {name}: unsupported strength '{strength}' — "
-                "require-read로 폴백",
-                file=sys.stderr,
-            )
+            if not quiet:
+                print(
+                    f"ziptie: rule {name}: unsupported strength '{strength}' — "
+                    "require-read로 폴백",
+                    file=sys.stderr,
+                )
             strength = "require-read"
         enabled_raw = str(meta.get("enabled", "true"))
         enabled_lower = enabled_raw.lower()
         if enabled_lower not in ("true", "false"):
-            print(
-                f"ziptie: rule {name}: unrecognized enabled value '{enabled_raw}' — "
-                "true로 취급",
-                file=sys.stderr,
-            )
+            if not quiet:
+                print(
+                    f"ziptie: rule {name}: unrecognized enabled value "
+                    f"'{enabled_raw}' — true로 취급",
+                    file=sys.stderr,
+                )
             enabled = True
         else:
             enabled = enabled_lower == "true"
@@ -104,16 +110,17 @@ def parse_rule_file(path: str) -> Optional[Rule]:
             path=path,
         )
     except Exception as e:  # 안전 기본값: 절대 세션을 죽이지 않는다
-        print(f"ziptie: rule parse error {path}: {e}", file=sys.stderr)
+        if not quiet:
+            print(f"ziptie: rule parse error {path}: {e}", file=sys.stderr)
         return None
 
 
-def load_rules(project_dir: str) -> List[Rule]:
+def load_rules(project_dir: str, quiet: bool = False) -> List[Rule]:
     rules = []
     for path in sorted(
         glob.glob(os.path.join(project_dir, ".claude", "rules", "*.md"))
     ):
-        rule = parse_rule_file(path)
+        rule = parse_rule_file(path, quiet=quiet)
         if rule and rule.enabled:
             rules.append(rule)
     return rules
