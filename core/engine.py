@@ -180,9 +180,10 @@ def rearm(input_data, project_dir: str) -> None:
         session = _sanitize_session(input_data.get("session_id", "nosession"))
         state_dir = os.path.join(project_dir, ".claude", "ziptie", "state")
         prefix = f"{session}--"
+        warned_marker = f"warned--{session}"
         removed = 0
         for fn in os.listdir(state_dir):
-            if fn.startswith(prefix) and not fn.startswith("warned--"):
+            if fn.startswith(prefix) and fn != warned_marker:
                 with contextlib.suppress(OSError):
                     os.remove(os.path.join(state_dir, fn))
                     removed += 1

@@ -306,3 +306,14 @@ class TestRearm(unittest.TestCase):
         engine.rearm({"session_id": "sess-1"}, "/nonexistent/dir")  # 예외 없이 통과
         engine.rearm({}, self.tmp)
         engine.rearm(None, self.tmp)
+
+    def test_rearm_session_id_warned_removes_delivery_markers_keeps_suppression(self):
+        # Session id "warned" collides with warned-- prefix.
+        # Delivery marker: warned--pr-rules (for session "warned")
+        # Suppression marker: warned--warned (warning already shown)
+        # After rearm, only suppression marker should remain.
+        self._touch("warned--pr-rules")
+        self._touch("warned--warned")
+        engine.rearm({"session_id": "warned", "source": "compact"}, self.tmp)
+        remaining = sorted(os.listdir(self.state))
+        self.assertEqual(remaining, ["warned--warned"])
