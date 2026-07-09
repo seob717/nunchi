@@ -157,6 +157,32 @@ def test_block_and_require_read_mixed_second_call_denies_with_block_only():
     assert "pr-rules" not in reason2
 
 
+def test_bad_encoding_source_does_not_void_batch():
+    d = make_project()
+    rule2 = RULE.replace("name: pr-rules", "name: pr-rules-2").replace(
+        "docs/pr-rules.md", "docs/pr-rules-2.md"
+    )
+    with open(os.path.join(d, ".claude", "rules", "pr2.md"), "w") as f:
+        f.write(rule2)
+    with open(os.path.join(d, "docs", "pr-rules-2.md"), "wb") as f:
+        f.write(b"\xff\xfe broken content")  # 잘못된 UTF-8
+
+    out = decide(hook_input(session="s30"), d)
+    hso = out["hookSpecificOutput"]
+    assert hso["permissionDecision"] == "deny"
+    reason = hso["permissionDecisionReason"]
+    assert "[LAB-123]" in reason  # rule1 콘텐츠는 정상 배달
+    assert "pr-rules-2" in reason  # rule2도 (폴백이든 스킵이든) 배치에서 사라지지 않음
+
+    state_dir = os.path.join(d, ".claude", "ziptie", "state")
+    assert os.path.exists(os.path.join(state_dir, "s30--pr-rules"))
+
+    # 두번째 호출에서 배달되지 않은 룰이 조용히 allow되면 안 된다.
+    # rule1은 이미 배달됐으니 allow, rule2가 실제로 배달됐다면 그것도 allow.
+    second = decide(hook_input(session="s30"), d)
+    assert second == {}
+
+
 def test_broken_rule_warning_once_per_session(capsys):
     broken = "---\nname: a/b\ntrigger:\n  tool: Bash\n  pattern: foo\n---\nbody"
     d = make_project()

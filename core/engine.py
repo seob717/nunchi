@@ -32,8 +32,8 @@ def _content(rule: Rule, project_dir: str) -> str:
         try:
             with open(os.path.join(project_dir, rule.source), encoding="utf-8") as f:
                 return f.read()  # 배달 시점에 원본을 읽는다 — 복붙 아님
-        except OSError:
-            pass
+        except Exception:
+            pass  # 파일 없음·권한·인코딩 깨짐 등 — 룰 본문으로 폴백 (배치 전체를 죽이지 않음)
     return rule.body
 
 
@@ -59,10 +59,8 @@ def _reason(rule: Rule, content: str) -> str:
     return template.format(name=rule.name, content=content)
 
 
-def _deny(rules: List[Rule], project_dir: str) -> dict:
-    reason = "\n\n---\n\n".join(
-        _reason(rule, _content(rule, project_dir)) for rule in rules
-    )
+def _deny(deliveries: List[tuple]) -> dict:
+    reason = "\n\n---\n\n".join(_reason(rule, content) for rule, content in deliveries)
     return {
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
@@ -99,18 +97,27 @@ def decide(input_data: dict, project_dir: str) -> dict:
             if not matched:
                 continue
             if rule.strength == "require-read":
-                os.makedirs(state_dir, exist_ok=True)
                 marker = os.path.join(state_dir, f"{session}--{rule.name}")
                 if os.path.exists(marker):
                     _log(project_dir, session, rule, tool_name, "allow-after-delivery")
                     continue
-                with open(marker, "w") as f:
-                    f.write("delivered")
-            _log(project_dir, session, rule, tool_name, "deny")
             to_deliver.append(rule)
         if not to_deliver:
             return {}
-        return _deny(to_deliver, project_dir)
+
+        # 콘텐츠 조립을 마커 기록보다 먼저 수행한다 — 한 룰의 배달 실패가
+        # 이미 조립된 다른 룰의 마커 기록(=배달 확정)을 소급 무효화하지 않도록.
+        deliveries = [(rule, _content(rule, project_dir)) for rule in to_deliver]
+
+        for rule in to_deliver:
+            if rule.strength == "require-read":
+                os.makedirs(state_dir, exist_ok=True)
+                marker = os.path.join(state_dir, f"{session}--{rule.name}")
+                with open(marker, "w") as f:
+                    f.write("delivered")
+            _log(project_dir, session, rule, tool_name, "deny")
+
+        return _deny(deliveries)
     except Exception as e:  # 안전 기본값
         print(f"ziptie: engine error: {e}", file=sys.stderr)
         return {}
