@@ -82,3 +82,7 @@ The MVP supports only the two strengths on the PreToolUse hook: `require-read` a
 - **Compliance report UI**: right now `/ziptie:report` only aggregates the log into a table; more sophisticated analysis is in the backlog.
 
 Also, these results are based on an n=3 pilot. Statistically, "100%" means no more than "we observed no failure in this sample," and it needs re-verification with a larger sample and stronger pressure conditions.
+
+---
+
+If ziptie keeps your rules alive when they matter, a ⭐ on this repo helps others find it.
