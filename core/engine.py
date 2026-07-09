@@ -1,6 +1,8 @@
 """ziptie 배달 엔진 — 매칭, 강도 결정, 세션 상태, 로깅."""
 
+import contextlib
 import datetime
+import io
 import json
 import os
 import re
@@ -8,6 +10,19 @@ import sys
 from typing import List
 
 from core.rules import Rule, load_rules
+
+_SESSION_SAFE_RE = re.compile(r"[^A-Za-z0-9._-]")
+
+
+def _sanitize_session(session_id: str) -> str:
+    """마커 파일명에 쓰기 전에 세션 id를 정화한다.
+
+    경로 구분자 등 [A-Za-z0-9._-] 밖의 문자는 전부 "-"로 치환 —
+    open()이 세션 문자열 때문에 실패해 룰 평가(특히 block 룰)를 통째로
+    무산시키는 일이 없도록 한다.
+    """
+    return _SESSION_SAFE_RE.sub("-", session_id or "nosession")
+
 
 REQUIRE_READ_TEMPLATE = (
     "[ziptie:{name}] 이 작업 전에 확인할 규칙이 있어. 아래 규칙을 빠짐없이 반영한 뒤 "
@@ -75,33 +90,60 @@ def decide(input_data: dict, project_dir: str) -> dict:
     try:
         tool_name = input_data.get("tool_name", "")
         tool_input = input_data.get("tool_input", {}) or {}
-        session = input_data.get("session_id", "nosession")
+        session = _sanitize_session(input_data.get("session_id", "nosession"))
         state_dir = os.path.join(project_dir, ".claude", "ziptie", "state")
         warned_marker = os.path.join(state_dir, f"warned--{session}")
-        quiet = os.path.exists(warned_marker)
-        if not quiet:
-            os.makedirs(state_dir, exist_ok=True)
-            with open(warned_marker, "w") as f:
-                f.write("warned")
+        # 마커 존재 확인은 non-fatal — 실패하면 quiet=False로 취급 (경고를 못 억제할
+        # 뿐, block 룰 평가는 아래 어떤 state-dir 부작용에도 의존하지 않는다).
+        try:
+            quiet = os.path.exists(warned_marker)
+        except OSError:
+            quiet = False
+
         to_deliver = []
-        for rule in load_rules(project_dir, quiet=quiet):
-            field = _match_field(rule, tool_name, tool_input)
-            if field is None:
-                continue
-            try:
-                matched = re.search(rule.pattern, field)
-            except re.error as e:
-                if not quiet:
-                    print(f"ziptie: rule {rule.name} match error: {e}", file=sys.stderr)
-                continue
-            if not matched:
-                continue
-            if rule.strength == "require-read":
-                marker = os.path.join(state_dir, f"{session}--{rule.name}")
-                if os.path.exists(marker):
-                    _log(project_dir, session, rule, tool_name, "allow-after-delivery")
+        warnings_buf = io.StringIO()
+        with contextlib.redirect_stderr(warnings_buf):
+            for rule in load_rules(project_dir, quiet=quiet):
+                field = _match_field(rule, tool_name, tool_input)
+                if field is None:
                     continue
-            to_deliver.append(rule)
+                try:
+                    matched = re.search(rule.pattern, field)
+                except re.error as e:
+                    if not quiet:
+                        print(
+                            f"ziptie: rule {rule.name} match error: {e}",
+                            file=sys.stderr,
+                        )
+                    continue
+                if not matched:
+                    continue
+                if rule.strength == "require-read":
+                    marker = os.path.join(state_dir, f"{session}--{rule.name}")
+                    if os.path.exists(marker):
+                        _log(
+                            project_dir,
+                            session,
+                            rule,
+                            tool_name,
+                            "allow-after-delivery",
+                        )
+                        continue
+                to_deliver.append(rule)
+
+        warnings_text = warnings_buf.getvalue()
+        if warnings_text:
+            sys.stderr.write(warnings_text)
+            if not quiet:
+                # 마커 기록은 "경고가 실제로 있었을 때만" 시도한다 — 무경고 호출마다
+                # state-dir에 파일을 남기던 부작용 제거. 기록 실패도 non-fatal.
+                try:
+                    os.makedirs(state_dir, exist_ok=True)
+                    with open(warned_marker, "w") as f:
+                        f.write("warned")
+                except OSError:
+                    pass
+
         if not to_deliver:
             return {}
 

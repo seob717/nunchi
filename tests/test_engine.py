@@ -157,6 +157,26 @@ def test_block_and_require_read_mixed_second_call_denies_with_block_only():
     assert "pr-rules" not in reason2
 
 
+def test_block_rule_with_malformed_session_id_still_denies():
+    d = make_project(RULE.replace("strength: require-read", "strength: block"))
+    out = decide(hook_input(session="weird/session"), d)
+    hso = out["hookSpecificOutput"]
+    assert hso["permissionDecision"] == "deny"
+    assert hso["permissionDecisionReason"]
+
+
+def test_require_read_markers_sanitize_session_id_across_calls():
+    d = make_project()
+    first = decide(hook_input(session="weird/session2"), d)
+    assert first["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+    second = decide(hook_input(session="weird/session2"), d)
+    assert second == {}
+
+    state_dir = os.path.join(d, ".claude", "ziptie", "state")
+    assert os.path.exists(os.path.join(state_dir, "weird-session2--pr-rules"))
+
+
 def test_bad_encoding_source_does_not_void_batch():
     d = make_project()
     rule2 = RULE.replace("name: pr-rules", "name: pr-rules-2").replace(
