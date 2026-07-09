@@ -8,6 +8,7 @@ argument-hint: "[document path (omit for CLAUDE.md and all its @references)]"
 Compile rules with the following procedure.
 
 ## 1. Collect input
+- Argument: $ARGUMENTS
 - If an argument is given, read only that document; otherwise read the project CLAUDE.md and every `@path` document it references.
 
 ## 2. Extract rules
@@ -29,6 +30,8 @@ A Bash rule's pattern matches against the command string; an Edit/Write rule's p
 ## 5. Generate rule files
 For each rule, create `.claude/rules/<kebab-case-name>.md`. If there is an original document, put its project-relative path in `source` and write only a one-line summary in the body (no copy-paste, since the original is read at delivery time):
 
+Filename convention: base the filename on the source document's filename in kebab-case (e.g. `docs/pr-rules.md` → `pr-rules.md`). If a single document yields multiple rules, append a content-based suffix to disambiguate (e.g. `pr-rules-title.md`, `pr-rules-reviewer.md`). If the resulting filename collides with an existing rule file, confirm with the user before overwriting it.
+
 ```markdown
 ---
 name: pr-rules
@@ -44,6 +47,8 @@ PR creation rules — title format, required sections, reviewer assignment.
 
 ## 6. User review
 Show the list of generated rule files as a table (name / trigger / strength / source), and along with the list of uncompilable rules, ask "is there anything to fix?" An overly broad regex becomes a false positive, so scoping it conservatively narrow is the default.
+
+If the user requests a change, edit only the affected rule file(s) and show the table again for another round of review. If the user requests no changes, treat the compilation as complete.
 
 ## 7. Closing line
 Only if at least one rule file was generated, end the final message with this single line (once — never repeat it later in the session):
