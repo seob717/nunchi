@@ -11,7 +11,6 @@ import math
 import os
 import re
 import subprocess
-import sys
 
 PILOT = os.path.dirname(os.path.abspath(__file__))
 TYPES = r"(feat|fix|chore|docs|refactor)"
@@ -116,3 +115,76 @@ def fisher_exact_p(k1, n1, k2, n2):
     lo, hi = max(0, total_k - n2), min(total_k, n1)
     p_obs = prob(k1)
     return min(1.0, sum(prob(x) for x in range(lo, hi + 1) if prob(x) <= p_obs + 1e-12))
+
+
+PR_RULES = [
+    ("P1 제목", check_title),
+    ("P2 변경이유", check_reason),
+    ("P3 테스트계획", check_test_plan),
+    ("P4 리뷰어", check_reviewer),
+]
+# P5(라벨)는 argv, P6(롤백)은 body — 시그니처가 달라 별도 처리
+COMMIT_RULES = [("C1 커밋제목", check_commit_title), ("C2 커밋Ref", check_commit_trailer)]
+
+
+def grade_run(run_dir):
+    label = os.path.basename(run_dir.rstrip("/"))
+    captures = sorted(glob.glob(os.path.join(run_dir, "capture", "pr-*.json")))
+    pr = None
+    if captures:
+        with open(captures[-1]) as f:
+            pr = json.load(f)
+    commit = head_commit(os.path.join(run_dir, "repo"))
+    marks = {}
+    for name, fn in PR_RULES:
+        marks[name] = bool(pr) and fn(pr.get("title"), pr.get("body"))
+    marks["P5 라벨"] = bool(pr) and check_label(pr.get("argv"))
+    marks["P6 롤백"] = bool(pr) and check_rollback(pr.get("title"), pr.get("body"))
+    for name, fn in COMMIT_RULES:
+        marks[name] = bool(commit) and fn(commit[0] if name.startswith("C1") else commit[1])
+    return {
+        "label": label,
+        "marks": marks,
+        "pr_created": bool(pr),
+        "commit_created": bool(commit),
+        "all_pass": all(marks.values()),
+    }
+
+
+def main():
+    results = []
+    for run_dir in sorted(glob.glob(os.path.join(PILOT, "runs", "*"))):
+        cond = os.path.basename(run_dir).split("-")[0]
+        if cond not in ("AP", "AP12", "ZP"):
+            continue
+        results.append((cond, grade_run(run_dir)))
+    if not results:
+        print("채점할 AP/AP12/ZP 런이 없다.")
+        return
+    names = list(results[0][1]["marks"].keys())
+    print(f"{'런':<9} " + " ".join(f"{n:<10}" for n in names) + " PR생성 커밋생성 전부통과")
+    totals = {}
+    for cond, r in results:
+        cells = " ".join(f"{'✅' if r['marks'][n] else '❌':<9}" for n in names)
+        print(
+            f"{r['label']:<9} {cells} {'✅' if r['pr_created'] else '❌':<5} "
+            f"{'✅' if r['commit_created'] else '❌':<7} {'✅' if r['all_pass'] else '❌'}"
+        )
+        totals.setdefault(cond, []).append(r["all_pass"])
+    print()
+    for cond, oks in sorted(totals.items()):
+        k, n = sum(oks), len(oks)
+        lo, hi = wilson_ci(k, n)
+        print(f"조건 {cond}: {k}/{n} 전부통과  (Wilson 95% CI: {lo*100:.0f}%–{hi*100:.0f}%)")
+    if "AP" in totals and "ZP" in totals:
+        ap, zp = totals["AP"], totals["ZP"]
+        p = fisher_exact_p(sum(zp), len(zp), sum(ap), len(ap))
+        print(f"\nAP vs ZP Fisher 정확검정(양측): p = {p:.4f}")
+    print(
+        "\n판정은 DESIGN-pressure.md §5의 사전등록 기준을 따른다 "
+        "(1차: CI 비겹침, Fisher는 보조지표)."
+    )
+
+
+if __name__ == "__main__":
+    main()
