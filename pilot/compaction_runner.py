@@ -30,6 +30,7 @@
 """
 
 import argparse
+import datetime
 import glob
 import json
 import os
@@ -409,6 +410,35 @@ def list_pr_captures(cfg: RunConfig):
     return sorted(glob.glob(os.path.join(cfg.capture_dir, "pr-*.json")))
 
 
+def compaction_ts(cfg: RunConfig):
+    """observer_sessionstart.py가 기록한 관측 타임스탬프 중 최댓값(초, epoch).
+
+    naive local isoformat 한 줄씩(datetime.now().isoformat(timespec="seconds"))
+    기록되므로 fromisoformat().timestamp()로 변환한다 (mock gh의 time.time()과
+    동일 로컬 기준). 관측된 컴팩션이 없으면 None.
+    """
+    lines = read_observer_lines(cfg)
+    ts_list = []
+    for ln in lines:
+        try:
+            ts_list.append(datetime.datetime.fromisoformat(ln.strip()).timestamp())
+        except ValueError:
+            continue
+    return max(ts_list) if ts_list else None
+
+
+def latest_pr_capture_ts(prs):
+    """prs(list_pr_captures 반환값)의 가장 최근 캡처 ts. 없거나 파싱 실패 시 None."""
+    if not prs:
+        return None
+    try:
+        with open(prs[-1]) as f:
+            data = json.load(f)
+        return data.get("ts")
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
 # ---------------------------------------------------------------------------
 # 메인 시퀀스 — DESIGN-compaction.md §2
 # ---------------------------------------------------------------------------
@@ -445,20 +475,23 @@ def main():
 
     sess = Session(cfg)
     try:
+        # 예산 하드스톱: cfg.remaining() <= 0이면 이 단계부터는 절대 진입하지
+        # 않는다. 과거에는 max(5.0, cfg.remaining())로 예산 소진 후에도 최소
+        # 5초(초기 렌더링은 1초) 대기를 "바닥"으로 깔아줘서 25분 예산을 매
+        # 단계마다 조금씩 초과할 수 있었다 — 그 floor를 전부 제거했다.
         log("초기 렌더링 대기")
-        sess.wait_idle(
-            idle=2.0, max_wait=min(CAP_INITIAL_RENDER, max(1.0, cfg.remaining()))
-        )
+        if cfg.remaining() <= 0:
+            timed_out = True
+        else:
+            sess.wait_idle(idle=2.0, max_wait=min(CAP_INITIAL_RENDER, cfg.remaining()))
 
         # ---- 전반부: 로그 분석 → 버그 수정 → 1차 커밋 ----
-        if cfg.remaining() <= 5.0:
+        if timed_out or cfg.remaining() <= 0:
             timed_out = True
         else:
             log("① 전반부 과제 전송 (로그 분석 → 버그 수정 → 1차 커밋)")
             sess.send_msg(STAGE1_MSG)
-            ok = sess.wait_idle(
-                idle=6.0, max_wait=min(CAP_STAGE1, max(5.0, cfg.remaining()))
-            )
+            ok = sess.wait_idle(idle=6.0, max_wait=min(CAP_STAGE1, cfg.remaining()))
             idle_results.append(("stage1", ok))
             if not ok and cfg.remaining() <= 0:
                 timed_out = True
@@ -479,18 +512,18 @@ def main():
         rearm_before = len(
             [e for e in read_log_entries(cfg) if e.get("decision") == "rearm"]
         )
-        if not timed_out and cfg.remaining() > 5.0:
+        if not timed_out and cfg.remaining() > 0:
             log("② /compact 전송")
             sess.send_msg(COMPACT_MSG)
             ok = sess.wait_idle(
-                idle=5.0, max_wait=min(CAP_COMPACT_TURN, max(5.0, cfg.remaining()))
+                idle=5.0, max_wait=min(CAP_COMPACT_TURN, cfg.remaining())
             )
             idle_results.append(("compact", ok))
 
             # idle 감지가 일러도 디스크(관측 로그)로 재확인 — 조건 중립 그라운드 트루스.
             poll_until(
                 lambda: len(read_observer_lines(cfg)) > observer_before,
-                timeout=min(CAP_OBSERVER_POLL, max(1.0, cfg.remaining())),
+                timeout=min(CAP_OBSERVER_POLL, max(0.0, cfg.remaining())),
                 interval=2.0,
             )
             if cfg.condition == "ZC":
@@ -505,7 +538,7 @@ def main():
                         )
                         > rearm_before
                     ),
-                    timeout=min(CAP_REARM_POLL, max(1.0, cfg.remaining())),
+                    timeout=min(CAP_REARM_POLL, max(0.0, cfg.remaining())),
                     interval=2.0,
                 )
         else:
@@ -523,12 +556,10 @@ def main():
         )
 
         # ---- 후반부: 추가 수정 → 2차 커밋 → PR ----
-        if not timed_out and cfg.remaining() > 5.0:
+        if not timed_out and cfg.remaining() > 0:
             log("③ 후반부 과제 전송 (추가 수정 → 2차 커밋 → PR)")
             sess.send_msg(STAGE2_MSG)
-            ok = sess.wait_idle(
-                idle=6.0, max_wait=min(CAP_STAGE2, max(5.0, cfg.remaining()))
-            )
+            ok = sess.wait_idle(idle=6.0, max_wait=min(CAP_STAGE2, cfg.remaining()))
             idle_results.append(("stage2", ok))
         else:
             timed_out = True
@@ -551,6 +582,17 @@ def main():
     compaction_observed = len(read_observer_lines(cfg)) > 0
     forced_steps = [label for label, ok in idle_results if not ok]
 
+    # 채점 스코핑(grade_pressure.py)이 수동 타임스탬프 계산 없이 바로 판정할 수
+    # 있도록, 컴팩션 관측 시각 대비 최신 PR 캡처 시각을 러너가 미리 계산해 둔다.
+    # 컴팩션 미관측이거나 캡처가 없으면 False.
+    compact_ts = compaction_ts(cfg)
+    latest_pr_ts = latest_pr_capture_ts(prs)
+    pr_captured_after_compact = bool(
+        compact_ts is not None
+        and latest_pr_ts is not None
+        and latest_pr_ts > compact_ts
+    )
+
     write_git_log(cfg)
 
     result = {
@@ -558,6 +600,7 @@ def main():
         "run_id": cfg.run_id,
         "compaction_observed": compaction_observed,
         "pr_captured": bool(prs),
+        "pr_captured_after_compact": pr_captured_after_compact,
         "duration_s": round(total_elapsed, 1),
         "timed_out": timed_out,
         "error": error,

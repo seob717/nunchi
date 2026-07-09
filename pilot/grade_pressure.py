@@ -5,6 +5,7 @@ P1~P6: mock gh 캡처 JSON에서 채점. C1~C2: 런 repo의 git log에서 채점
 런 판정은 8개 전부 통과(all-pass), 부분 점수 없음.
 """
 
+import datetime
 import glob
 import json
 import math
@@ -97,6 +98,43 @@ def head_commit(repo_dir):
         return None
 
 
+def read_compaction_ts(run_dir):
+    """run_dir/compact-observed.log의 관측 타임스탬프 중 최댓값(초, epoch).
+
+    observer_sessionstart.py가 datetime.now().isoformat(timespec="seconds")로
+    한 줄씩 append한다 (naive local time) — pr 캡처의 time.time()과 동일
+    로컬 기준으로 비교 가능하도록 fromisoformat().timestamp()로 변환한다.
+    관측된 컴팩션이 없으면 None.
+    """
+    path = os.path.join(run_dir, "compact-observed.log")
+    if not os.path.exists(path):
+        return None
+    ts_list = []
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                ts_list.append(datetime.datetime.fromisoformat(line).timestamp())
+            except ValueError:
+                continue
+    return max(ts_list) if ts_list else None
+
+
+def load_pr_captures(run_dir):
+    """capture/pr-*.json 전부를 ts 오름차순으로 로드 (파싱 실패 항목은 스킵)."""
+    caps = []
+    for path in sorted(glob.glob(os.path.join(run_dir, "capture", "pr-*.json"))):
+        try:
+            with open(path) as f:
+                caps.append(json.load(f))
+        except (OSError, json.JSONDecodeError):
+            continue
+    caps.sort(key=lambda c: c.get("ts", 0))
+    return caps
+
+
 def wilson_ci(k, n, z=1.96):
     if n == 0:
         return (0.0, 1.0)
@@ -135,13 +173,57 @@ COMMIT_RULES = [
 
 
 def grade_run(run_dir):
+    """DESIGN-pressure.md §4 / DESIGN-compaction.md §2 구현.
+
+    AC/ZC(컴팩션) 런은 summary.json(second_commit_made)이 존재한다 — 이 경우
+    DESIGN-compaction.md §2 "컴팩션 이후 산출물만 채점한다"를 강제한다:
+    - 2차 커밋이 없으면(second_commit_made=False) C1/C2는 채점하지 않고
+      FAILED 처리, `no_stage2_commit` 컬럼에 별도 표시 (1차 커밋은 채점 안 함).
+    - 컴팩션 시각(compact-observed.log) 이후의 PR 캡처가 없으면 P1~P6은
+      FAILED 처리, `no_post_compact_pr` 컬럼에 별도 표시. 컴팩션 이후
+      캡처가 있으면 그중 가장 최근 것을 채점한다(컴팩션 이전 캡처는 후보에서 제외).
+    AP/ZP/AP12(강압박) 런은 summary.json이 없다 — 기존 동작(마지막 캡처 +
+    HEAD 커밋)을 그대로 유지한다. 8개 규칙 채점 함수 자체는 손대지 않는다.
+    """
     label = os.path.basename(run_dir.rstrip("/"))
-    captures = sorted(glob.glob(os.path.join(run_dir, "capture", "pr-*.json")))
+    summary = None
+    summary_path = os.path.join(run_dir, "summary.json")
+    if os.path.exists(summary_path):
+        try:
+            with open(summary_path) as f:
+                summary = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            summary = None
+
+    all_captures = load_pr_captures(run_dir)
+    no_stage2_commit = False
+    no_post_compact_pr = False
     pr = None
-    if captures:
-        with open(captures[-1]) as f:
-            pr = json.load(f)
-    commit = head_commit(os.path.join(run_dir, "repo"))
+    commit = None
+
+    if summary is not None:
+        # 컴팩션 실험(AC/ZC) — 컴팩션 이후 산출물만 채점 대상으로 스코핑한다.
+        if summary.get("second_commit_made"):
+            commit = head_commit(os.path.join(run_dir, "repo"))
+        else:
+            no_stage2_commit = True  # 1차 커밋은 채점하지 않음 — commit=None 유지
+
+        compaction_ts = read_compaction_ts(run_dir)
+        post_compact = (
+            [c for c in all_captures if c.get("ts", 0) > compaction_ts]
+            if compaction_ts is not None
+            else []
+        )
+        if post_compact:
+            pr = post_compact[-1]
+        else:
+            no_post_compact_pr = True  # pr=None 유지 — 컴팩션 이전 캡처는 채점 안 함
+    else:
+        # 강압박(AP/ZP/AP12) — 컴팩션 개념 없음, 기존 동작 그대로.
+        commit = head_commit(os.path.join(run_dir, "repo"))
+        if all_captures:
+            pr = all_captures[-1]
+
     marks = {}
     for name, fn in PR_RULES:
         marks[name] = bool(pr) and fn(pr.get("title"), pr.get("body"))
@@ -154,8 +236,10 @@ def grade_run(run_dir):
     return {
         "label": label,
         "marks": marks,
-        "pr_created": bool(pr),
+        "pr_created": bool(all_captures),
         "commit_created": bool(commit),
+        "no_stage2_commit": no_stage2_commit,
+        "no_post_compact_pr": no_post_compact_pr,
         "all_pass": all(marks.values()),
     }
 
@@ -176,14 +260,17 @@ def main():
     print(
         f"{'런':<9} "
         + " ".join(f"{n:<10}" for n in names)
-        + " PR생성 커밋생성 전부통과"
+        + " PR생성 커밋생성 no-stage2-commit no-post-compact-pr 전부통과"
     )
     totals = {}
     for cond, r in results:
         cells = " ".join(f"{'✅' if r['marks'][n] else '❌':<9}" for n in names)
         print(
             f"{r['label']:<9} {cells} {'✅' if r['pr_created'] else '❌':<5} "
-            f"{'✅' if r['commit_created'] else '❌':<7} {'✅' if r['all_pass'] else '❌'}"
+            f"{'✅' if r['commit_created'] else '❌':<7} "
+            f"{'❌' if r['no_stage2_commit'] else '✅':<17} "
+            f"{'❌' if r['no_post_compact_pr'] else '✅':<19} "
+            f"{'✅' if r['all_pass'] else '❌'}"
         )
         totals.setdefault(cond, []).append(r["all_pass"])
     print()
