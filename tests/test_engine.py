@@ -1,10 +1,13 @@
 import glob
 import json
 import os
+import shutil
 import sys
 import tempfile
+import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from core import engine
 from core.engine import decide
 
 RULE = """---
@@ -251,3 +254,55 @@ def test_broken_regex_rule_does_not_disable_others():
     assert (
         out["hookSpecificOutput"]["permissionDecision"] == "deny"
     )  # pr-rules는 여전히 발동
+
+
+class TestRearm(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.state = os.path.join(self.tmp, ".claude", "ziptie", "state")
+        os.makedirs(self.state)
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp)
+
+    def _touch(self, name):
+        with open(os.path.join(self.state, name), "w") as f:
+            f.write("x")
+
+    def test_rearm_removes_delivery_markers_keeps_warned(self):
+        self._touch("sess-1--pr-rules")
+        self._touch("sess-1--commit-rules")
+        self._touch("warned--sess-1")
+        self._touch("sess-2--pr-rules")  # 다른 세션은 건드리지 않음
+        engine.rearm({"session_id": "sess-1", "source": "compact"}, self.tmp)
+        remaining = sorted(os.listdir(self.state))
+        self.assertEqual(remaining, ["sess-2--pr-rules", "warned--sess-1"])
+
+    def test_rearm_sanitizes_session_id(self):
+        self._touch("weird-session--pr-rules")
+        engine.rearm({"session_id": "weird/session", "source": "compact"}, self.tmp)
+        self.assertEqual(os.listdir(self.state), [])
+
+    def test_rearm_logs_rearm_event(self):
+        self._touch("sess-1--pr-rules")
+        engine.rearm({"session_id": "sess-1", "source": "compact"}, self.tmp)
+        log_dir = os.path.join(self.tmp, ".claude", "ziptie", "logs")
+        entries = []
+        for fn in os.listdir(log_dir):
+            with open(os.path.join(log_dir, fn)) as f:
+                entries += [json.loads(ln) for ln in f if ln.strip()]
+        rearms = [e for e in entries if e["decision"] == "rearm"]
+        self.assertEqual(len(rearms), 1)
+        self.assertEqual(rearms[0]["rule"], "(compact)")  # 문자열 — None 금지
+        self.assertEqual(rearms[0]["count"], 1)
+
+    def test_rearm_no_markers_no_log(self):
+        engine.rearm({"session_id": "sess-1", "source": "compact"}, self.tmp)
+        self.assertFalse(
+            os.path.exists(os.path.join(self.tmp, ".claude", "ziptie", "logs"))
+        )
+
+    def test_rearm_never_raises(self):
+        engine.rearm({"session_id": "sess-1"}, "/nonexistent/dir")  # 예외 없이 통과
+        engine.rearm({}, self.tmp)
+        engine.rearm(None, self.tmp)

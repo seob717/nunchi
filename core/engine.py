@@ -52,17 +52,21 @@ def _content(rule: Rule, project_dir: str) -> str:
     return rule.body
 
 
-def _log(project_dir: str, session: str, rule: Rule, tool: str, decision: str):
+def _log(
+    project_dir: str, session: str, rule_name: str, tool: str, decision: str, extra=None
+):
     try:
         log_dir = os.path.join(project_dir, ".claude", "ziptie", "logs")
         os.makedirs(log_dir, exist_ok=True)
         entry = {
             "ts": datetime.datetime.now().isoformat(timespec="seconds"),
             "session": session,
-            "rule": rule.name,
+            "rule": rule_name,
             "tool": tool,
             "decision": decision,
         }
+        if extra:
+            entry.update(extra)
         with open(os.path.join(log_dir, f"{datetime.date.today()}.jsonl"), "a") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     except OSError as e:
@@ -124,7 +128,7 @@ def decide(input_data: dict, project_dir: str) -> dict:
                         _log(
                             project_dir,
                             session,
-                            rule,
+                            rule.name,
                             tool_name,
                             "allow-after-delivery",
                         )
@@ -157,9 +161,39 @@ def decide(input_data: dict, project_dir: str) -> dict:
                 marker = os.path.join(state_dir, f"{session}--{rule.name}")
                 with open(marker, "w") as f:
                     f.write("delivered")
-            _log(project_dir, session, rule, tool_name, "deny")
+            _log(project_dir, session, rule.name, tool_name, "deny")
 
         return _deny(deliveries)
     except Exception as e:  # 안전 기본값
         print(f"ziptie: engine error: {e}", file=sys.stderr)
         return {}
+
+
+def rearm(input_data, project_dir: str) -> None:
+    """컴팩션 직후 세션의 배달 마커를 리셋한다 — 룰이 JIT로 재배달되게.
+
+    warned-- 마커는 유지(경고 억제는 컴팩션과 무관). 어떤 예외도 밖으로
+    내지 않으며, stdout에는 아무것도 쓰지 않는다.
+    """
+    try:
+        input_data = input_data or {}
+        session = _sanitize_session(input_data.get("session_id", "nosession"))
+        state_dir = os.path.join(project_dir, ".claude", "ziptie", "state")
+        prefix = f"{session}--"
+        removed = 0
+        for fn in os.listdir(state_dir):
+            if fn.startswith(prefix) and not fn.startswith("warned--"):
+                with contextlib.suppress(OSError):
+                    os.remove(os.path.join(state_dir, fn))
+                    removed += 1
+        if removed:
+            _log(
+                project_dir,
+                session,
+                "(compact)",
+                "SessionStart",
+                "rearm",
+                extra={"count": removed},
+            )
+    except Exception as e:
+        print(f"ziptie: rearm error: {e}", file=sys.stderr)
