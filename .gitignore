@@ -5,3 +5,4 @@ pilot/runs/
 !pilot/template/*.local.md
 .state/
 /docs/
+pilot/compile-bench/corpus/
