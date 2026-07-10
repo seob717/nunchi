@@ -5,7 +5,45 @@
 
 *"Rules with nunchi — delivered before you have to ask."*
 
-A Claude Code plugin that compiles CLAUDE.md rules into trigger-bound hooks and delivers each rule right before the action it applies to.
+nunchi is a Claude Code plugin that turns CLAUDE.md rules into event listeners. Instead of loading every rule at session start and hoping it survives 40 turns and a compaction, each rule is delivered at the exact moment its action fires:
+
+```text
+$ gh pr create
+  ✗ blocked once — nunchi delivers docs/pr-rules.md as the block reason
+$ gh pr create   # retry
+  ✓ PR created, with the rules in context
+```
+
+One `/nunchi:compile` turns your CLAUDE.md into trigger-bound rule files; a PreToolUse hook does the delivery from then on. What you get, all [measured](#measured-results):
+
+- **−42.5% tokens at session start** — moving 8 rule docs (~76KB) out of `@imports` saved ~34k prompt tokens per session start; the full doc is paid only in sessions where its action actually fires.
+- **Rules survive compaction** — a SessionStart hook re-arms delivered rules after every `/compact`, verified across repeated compactions.
+- **Every delivery is logged** — `/nunchi:report` shows which rule fired when, and what it saved in your repo.
+
+## Quick start
+
+Requires [Claude Code](https://code.claude.com) with plugin support, and Python 3 (the hook engine runs on the standard library only — no external packages).
+
+```
+/plugin marketplace add seob717/nunchi
+/plugin install nunchi@nunchi-marketplace
+```
+
+Then, inside your project:
+
+1. **`/nunchi:compile`** — reads CLAUDE.md and the `@referenced` documents inside it, extracts rules, infers a trigger (tool, regex pattern) for each, and writes them to `.claude/rules/*.md`.
+2. **Review the rule files** — they are plain text and the source of truth. Check that each trigger, strength, and source path is right; fix by hand if needed.
+3. **Done.** From now on the PreToolUse hook delivers each rule right before the action it applies to. `/nunchi:report` shows what was delivered, when, and what it saved.
+
+<details>
+<summary>Install from a local directory instead</summary>
+
+```bash
+git clone https://github.com/seob717/nunchi.git
+claude --plugin-dir /path/to/nunchi
+```
+
+</details>
 
 ## The problem
 
@@ -108,29 +146,6 @@ The table below is a **scope map, not a scoreboard** — an empty cell or a "by 
 Hook overhead, measured: ~24ms median per tool call (26ms when a rule is delivered). Rows verified against each tool's source or official docs as of July 2026 — corrections welcome via issue.
 
 Credit where due: hookify pioneered markdown-frontmatter rules on Claude Code hooks and covers more hook events (PostToolUse, Stop, UserPromptSubmit); Ruler and rulesync solve cross-agent distribution properly; Writ explores semantic retrieval-based delivery. nunchi's niche is deliberately narrow: deterministic, action-triggered delivery with delivery-state tracking — and only measured claims.
-
-## Requirements
-
-- [Claude Code](https://code.claude.com) with plugin support
-- Python 3 — the hook engine and `/nunchi:report` run on the standard library only; no external packages
-
-## Installation
-
-### From the marketplace (recommended)
-
-```
-/plugin marketplace add seob717/nunchi
-/plugin install nunchi@nunchi-marketplace
-```
-
-### From a local directory
-
-```bash
-git clone https://github.com/seob717/nunchi.git
-claude --plugin-dir /path/to/nunchi
-```
-
-Once the plugin loads, the `/nunchi:compile` and `/nunchi:report` slash commands and the PreToolUse hook are active.
 
 ## Development
 
