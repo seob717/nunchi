@@ -1,0 +1,15 @@
+{
+  "doc": "<compile-bench manifest의 id>",
+  "matches": [
+    {"gold_id": "g1", "output_rule": "<outputs/<id>.json의 룰 name>", "rationale": "매치 판정 근거"}
+  ],
+  "misses": [
+    {"gold_id": "g2", "category": "implicit", "note": "왜 놓쳤다고 보는지"}
+  ],
+  "unmatched_extracted": [
+    {"output_rule": "<정답에 없는 추출 룰 name>", "class": "over-extraction", "note": "분류 근거"}
+  ],
+  "gold_amendments": [
+    {"gold_id": "g9", "reason": "추출 룰 검토 중 정답 누락 발견 — recall 분모 확대 방향만 허용 (§4)"}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "doc": "<compile-bench manifest의 id>",
+  "author": "human:<github-id>",
+  "rules": [
+    {
+      "id": "g1",
+      "summary": "룰 한 줄 요약",
+      "tool": "Bash",
+      "trigger_intent": "어떤 액션을 겨냥하는지 자연어로 (정규식 작성은 불요)",
+      "strength": "require-read",
+      "evidence": "원문 인용 (짧게)"
+    }
+  ]
+}
