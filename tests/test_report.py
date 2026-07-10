@@ -150,6 +150,7 @@ def test_context_economics_no_rules():
         "body_bytes": 0,
         "deliveries": 0,
         "delivered_bytes": 0,
+        "sessions_seen": 0,
     }
 
 
