@@ -21,7 +21,8 @@ For each rule, set a `tool` (Bash|Edit|Write) and a `pattern` (Python regex). Ex
 - PR rules → tool: Bash, pattern: `gh\s+pr\s+create`
 - Commit conventions → tool: Bash, pattern: `git\s+commit`
 - Migration file rules → tool: Edit, pattern: `migrations/`
-A Bash rule's pattern matches against the command string; an Edit/Write rule's pattern matches against the file path.
+- Content rules ("no console.log") → tool: Edit, pattern: `console\.log`, field: `new_string`
+A Bash rule's pattern matches against the command string; an Edit/Write rule's pattern matches against the file path. Add `field: <tool_input key>` under `trigger` to match against a specific input field instead (e.g. `new_string` for edit content, `content` for Write).
 
 ## 4. Decide strength
 - The default is `require-read` (block once per session with the rule as the reason, let the retry through — guarantees a read at the cost of one retry).

@@ -45,9 +45,13 @@ INJECT_TEMPLATE = (
 def _match_field(rule: Rule, tool_name: str, tool_input: dict):
     if rule.tool != tool_name:
         return None
+    if rule.field:
+        value = tool_input.get(rule.field)
+        # 필드 부재·비문자열(중첩 구조 등)은 매칭 불가로 취급
+        return value if isinstance(value, str) else None
     if tool_name == "Bash":
         return tool_input.get("command", "")
-    return tool_input.get("file_path", "")  # Edit/Write/기타: 경로 매칭 (MVP)
+    return tool_input.get("file_path", "")  # Edit/Write/기타: 경로 매칭 (기본)
 
 
 def _content(rule: Rule, project_dir: str) -> str:

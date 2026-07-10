@@ -20,6 +20,7 @@ class Rule:
     enabled: bool
     body: str
     path: str
+    field: Optional[str] = None  # tool_input에서 매칭할 필드 (없으면 도구별 기본)
 
 
 def _parse_frontmatter(text: str):
@@ -108,6 +109,7 @@ def parse_rule_file(path: str, quiet: bool = False) -> Optional[Rule]:
             enabled=enabled,
             body=body,
             path=path,
+            field=trigger.get("field") or None,
         )
     except Exception as e:  # 안전 기본값: 절대 세션을 죽이지 않는다
         if not quiet:

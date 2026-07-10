@@ -256,6 +256,59 @@ def test_broken_regex_rule_does_not_disable_others():
     )  # pr-rules는 여전히 발동
 
 
+CONTENT_RULE = """---
+name: no-console
+trigger:
+  tool: Edit
+  pattern: console\\.log
+  field: new_string
+strength: require-read
+---
+console.log 대신 src/logger를 써.
+"""
+
+
+def _edit_input(session, new_string, file_path="src/a.ts"):
+    return {
+        "hook_event_name": "PreToolUse",
+        "session_id": session,
+        "tool_name": "Edit",
+        "tool_input": {"file_path": file_path, "new_string": new_string},
+    }
+
+
+def test_content_field_rule_matches_new_string():
+    d = make_project(CONTENT_RULE, with_source=False)
+    out = decide(_edit_input("f1", 'console.log("x")'), d)
+    hso = out["hookSpecificOutput"]
+    assert hso["permissionDecision"] == "deny"
+    assert "src/logger" in hso["permissionDecisionReason"]
+
+
+def test_content_field_rule_ignores_non_matching_content():
+    d = make_project(CONTENT_RULE, with_source=False)
+    assert decide(_edit_input("f2", "logger.info('x')"), d) == {}
+
+
+def test_content_field_rule_ignores_file_path():
+    # field가 지정되면 file_path가 아니라 지정 필드에만 매칭한다.
+    d = make_project(CONTENT_RULE, with_source=False)
+    assert decide(_edit_input("f3", "clean", file_path="console.log.ts"), d) == {}
+
+
+def test_content_field_missing_or_non_string_no_match():
+    d = make_project(CONTENT_RULE, with_source=False)
+    inp = {
+        "hook_event_name": "PreToolUse",
+        "session_id": "f4",
+        "tool_name": "Edit",
+        "tool_input": {"file_path": "src/a.ts"},  # new_string 없음
+    }
+    assert decide(inp, d) == {}
+    inp["tool_input"]["new_string"] = ["not", "a", "string"]
+    assert decide(inp, d) == {}
+
+
 def test_inject_first_match_returns_additional_context_only():
     # PROBE-inject.md 판정 ②: permissionDecision을 넣으면 권한 시스템을
     # 우회하므로 additionalContext 단독으로 반환해야 한다.

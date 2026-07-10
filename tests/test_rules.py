@@ -49,6 +49,17 @@ def test_parse_defaults():
     assert rule.strength == "require-read"  # 기본 강도
     assert rule.enabled is True  # 기본 활성
     assert rule.source is None
+    assert rule.field is None  # 기본: 도구별 기본 필드(command/file_path)
+
+
+def test_parse_trigger_field():
+    with_field = (
+        "---\nname: no-console\ntrigger:\n  tool: Edit\n"
+        "  pattern: console\\.log\n  field: new_string\n---\nbody"
+    )
+    with tempfile.TemporaryDirectory() as d:
+        rule = parse_rule_file(_write(d, "r.md", with_field))
+    assert rule.field == "new_string"
 
 
 def test_inject_strength_accepted():
