@@ -76,6 +76,28 @@ What this table shows is *not* an edge of "JIT has a higher compliance rate than
 
 **Compaction follow-up (pre-registered):** two further arms (design and results: `pilot/DESIGN-compaction-followup.md`, `pilot/RESULTS-compaction-followup.md`). A 10-run expansion of the CLAUDE.md-only compaction condition produced no new violations in 9 valid runs, putting the observed single-compaction violation rate at 1/12 (~8%). A double-compaction preflight (3-stage task, two forced `/compact`s) again did not meet the pre-registered gate (all valid baseline runs passed), so no superiority comparison was run and none is claimed. What it did verify: **the re-arm mechanism survives repeated compaction** — deliver → compact → re-deliver → compact → re-deliver again, in 2/2 valid treated runs — and JIT delivery still didn't hurt task completion after two compactions.
 
+## How ziptie compares
+
+Different tools solve different layers of "make the agent follow the rules". Static distributors ([Ruler](https://github.com/intellectronica/ruler), [rulesync](https://github.com/dyoshikawa/rulesync)) answer *"how do I ship the same rules to every agent?"*. Guardrail hooks ([hookify](https://github.com/anthropics/claude-code/tree/main/plugins/hookify)) answer *"how do I stop a bad action?"*. ziptie answers *"how do I get the right rule into the model's context at the moment it matters — and keep it there across compactions?"*. These compose: you can distribute rule documents with Ruler and deliver them with ziptie.
+
+| Capability | ziptie | hookify | Claude Code native rules | Ruler / rulesync | Writ |
+|---|---|---|---|---|---|
+| Action (command) triggers — `gh pr create`, `git commit` | ✅ | ✅ | ❌ (file-path globs only) | ❌ | partial (gates) |
+| Content triggers — what's being *written* | ✅ `trigger.field` | ✅ | ❌ | ❌ | ❌ |
+| Delivers rule text **to the model** on block | ✅ reason | ❌ user-facing message only | — | — | ✅ |
+| Non-blocking JIT injection | ✅ `inject` | ❌ | at file-read only | ❌ | ✅ every turn |
+| Delivery state — once per session, no block loops | ✅ | ❌ (fires every time) | — | — | ❌ |
+| Re-armed after compaction | ✅ measured 5/5 | ❌ | root CLAUDE.md only | ❌ | unverified |
+| Source document read at delivery time (no drift) | ✅ | ❌ (fixed message) | ✅ | ❌ (copied at generation) | ✅ |
+| Delivery log + report | ✅ JSONL, `/ziptie:report` | ❌ | ❌ | ❌ | partial |
+| Multi-agent rule distribution (Cursor, Cline, …) | ❌ | ❌ | ❌ | ✅ 30+ agents | ❌ |
+| Runtime dependencies | Python stdlib only | Python stdlib | — | Node | Docker + Neo4j + FastAPI |
+| Published compliance measurements | ✅ pre-registered runs above | ❌ | ❌ | ❌ | ❌ |
+
+Hook overhead, measured: ~24ms median per tool call (26ms when a rule is delivered). Rows verified against each tool's source or official docs as of July 2026 — corrections welcome via issue.
+
+Credit where due: hookify pioneered markdown-frontmatter rules on Claude Code hooks and covers more hook events (PostToolUse, Stop, UserPromptSubmit); Ruler and rulesync solve cross-agent distribution properly; Writ explores semantic retrieval-based delivery. ziptie's niche is deliberately narrow: deterministic, action-triggered delivery with delivery-state tracking — and only measured claims.
+
 ## Requirements
 
 - [Claude Code](https://code.claude.com) with plugin support
