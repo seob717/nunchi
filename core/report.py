@@ -35,13 +35,20 @@ def main():
     if not result["rules"] and not result["never_triggered"]:
         print("ziptie: 기록된 로그가 없다.")
         return
-    print(f"{'룰':<24} {'배달(deny)':<10} {'통과':<6}")
+    print(f"{'룰':<24} {'배달(deny)':<10} {'주입(inject)':<12} {'통과':<6}")
+    rearm_count = 0
     for name, c in sorted(result["rules"].items()):
+        if name == "(compact)":
+            rearm_count = c.get("rearm", 0)
+            continue
         print(
-            f"{name:<24} {c.get('deny', 0):<10} {c.get('allow-after-delivery', 0):<6}"
+            f"{name:<24} {c.get('deny', 0):<10} {c.get('inject', 0):<12} "
+            f"{c.get('allow-after-delivery', 0):<6}"
         )
     for name in result["never_triggered"]:
         print(f"{name:<24} {'한 번도 트리거되지 않음 (죽은 룰?)'}")
+    if rearm_count:
+        print(f"컴팩션 재무장(rearm): {rearm_count}회")
 
 
 if __name__ == "__main__":

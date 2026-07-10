@@ -37,6 +37,51 @@ def test_summarize_counts_and_dead_rules():
     assert result["never_triggered"] == ["dead-rule"]
 
 
+def _write_log(d, entries):
+    log_dir = os.path.join(d, ".claude", "ziptie", "logs")
+    os.makedirs(log_dir)
+    with open(os.path.join(log_dir, "2026-07-10.jsonl"), "w") as f:
+        for rule, dec in entries:
+            f.write(
+                json.dumps(
+                    {
+                        "ts": "t",
+                        "session": "s",
+                        "rule": rule,
+                        "tool": "Edit",
+                        "decision": dec,
+                    }
+                )
+                + "\n"
+            )
+
+
+def test_main_output_counts_inject(capsys, monkeypatch):
+    d = tempfile.mkdtemp()
+    _write_log(d, [("style-rule", "inject"), ("style-rule", "inject")])
+    monkeypatch.chdir(d)
+    from core.report import main
+
+    main()
+    out = capsys.readouterr().out
+    assert "inject" in out.splitlines()[0]  # 헤더에 inject 컬럼
+    line = next(ln for ln in out.splitlines() if ln.startswith("style-rule"))
+    assert "2" in line
+
+
+def test_main_output_rearm_as_summary_line(capsys, monkeypatch):
+    d = tempfile.mkdtemp()
+    _write_log(d, [("pr-rules", "deny"), ("(compact)", "rearm")])
+    monkeypatch.chdir(d)
+    from core.report import main
+
+    main()
+    out = capsys.readouterr().out
+    # "(compact)"가 룰 행이 아니라 별도 요약 줄로 나온다
+    assert not any(ln.startswith("(compact)") for ln in out.splitlines())
+    assert "rearm" in out
+
+
 def test_summarize_empty_project():
     d = tempfile.mkdtemp()
     assert summarize(d) == {"rules": {}, "never_triggered": []}
