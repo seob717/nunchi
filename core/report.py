@@ -53,7 +53,7 @@ def context_economics(project_dir: str) -> dict:
             except OSError:
                 pass
     deliveries = delivered_bytes = 0
-    sessions = set()
+    sessions, tracked = set(), set()
     for path in sorted(
         glob.glob(os.path.join(project_dir, ".claude", "ziptie", "logs", "*.jsonl"))
     ):
@@ -67,6 +67,8 @@ def context_economics(project_dir: str) -> dict:
                     continue
                 if entry.get("session"):
                     sessions.add(entry["session"])
+                    if entry.get("decision") == "session-start":
+                        tracked.add(entry["session"])
                 if entry.get("decision") not in ("deny", "inject"):
                     continue
                 deliveries += 1
@@ -78,8 +80,10 @@ def context_economics(project_dir: str) -> dict:
         "body_bytes": body_bytes,
         "deliveries": deliveries,
         "delivered_bytes": delivered_bytes,
-        # 하한: 무배달 세션은 로그에 흔적이 없다 (SessionStart 훅은 compact 전용)
+        # InstructionsLoaded 훅(#10)이 세션마다 session-start 1줄을 남기므로
+        # 훅 도입 이후 세션은 전수 관측된다. 도입 전 로그는 배달 흔적만 있어 하한.
         "sessions_seen": len(sessions),
+        "sessions_tracked": len(tracked),
     }
 
 
@@ -94,6 +98,8 @@ def main():
         if name == "(compact)":
             rearm_count = c.get("rearm", 0)
             continue
+        if name == "(session)":
+            continue  # 세션 관측 기록 — 룰이 아니므로 아래 경제성 요약에서만 쓴다
         print(
             f"{name:<24} {c.get('deny', 0):<10} {c.get('inject', 0):<12} "
             f"{c.get('allow-after-delivery', 0):<6}"
@@ -105,15 +111,25 @@ def main():
     eco = context_economics(os.getcwd())
     if eco["n_docs"]:
         saved = eco["import_bytes"] - eco["body_bytes"]
+        if eco["sessions_tracked"]:
+            session_note = (
+                f"로그에 잡힌 세션 {eco['sessions_seen']}개 "
+                f"(InstructionsLoaded 훅 전수 관측 {eco['sessions_tracked']}개 포함 — "
+                f"훅 도입 후 세션은 빠짐없이 집계), "
+                f"누적 절약 ≈ 세션수×{saved:,}B − 배달 지출."
+            )
+        else:
+            session_note = (
+                f"로그에 잡힌 세션 {eco['sessions_seen']}개 — 하한(무배달 세션은 "
+                f"로그에 없음), 누적 절약은 최소 세션수×{saved:,}B − 배달 지출."
+            )
         print(
             f"\n[컨텍스트 절약 추정] source 문서 {eco['n_docs']}개 "
             f"{eco['import_bytes']:,}B — @import했다면 매 세션 선불. "
             f"ziptie 방식 세션 시작 비용은 룰 본문 {eco['body_bytes']:,}B "
             f"(세션당 약 {saved:,}B 절약). "
             f"배달 지출 {eco['deliveries']}건 ≈ {eco['delivered_bytes']:,}B "
-            f"(현재 문서 크기 기준 근사). "
-            f"로그에 잡힌 세션 {eco['sessions_seen']}개 — 하한(무배달 세션은 "
-            f"로그에 없음), 누적 절약은 최소 세션수×{saved:,}B − 배달 지출."
+            f"(현재 문서 크기 기준 근사). " + session_note
         )
 
 

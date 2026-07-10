@@ -113,6 +113,61 @@ def test_engine_never_raises_on_garbage_input():
     assert decide({"tool_name": "Bash"}, d) == {}
 
 
+def _session_log_entries(d):
+    entries = []
+    for path in glob.glob(os.path.join(d, ".claude", "ziptie", "logs", "*.jsonl")):
+        with open(path) as f:
+            entries += [json.loads(ln) for ln in f if ln.strip()]
+    return [e for e in entries if e["decision"] == "session-start"]
+
+
+def test_record_session_logs_one_line():
+    d = make_project()
+    engine.record_session({"session_id": "s1"}, d)
+    entries = _session_log_entries(d)
+    assert len(entries) == 1
+    assert entries[0]["session"] == "s1"
+    assert entries[0]["rule"] == "(session)"
+
+
+def test_record_session_dedupes_within_session():
+    d = make_project()
+    engine.record_session({"session_id": "s1"}, d)
+    engine.record_session({"session_id": "s1"}, d)  # 같은 세션의 재발화(재로드 등)
+    assert len(_session_log_entries(d)) == 1
+
+
+def test_record_session_counts_distinct_sessions():
+    d = make_project()
+    engine.record_session({"session_id": "s1"}, d)
+    engine.record_session({"session_id": "s2"}, d)
+    assert len(_session_log_entries(d)) == 2
+
+
+def test_record_session_marker_survives_rearm():
+    # 컴팩션 후 InstructionsLoaded가 다시 발화해도 같은 세션을 중복 계상하지 않는다
+    d = make_project()
+    engine.record_session({"session_id": "s1"}, d)
+    engine.rearm({"session_id": "s1", "source": "compact"}, d)
+    engine.record_session({"session_id": "s1"}, d)
+    assert len(_session_log_entries(d)) == 1
+
+
+def test_record_session_sanitizes_session_id():
+    d = make_project()
+    engine.record_session({"session_id": "../evil/../../x"}, d)
+    entries = _session_log_entries(d)
+    assert len(entries) == 1
+    state = os.path.join(d, ".claude", "ziptie", "state")
+    assert not any("/" in fn for fn in os.listdir(state))
+
+
+def test_record_session_never_raises():
+    engine.record_session({"session_id": "s1"}, "/nonexistent/dir")
+    engine.record_session({}, make_project())
+    engine.record_session(None, make_project())
+
+
 def test_multiple_require_read_rules_merge_in_single_deny():
     d = make_project()
     rule2 = RULE.replace("name: pr-rules", "name: pr-rules-2").replace(

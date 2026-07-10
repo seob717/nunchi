@@ -15,6 +15,13 @@
           { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/sessionstart.py\"", "timeout": 10 }
         ]
       }
+    ],
+    "InstructionsLoaded": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/instructionsloaded.py\"", "timeout": 10 }
+        ]
+      }
     ]
   }
 }

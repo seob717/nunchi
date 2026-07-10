@@ -216,6 +216,29 @@ def decide(input_data: dict, project_dir: str) -> dict:
         return {}
 
 
+def record_session(input_data, project_dir: str) -> None:
+    """세션을 1회 관측 기록한다 — InstructionsLoaded 훅 엔트리에서 호출.
+
+    배달 로그만으로는 무배달 세션이 보이지 않아 누적 절약(세션수×고정비)이
+    과소 계상된다(#10). 세션당 정확히 1줄만 남긴다: seen-- 마커가 있으면
+    무시. 마커는 "{session}--" 접두사가 아니므로 rearm에서 살아남는다 —
+    컴팩션 후 재발화해도 같은 세션을 중복 계상하지 않는다.
+    """
+    try:
+        input_data = input_data or {}
+        session = _sanitize_session(input_data.get("session_id", "nosession"))
+        state_dir = os.path.join(project_dir, ".claude", "ziptie", "state")
+        marker = os.path.join(state_dir, f"seen--{session}")
+        if os.path.exists(marker):
+            return
+        os.makedirs(state_dir, exist_ok=True)
+        with open(marker, "w") as f:
+            f.write("seen")
+        _log(project_dir, session, "(session)", "InstructionsLoaded", "session-start")
+    except Exception as e:
+        print(f"ziptie: record_session error: {e}", file=sys.stderr)
+
+
 def rearm(input_data, project_dir: str) -> None:
     """컴팩션 직후 세션의 배달 마커를 리셋한다 — 룰이 JIT로 재배달되게.
 

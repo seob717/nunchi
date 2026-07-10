@@ -151,7 +151,53 @@ def test_context_economics_no_rules():
         "deliveries": 0,
         "delivered_bytes": 0,
         "sessions_seen": 0,
+        "sessions_tracked": 0,
     }
+
+
+def test_main_output_session_as_summary_not_rule_row(capsys, monkeypatch):
+    d = tempfile.mkdtemp()
+    _write_log(d, [("pr-rules", "deny"), ("(session)", "session-start")])
+    monkeypatch.chdir(d)
+    from core.report import main
+
+    main()
+    out = capsys.readouterr().out
+    # "(session)"은 룰 행으로 나오지 않는다
+    assert not any(ln.startswith("(session)") for ln in out.splitlines())
+
+
+def test_context_economics_tracked_sessions():
+    import json as _json
+
+    from core.report import context_economics
+
+    d = tempfile.mkdtemp()
+    log_dir = os.path.join(d, ".claude", "ziptie", "logs")
+    os.makedirs(log_dir)
+    with open(os.path.join(log_dir, "2026-07-10.jsonl"), "w") as f:
+        rows = [
+            ("s1", "(session)", "session-start"),  # 훅으로 관측된 세션
+            ("s2", "(session)", "session-start"),
+            ("s2", "r", "deny"),  # s2는 배달도 있음 — 중복 계상 없음
+            ("s3", "r", "deny"),  # 훅 도입 전 로그 — 배달로만 관측
+        ]
+        for sess, rule, dec in rows:
+            f.write(
+                _json.dumps(
+                    {
+                        "ts": "t",
+                        "session": sess,
+                        "rule": rule,
+                        "tool": "InstructionsLoaded",
+                        "decision": dec,
+                    }
+                )
+                + "\n"
+            )
+    eco = context_economics(d)
+    assert eco["sessions_seen"] == 3  # s1, s2, s3
+    assert eco["sessions_tracked"] == 2  # s1, s2 (session-start 기록이 있는 세션)
 
 
 def test_summarize_empty_project():

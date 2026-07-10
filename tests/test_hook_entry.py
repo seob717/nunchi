@@ -9,6 +9,9 @@ HOOK = os.path.join(os.path.dirname(__file__), "..", "hooks", "pretooluse.py")
 SESSIONSTART_HOOK = os.path.join(
     os.path.dirname(__file__), "..", "hooks", "sessionstart.py"
 )
+INSTRUCTIONSLOADED_HOOK = os.path.join(
+    os.path.dirname(__file__), "..", "hooks", "instructionsloaded.py"
+)
 REPO_ROOT = os.path.dirname(os.path.dirname(__file__))
 RULE = """---
 name: pr-rules
@@ -161,6 +164,80 @@ def test_sessionstart_non_compact_source_is_noop():
         assert os.path.exists(marker_file)
     finally:
         shutil.rmtree(tmp)
+
+
+def _read_session_entries(project_dir):
+    import glob
+
+    entries = []
+    for path in glob.glob(
+        os.path.join(project_dir, ".claude", "ziptie", "logs", "*.jsonl")
+    ):
+        with open(path) as f:
+            entries += [json.loads(ln) for ln in f if ln.strip()]
+    return [e for e in entries if e["decision"] == "session-start"]
+
+
+def test_instructionsloaded_logs_session_and_stays_silent():
+    tmp = tempfile.mkdtemp()
+    try:
+        env = {k: v for k, v in os.environ.items() if k != "CLAUDE_PROJECT_DIR"}
+        env["CLAUDE_PROJECT_DIR"] = tmp
+        payload = {
+            "session_id": "s1",
+            "hook_event_name": "InstructionsLoaded",
+            "matcher": "session_start",
+        }
+        r = subprocess.run(
+            [sys.executable, INSTRUCTIONSLOADED_HOOK],
+            input=json.dumps(payload),
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=10,
+        )
+        assert r.returncode == 0
+        assert r.stdout == ""  # stdout은 컨텍스트에 주입되므로 항상 침묵
+        entries = _read_session_entries(tmp)
+        assert len(entries) == 1
+        assert entries[0]["session"] == "s1"
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_instructionsloaded_repeat_fire_logs_once():
+    tmp = tempfile.mkdtemp()
+    try:
+        env = {k: v for k, v in os.environ.items() if k != "CLAUDE_PROJECT_DIR"}
+        env["CLAUDE_PROJECT_DIR"] = tmp
+        payload = {"session_id": "s1", "hook_event_name": "InstructionsLoaded"}
+        for _ in range(2):  # nested_traversal·include 등으로 세션 중 재발화 가능
+            r = subprocess.run(
+                [sys.executable, INSTRUCTIONSLOADED_HOOK],
+                input=json.dumps(payload),
+                capture_output=True,
+                text=True,
+                env=env,
+                timeout=10,
+            )
+            assert r.returncode == 0 and r.stdout == ""
+        assert len(_read_session_entries(tmp)) == 1
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_instructionsloaded_garbage_stdin_exits_zero_silent():
+    env = {k: v for k, v in os.environ.items() if k != "CLAUDE_PROJECT_DIR"}
+    r = subprocess.run(
+        [sys.executable, INSTRUCTIONSLOADED_HOOK],
+        input="not json",
+        capture_output=True,
+        text=True,
+        env=env,
+        timeout=10,
+    )
+    assert r.returncode == 0
+    assert r.stdout == ""
 
 
 def test_sessionstart_garbage_stdin_exits_zero_silent():
