@@ -85,19 +85,25 @@ What this table shows is *not* an edge of "JIT has a higher compliance rate than
 
 Different tools solve different layers of "make the agent follow the rules". Static distributors ([Ruler](https://github.com/intellectronica/ruler), [rulesync](https://github.com/dyoshikawa/rulesync)) answer *"how do I ship the same rules to every agent?"*. Guardrail hooks ([hookify](https://github.com/anthropics/claude-code/tree/main/plugins/hookify)) answer *"how do I stop a bad action?"*. ziptie answers *"how do I get the right rule into the model's context at the moment it matters — and keep it there across compactions?"*. These compose: you can distribute rule documents with Ruler and deliver them with ziptie.
 
+The table below is a **scope map, not a scoreboard** — an empty cell or a "by design" note usually marks a deliberate design choice, and several rows go the other way (hookify covers more hook events, Writ retrieves semantically, Ruler distributes to 30+ agents — none of which ziptie does).
+
 | Capability | ziptie | hookify | Claude Code native rules | Ruler / rulesync | Writ |
 |---|---|---|---|---|---|
-| Action (command) triggers — `gh pr create`, `git commit` | ✅ | ✅ | ❌ (file-path globs only) | ❌ | partial (gates) |
-| Content triggers — what's being *written* | ✅ `trigger.field` | ✅ | ❌ | ❌ | partial (static analysis pre-write, not rule patterns) |
-| Delivers rule text **to the model** on block | ✅ reason | Stop events ✅ / PreToolUse ❌ (user-facing only) | — | — | ✅ rule ID + reason |
-| Non-blocking JIT injection | ✅ `inject` | ❌ | at file-read only | ❌ | ✅ every turn |
-| Delivery state — once per session, no block loops | ✅ | ❌ (fires every time) | — | — | ✅ per-phase IDs + token budget |
-| Re-armed after compaction | ✅ measured 5/5 | ❌ | root CLAUDE.md documented; rules files unspecified | ❌ | ✅ PostCompact re-inject |
-| Source document read at delivery time (no drift) | ✅ | ❌ (message lives in the rule file itself) | ✅ | ❌ (copied at generation) | ✅ |
-| Delivery log + report | ✅ JSONL, `/ziptie:report` | ❌ | ❌ | ❌ | ✅ friction log + dashboard |
-| Multi-agent rule distribution (Cursor, Cline, …) | ❌ | ❌ | ❌ | ✅ 30+ agents | ❌ |
-| Runtime dependencies | Python stdlib only | Python stdlib | — | Node | Docker + Neo4j + FastAPI |
-| Published compliance measurements | ✅ pre-registered runs above | ❌ | ❌ | ❌ | ❌ (qualitative pressure-run transcripts only) |
+| Action (command) triggers — `gh pr create`, `git commit` | ✅ | ✅ | file-read path globs | out of scope¹ | partial (built-in gates) |
+| Content triggers — what's being *written* | ✅ `trigger.field` | ✅ | — | out of scope¹ | partial (static-analysis pre-write) |
+| Delivers rule text **to the model** on block | ✅ reason | Stop ✅ / PreToolUse: user-facing message | — | out of scope¹ | ✅ rule ID + reason |
+| Non-blocking JIT injection | ✅ `inject` | — | at file-read | out of scope¹ | ✅ every turn (retrieval) |
+| Delivery state — once per session, no block loops | ✅ | stateless by design | — | out of scope¹ | ✅ per-phase IDs + token budget |
+| Re-armed after compaction | ✅ measured 5/5 | stateless by design | root CLAUDE.md documented; rules files unspecified | out of scope¹ | ✅ PostCompact re-inject |
+| Source document read at delivery time (no drift) | ✅ | message lives in the rule file | ✅ | copied at generation | ✅ |
+| Delivery log + report | ✅ JSONL, `/ziptie:report` | — | — | out of scope¹ | ✅ friction log + dashboard |
+| Hook events beyond PreToolUse (PostToolUse, Stop, UserPromptSubmit) | not yet — Stop rules on the roadmap | ✅ 4 events | — | — | ✅ broad coverage |
+| Semantic rule matching (meaning, not regex) | regex by design (deterministic) | regex | path globs | — | ✅ hybrid-RAG |
+| Multi-agent rule distribution (Cursor, Cline, …) | not planned | — | — | ✅ 30+ agents | — |
+| Runtime dependencies | Python stdlib | Python stdlib | built-in | Node | Docker + Neo4j + FastAPI |
+| Published compliance measurements | pre-registered runs above | — | — | — | qualitative pressure-run transcripts |
+
+¹ Ruler and rulesync are static distributors by design — they generate config files and hand off to each agent's own runtime, so runtime-delivery rows simply don't apply to them.
 
 Hook overhead, measured: ~24ms median per tool call (26ms when a rule is delivered). Rows verified against each tool's source or official docs as of July 2026 — corrections welcome via issue.
 
