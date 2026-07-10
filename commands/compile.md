@@ -30,7 +30,7 @@ A Bash rule's pattern matches against the command string; an Edit/Write rule's p
 - Use `inject` for advisory rules where even one blocked attempt is overkill (style reminders, soft conventions): the rule is delivered alongside the tool call with zero friction, but compliance is left to the model's judgment rather than forced by a retry.
 
 ## 5. Generate rule files
-For each rule, create `.claude/rules/<kebab-case-name>.md`. If there is an original document, put its project-relative path in `source` and write only a one-line summary in the body (no copy-paste, since the original is read at delivery time):
+For each rule, create `.claude/rules/<kebab-case-name>.md`. If there is an original document, put its project-relative path in `source` and write only a **one-line summary** in the body. Two reasons, both hard requirements: the original is read at delivery time (so a pasted copy would drift), and Claude Code's native `.claude/rules/` loader injects the body at session start (so a long body would enter context twice — the body is the always-on declaration, the source is the JIT payload):
 
 Filename convention: base the filename on the source document's filename in kebab-case (e.g. `docs/pr-rules.md` → `pr-rules.md`). If a single document yields multiple rules, append a content-based suffix to disambiguate (e.g. `pr-rules-title.md`, `pr-rules-reviewer.md`). If the resulting filename collides with an existing rule file, confirm with the user before overwriting it.
 

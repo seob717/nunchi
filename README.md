@@ -41,7 +41,16 @@ Reflect docs/pr-rules.md before creating a PR.
   - `block` — always block, delivering the rule as the reason. For actions a document marks as absolutely forbidden.
   - `require-read` (default) — block once per session with the rule text as the reason, then let the retry through. One retry buys a guaranteed read.
   - `inject` — deliver the rule via `additionalContext` alongside the tool call, with **zero blocking and zero retry cost**. The delivery carries a provenance framing (project-owner hook, registered rule path, `source` path) because we measured that unframed injected instructions get treated as prompt injection and refused, while framed ones are followed (see `pilot/PROBE-inject.md`). Softer than `require-read`: compliance rides on the model's judgment instead of a forced retry. ziptie never returns `permissionDecision: allow`, so your permission prompts are untouched.
-- Body: a summary to deliver instead of, or in addition to, the original document.
+- Body: a summary to deliver instead of, or in addition to, the original document. **Keep it to one line** — see below.
+
+### Interaction with Claude Code's native `.claude/rules/` loader
+
+Claude Code itself (v2.0.64+) also reads `.claude/rules/*.md`: a file without a `paths:` frontmatter key gets its body loaded into context at session start (verified by probe on v2.1.206). ziptie embraces this rather than fighting it — the two loaders split the work:
+
+- The **body** doubles as an always-on one-line declaration, natively loaded at t=0 ("PR rules exist for this repo").
+- The **source document** is what ziptie delivers just-in-time, in full, at the moment the trigger fires.
+
+This is why rule bodies must stay at one summary line: a long body would be injected at session start *and* delivered again at trigger time. `/ziptie:compile` generates bodies this way by default.
 
 ## Measured results
 
