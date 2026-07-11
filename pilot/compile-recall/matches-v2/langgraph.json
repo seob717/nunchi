@@ -1,0 +1,40 @@
+{
+  "doc": "langgraph",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "run-checks-before-pr",
+      "rationale": "The Bash rule gates pull-request creation on running the library checks, which includes the gold rule's formatting action. It is broader and does not encode `make format` or the library directory explicitly, but this is partial coverage of the same action. Because it consolidates format, lint, and test into one extracted rule, 1:1 matching assigns it only here."
+    },
+    {
+      "gold_id": "g5",
+      "output_rule": "no-sphinx-double-backtick",
+      "rationale": "The Edit rule detects Sphinx-style double-backtick content in source-file edits, and its evidence explicitly prohibits that formatting in docstrings and comments."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g2",
+      "category": "structure",
+      "note": "The compiler collapsed the three sibling checklist bullets into the single generic `run-checks-before-pr` rule. Under the 1:1 constraint that rule is used for g1, leaving no distinct extracted rule for the `make lint` bullet."
+    },
+    {
+      "gold_id": "g3",
+      "category": "structure",
+      "note": "The compiler collapsed the three sibling checklist bullets into the single generic `run-checks-before-pr` rule. Under the 1:1 constraint that rule is used for g1, leaving no distinct extracted rule for the `make test` bullet."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "The compiler deliberately self-reported this as uncompilable: \"TEST environment variable syntax for running a specific test file — usage documentation, no obligation/prohibition attached\". Consequently there is no Bash extraction targeting use of `TEST`."
+    },
+    {
+      "gold_id": "g6",
+      "category": "other",
+      "note": "The compiler combined the positive single-backtick instruction with the double-backtick prohibition in `no-sphinx-double-backtick`. That extracted rule is already assigned to the closer prohibition g5 under the 1:1 constraint, and there is no separate rule requiring single backticks."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}

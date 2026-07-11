@@ -1,0 +1,40 @@
+{
+  "doc": "langgraph",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "run-checks-before-pr",
+      "rationale": "The Bash rule triggers when creating a pull request and its evidence requires the library-local pre-PR commands; among the three command-specific gold rules, this is a valid but equally broad match, so the 1:1 constraint assigns it only to g1."
+    },
+    {
+      "gold_id": "g5",
+      "output_rule": "no-sphinx-double-backtick",
+      "rationale": "The Edit rule targets double-backtick content in source files and cites the prohibition on Sphinx-style double backticks in docstrings and comments, matching the prohibited edit in g5."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g2",
+      "category": "structure",
+      "note": "The lint obligation is a separate bullet in the pre-PR command list, but the compiler collapsed the list into one broad extracted rule, which is already consumed by the closest available 1:1 assignment."
+    },
+    {
+      "gold_id": "g3",
+      "category": "structure",
+      "note": "The test obligation is a separate bullet in the pre-PR command list, but the compiler collapsed the list into one broad extracted rule, which is already consumed by the closest available 1:1 assignment."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "The compiler deliberately self-reported this as uncompilable: \"TEST environment variable syntax for running a specific test file — usage documentation, no obligation/prohibition attached\"."
+    },
+    {
+      "gold_id": "g6",
+      "category": "other",
+      "note": "The compiler combined the positive single-backtick guidance with the double-backtick prohibition, but its actual trigger matches only double-backtick text; that extracted rule is therefore matched to g5 and cannot also satisfy g6 under the 1:1 constraint."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}

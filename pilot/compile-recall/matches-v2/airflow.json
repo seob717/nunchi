@@ -1,0 +1,526 @@
+{
+  "doc": "airflow",
+  "judge": "llm:codex-0.144.1(gpt-5)",
+  "matches": [
+    {
+      "gold_id": "g6",
+      "output_rule": "no-direct-pytest-python-airflow-on-host",
+      "rationale": "Same Bash commands and same prohibition on running pytest, Python, or Airflow directly on the host."
+    },
+    {
+      "gold_id": "g40",
+      "output_rule": "no-assert-in-production-code",
+      "rationale": "Same Edit target: assertions in production Python code."
+    },
+    {
+      "gold_id": "g42",
+      "output_rule": "no-time-time-for-durations",
+      "rationale": "Same Edit target: time.time() used for duration measurement."
+    },
+    {
+      "gold_id": "g43",
+      "output_rule": "no-session-commit-in-airflow-core",
+      "rationale": "Same Edit target: session.commit() in airflow-core functions with a session parameter; the extracted rule omits the keyword-only parameter clause."
+    },
+    {
+      "gold_id": "g46",
+      "output_rule": "no-new-raise-airflow-exception-edit",
+      "rationale": "Same Edit target: newly added direct raise AirflowException calls."
+    },
+    {
+      "gold_id": "g47",
+      "output_rule": "translate-exceptions-to-httpexception",
+      "rationale": "Same Edit target: exception translation in airflow-core core_api routes."
+    },
+    {
+      "gold_id": "g48",
+      "output_rule": "batch-bulk-delete-update-in-scheduler",
+      "rationale": "Same Edit target: unbounded bulk delete/update in scheduler code; extraction captures the central batching prohibition but not every compound clause."
+    },
+    {
+      "gold_id": "g50",
+      "output_rule": "apache-license-header-new-files",
+      "rationale": "Same Write target: license headers on new repository source files, though the extraction covers only listed extensions."
+    },
+    {
+      "gold_id": "g51",
+      "output_rule": "keep-selective-checks-doc-in-sync",
+      "rationale": "Same Edit target: changes to selective_checks.py require its documentation to be updated."
+    },
+    {
+      "gold_id": "g52",
+      "output_rule": "newsfragment-only-if-user-facing",
+      "rationale": "Same Write target: newsfragments must be limited to certain user-facing changes; extraction is path-narrower."
+    },
+    {
+      "gold_id": "g53",
+      "output_rule": "no-newsfragment-for-providers-or-airflow-ctl",
+      "rationale": "Same Write target: newsfragments under providers or airflow-ctl are prohibited."
+    },
+    {
+      "gold_id": "g56",
+      "output_rule": "no-unittest-testcase",
+      "rationale": "Same Edit target: unittest.TestCase usage in Python tests."
+    },
+    {
+      "gold_id": "g57",
+      "output_rule": "prefer-autospec-mocking",
+      "rationale": "Same Edit target: mocks in tests should use spec/autospec; extraction is narrower to mock.patch."
+    },
+    {
+      "gold_id": "g58",
+      "output_rule": "prefer-mock-patch-decorator",
+      "rationale": "Same Edit target: context-manager mock.patch usage should be replaced by decorators; the configuration-override clause is omitted."
+    },
+    {
+      "gold_id": "g59",
+      "output_rule": "no-datetime-now-in-tests",
+      "rationale": "Same Edit target: datetime.now() in tests; extraction omits the time_machine requirement."
+    },
+    {
+      "gold_id": "g63",
+      "output_rule": "no-caplog-in-tests",
+      "rationale": "Same Edit target: caplog usage in tests."
+    },
+    {
+      "gold_id": "g65",
+      "output_rule": "no-conventional-commit-prefix",
+      "rationale": "Same Bash/commit target: commit messages must not use Conventional Commit prefixes; the imperative-mood clause is omitted."
+    },
+    {
+      "gold_id": "g66",
+      "output_rule": "run-prek-install-before-commit",
+      "rationale": "Same Bash target: run prek install before committing code."
+    },
+    {
+      "gold_id": "g68",
+      "output_rule": "no-self-co-authored-by",
+      "rationale": "Same Bash/commit-message target: prohibit self Co-Authored-By attribution."
+    },
+    {
+      "gold_id": "g69",
+      "output_rule": "no-destructive-push-to-upstream-or-main",
+      "rationale": "Same Bash target: prohibit pushing to upstream or main; extraction does not affirmatively require origin for all other pushes."
+    },
+    {
+      "gold_id": "g70",
+      "output_rule": "verify-remotes-before-push-or-pr",
+      "rationale": "Same Bash target for push/PR remote operations: verify remotes first; extraction is narrower than all remote-based commands."
+    },
+    {
+      "gold_id": "g74",
+      "output_rule": "self-review-checklist-before-pr",
+      "rationale": "Same Bash/PR target: perform the prescribed self-review before PR creation; extraction does not isolate the full-diff substep."
+    },
+    {
+      "gold_id": "g77",
+      "output_rule": "rebase-before-push",
+      "rationale": "Same Bash target: rebase onto the latest target branch before pushing."
+    },
+    {
+      "gold_id": "g78",
+      "output_rule": "pr-body-ai-disclosure",
+      "rationale": "Same Bash/PR-creation target: open PR creation with a prefilled body; extraction covers the AI-disclosure portion of the prefill."
+    },
+    {
+      "gold_id": "g79",
+      "output_rule": "pr-title-format",
+      "rationale": "Same Bash/PR-title target: short, imperative, user-impact-focused title."
+    },
+    {
+      "gold_id": "g81",
+      "output_rule": "no-issue-when-fix-is-imminent",
+      "rationale": "Same Bash target: do not create an issue when proceeding directly to an imminent fix PR."
+    },
+    {
+      "gold_id": "g82",
+      "output_rule": "tracking-issue-for-deferred-work",
+      "rationale": "Same Bash/PR target: deferred work in a partial fix must be captured in a tracking issue; extraction omits the URL-comment clause."
+    },
+    {
+      "gold_id": "g83",
+      "output_rule": "tracking-issue-full-url-in-comment",
+      "rationale": "Same Edit target: use the full issue URL rather than a bare issue number at a workaround site."
+    },
+    {
+      "gold_id": "g87",
+      "output_rule": "attribution-footer-on-github-posts",
+      "rationale": "Same Bash target: agent-drafted GitHub comments or reviews require an attribution footer."
+    },
+    {
+      "gold_id": "g89",
+      "output_rule": "no-tagging-individuals",
+      "rationale": "Same Bash target: GitHub messages must not mention or tag individual contributors."
+    },
+    {
+      "gold_id": "g91",
+      "output_rule": "no-hand-edit-magpie-snapshot",
+      "rationale": "Same Edit target: files in the apache-magpie snapshot must not be edited directly."
+    },
+    {
+      "gold_id": "g93",
+      "output_rule": "ask-before-destructive-migration",
+      "rationale": "Same Edit target for the destructive data/migration branch of this compound gold rule; broad refactors and dependencies are omitted."
+    },
+    {
+      "gold_id": "g95",
+      "output_rule": "no-hand-edit-uv-lock",
+      "rationale": "Same Edit target: uv.lock is generated and should be regenerated rather than hand-edited; extraction covers the document's concrete generated-file example."
+    },
+    {
+      "gold_id": "g96",
+      "output_rule": "no-destructive-git-ops-unless-requested",
+      "rationale": "Same Bash target: destructive git operations require explicit request; extraction enumerates a subset."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g1",
+      "category": "other",
+      "note": "Self-reported uncompilable: \"Dag/DAG capitalization convention in prose (title-case 'Dag' vs literal code tokens) — general writing style, not action-bindable\"."
+    },
+    {
+      "gold_id": "g2",
+      "category": "other",
+      "note": "Self-reported uncompilable with the Dag/DAG prose convention; no extracted Edit rule targets acronym expansion."
+    },
+    {
+      "gold_id": "g3",
+      "category": "other",
+      "note": "Self-reported uncompilable: \"One-time environment setup steps (install prek, enable commit hooks initially, install breeze shim) — bootstrap steps, not per-action triggers\"."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "The setup command prek install was self-reported uncompilable as a one-time bootstrap step; the commit-triggered extracted rule is a different action."
+    },
+    {
+      "gold_id": "g5",
+      "category": "other",
+      "note": "Self-reported uncompilable as a one-time environment bootstrap step."
+    },
+    {
+      "gold_id": "g7",
+      "category": "other",
+      "note": "Self-reported uncompilable: \"Place temporary scripts under dev/ — no trigger reliably distinguishes 'temporary script' writes from ordinary source writes\"."
+    },
+    {
+      "gold_id": "g8",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table; no extracted rule targets the single-method uv pytest command."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g10",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g11",
+      "category": "other",
+      "note": "Self-reported uncompilable: reactive troubleshooting tip for missing system dependencies."
+    },
+    {
+      "gold_id": "g12",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g13",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g14",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g15",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g16",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g17",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g18",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g19",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g20",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g21",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g22",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table; the host-command blocker is not the same affirmative Breeze command."
+    },
+    {
+      "gold_id": "g23",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g24",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g25",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g26",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g27",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g28",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g29",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g30",
+      "category": "structure",
+      "note": "Self-reported uncompilable as part of the commands reference table."
+    },
+    {
+      "gold_id": "g31",
+      "category": "structure",
+      "note": "No extracted Bash rule targets database-backend selection; it appears in the command guidance/table."
+    },
+    {
+      "gold_id": "g32",
+      "category": "other",
+      "note": "Self-reported uncompilable: reactive troubleshooting tip for Docker networking failure."
+    },
+    {
+      "gold_id": "g33",
+      "category": "implicit",
+      "note": "The document states this as an informal conflict-recovery instruction; the extracted uv.lock rule is Edit-based and does not target the Bash regeneration action."
+    },
+    {
+      "gold_id": "g34",
+      "category": "other",
+      "note": "Self-reported uncompilable as descriptive Architecture Boundaries guidance, not a tool-bound rule."
+    },
+    {
+      "gold_id": "g35",
+      "category": "other",
+      "note": "Self-reported uncompilable as descriptive Architecture Boundaries guidance, not a tool-bound rule."
+    },
+    {
+      "gold_id": "g36",
+      "category": "implicit",
+      "note": "The dependency-declaration statement is architectural guidance; no extracted Edit rule targets declarations themselves."
+    },
+    {
+      "gold_id": "g37",
+      "category": "other",
+      "note": "Self-reported uncompilable as Security Model vulnerability-classification guidance."
+    },
+    {
+      "gold_id": "g38",
+      "category": "other",
+      "note": "Self-reported uncompilable as Security Model vulnerability-classification guidance."
+    },
+    {
+      "gold_id": "g39",
+      "category": "other",
+      "note": "The extracted ruff rules trigger Edit/Write, not the gold rule's Bash action, so same-tool matching fails."
+    },
+    {
+      "gold_id": "g41",
+      "category": "other",
+      "note": "Self-reported uncompilable: \"Comment sparingly / when comments are warranted — general coding style at large\"."
+    },
+    {
+      "gold_id": "g44",
+      "category": "other",
+      "note": "Self-reported uncompilable: imports-at-top general style guidance."
+    },
+    {
+      "gold_id": "g45",
+      "category": "other",
+      "note": "Self-reported uncompilable: judgment-heavy TYPE_CHECKING guidance without a reliable trigger."
+    },
+    {
+      "gold_id": "g49",
+      "category": "other",
+      "note": "Self-reported uncompilable: action-verb function naming is general naming style."
+    },
+    {
+      "gold_id": "g54",
+      "category": "structure",
+      "note": "The task-sdk newsfragment destination is embedded in the detailed newsfragment guidance; no extracted Write rule targets it."
+    },
+    {
+      "gold_id": "g55",
+      "category": "other",
+      "note": "Self-reported uncompilable with the judgment-based test-scope/coverage guidance."
+    },
+    {
+      "gold_id": "g60",
+      "category": "other",
+      "note": "Self-reported uncompilable: parametrization of similar tests is judgment-based style guidance."
+    },
+    {
+      "gold_id": "g61",
+      "category": "other",
+      "note": "Self-reported uncompilable: database-test marking requires semantic judgment."
+    },
+    {
+      "gold_id": "g62",
+      "category": "other",
+      "note": "Self-reported uncompilable: test-location mirroring was treated as a descriptive convention."
+    },
+    {
+      "gold_id": "g64",
+      "category": "other",
+      "note": "Self-reported uncompilable: generated-output placement lacks a reliable trigger distinguishing it from ordinary writes."
+    },
+    {
+      "gold_id": "g67",
+      "category": "implicit",
+      "note": "No extracted Bash rule targets the commit-body why-not-what requirement; the user-impact extraction is related but not semantically the same target."
+    },
+    {
+      "gold_id": "g71",
+      "category": "structure",
+      "note": "The re-verification step appears within nested remote-renaming instructions; no extracted rule targets continuing after a rename/add."
+    },
+    {
+      "gold_id": "g72",
+      "category": "structure",
+      "note": "The translation rule is embedded in detailed remote-convention guidance; no extracted Bash rule targets proposing commands with nonstandard names."
+    },
+    {
+      "gold_id": "g73",
+      "category": "other",
+      "note": "Self-reported uncompilable: checking existing PRs occurs before work and was deemed not bindable to a specific action."
+    },
+    {
+      "gold_id": "g75",
+      "category": "reference-depth",
+      "note": "The actionable checklist requires reading the referenced .github instructions; the broad self-review extraction was allocated to the closer full-diff gold rule."
+    },
+    {
+      "gold_id": "g76",
+      "category": "structure",
+      "note": "This is one checklist item in the nested pre-push self-review list; the single broad extraction was allocated 1:1 to g74."
+    },
+    {
+      "gold_id": "g80",
+      "category": "structure",
+      "note": "The brief-description requirement is inside the PR body template/instructions; no extracted rule targets that content."
+    },
+    {
+      "gold_id": "g84",
+      "category": "other",
+      "note": "An extracted rule covers the language but uses Bash, while this gold rule requires Edit; same-tool matching fails."
+    },
+    {
+      "gold_id": "g85",
+      "category": "structure",
+      "note": "The required tracking-issue contents are in a nested list; no extracted Bash rule targets issue-body content."
+    },
+    {
+      "gold_id": "g86",
+      "category": "structure",
+      "note": "The repair procedure is a multi-step nested instruction; no extracted Bash rule covers it."
+    },
+    {
+      "gold_id": "g88",
+      "category": "structure",
+      "note": "The exact no-human-review footer variant is in the attribution template; the broader footer extraction was allocated 1:1 to g87."
+    },
+    {
+      "gold_id": "g90",
+      "category": "reference-depth",
+      "note": "Invocability depends on the external apache-magpie framework snapshot/workflow; no extracted Bash rule covers clone initialization."
+    },
+    {
+      "gold_id": "g92",
+      "category": "reference-depth",
+      "note": "Self-reported uncompilable: use of the magpie PR-review skill is a referenced workflow choice, not a tool-call trigger."
+    },
+    {
+      "gold_id": "g94",
+      "category": "other",
+      "note": "The extracted secret detector is an Edit rule, while this gold rule is Bash/commit-triggered; same-tool matching fails."
+    }
+  ],
+  "unmatched_extracted": [
+    {
+      "output_rule": "ruff-format-after-python-edit",
+      "class": "gold-miss",
+      "note": "Real action-bindable Edit rule, but gold represents the follow-up formatting as a Bash rule, so no same-tool match exists."
+    },
+    {
+      "output_rule": "ruff-format-after-python-write",
+      "class": "gold-miss",
+      "note": "Real action-bindable Write rule, but gold represents the follow-up formatting as a Bash rule, so no same-tool match exists."
+    },
+    {
+      "output_rule": "no-new-raise-airflow-exception-write",
+      "class": "duplicate",
+      "note": "Write-tool counterpart of the extracted AirflowException prohibition already matched through its Edit rule."
+    },
+    {
+      "output_rule": "commit-message-style-user-impact",
+      "class": "gold-miss",
+      "note": "Real document rule about user-impact-focused commit messages; no gold rule states this same general commit-subject target."
+    },
+    {
+      "output_rule": "no-vague-forward-looking-language",
+      "class": "gold-miss",
+      "note": "Real action-bindable Bash/GitHub-message rule, but the corresponding gold entry is typed Edit and cannot match."
+    },
+    {
+      "output_rule": "no-commit-secrets",
+      "class": "gold-miss",
+      "note": "Real action-bindable Edit rule, but the gold secret rule is typed Bash and cannot match."
+    },
+    {
+      "output_rule": "ask-before-new-dependency",
+      "class": "duplicate",
+      "note": "Covers the broad-dependency branch of compound g93, which was already matched 1:1 to the closer destructive-migration extraction."
+    }
+  ],
+  "gold_amendments": []
+}

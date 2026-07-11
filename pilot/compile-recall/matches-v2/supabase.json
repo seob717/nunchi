@@ -1,0 +1,120 @@
+{
+  "doc": "supabase",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g12",
+      "output_rule": "check-ui-index-before-primitive",
+      "rationale": "The Write rule carries the same instruction to check packages/ui/index.tsx before creating a UI primitive, although its file pattern broadly triggers on packages/ui TSX files."
+    },
+    {
+      "gold_id": "g15",
+      "output_rule": "no-hardcoded-colors",
+      "rationale": "The Edit rule targets newly added hardcoded hexadecimal color values in styling files, directly covering the prohibition on hardcoded colors."
+    },
+    {
+      "gold_id": "g18",
+      "output_rule": "use-shortcut-registry",
+      "rationale": "The Edit rule detects one-off Studio keyboard handling and directs the user toward the shared shortcut registry, matching the preference for registered shortcuts over one-off listeners. It does not cover every possible one-off shortcut implementation."
+    },
+    {
+      "gold_id": "g21",
+      "output_rule": "avoid-barrel-reexports-studio",
+      "rationale": "The Write rule targets Studio index files and carries the instruction to avoid barrel re-export files, matching the gold action despite covering only Studio paths."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g1",
+      "category": "other",
+      "note": "No extracted Bash rule covers using pnpm 10 for package or script commands. The compiler deliberately reported: \"Toolchain/version requirement: pnpm 10 + Turborepo, Node >= 22 (environment fact, not an action).\""
+    },
+    {
+      "gold_id": "g2",
+      "category": "other",
+      "note": "No extracted Bash rule covers the Node.js 22 minimum. The compiler deliberately reported: \"Toolchain/version requirement: pnpm 10 + Turborepo, Node >= 22 (environment fact, not an action).\""
+    },
+    {
+      "gold_id": "g3",
+      "category": "structure",
+      "note": "The dependency-install command appears only as an entry in the Common Commands code block; no extracted Bash rule covers it. The compiler also classified that block as a usage catalog and skipped it."
+    },
+    {
+      "gold_id": "g4",
+      "category": "structure",
+      "note": "The Studio development command appears only in the Common Commands code block; no extracted Bash rule covers it. The compiler also classified that block as a usage catalog and skipped it."
+    },
+    {
+      "gold_id": "g5",
+      "category": "structure",
+      "note": "The Studio unit-test command appears only in the Common Commands code block; no extracted Bash rule covers it. The compiler also classified that block as a usage catalog and skipped it."
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "The Studio E2E command appears only in the Common Commands code block; no extracted Bash rule covers it. The compiler also classified that block as a usage catalog and skipped it."
+    },
+    {
+      "gold_id": "g7",
+      "category": "structure",
+      "note": "The Studio build command appears only in the Common Commands code block; no extracted Bash rule covers it. The compiler also classified that block as a usage catalog and skipped it."
+    },
+    {
+      "gold_id": "g8",
+      "category": "structure",
+      "note": "The Studio lint command appears only in the Common Commands code block; no extracted Bash rule covers it. The compiler also classified that block as a usage catalog and skipped it."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "The repository type-check command appears only in the Common Commands code block; no extracted Bash rule covers it. The compiler also classified that block as a usage catalog and skipped it."
+    },
+    {
+      "gold_id": "g10",
+      "category": "other",
+      "note": "No extracted Edit rule targets imports of shared UI components. The compiler deliberately reported: \"Import shared UI from 'ui' and use _Shadcn_-suffixed variants for form primitives (general import/naming style, no precise action-bindable trigger).\""
+    },
+    {
+      "gold_id": "g11",
+      "category": "other",
+      "note": "No extracted Edit rule targets form primitive variants. The compiler deliberately reported: \"Import shared UI from 'ui' and use _Shadcn_-suffixed variants for form primitives (general import/naming style, no precise action-bindable trigger).\""
+    },
+    {
+      "gold_id": "g13",
+      "category": "other",
+      "note": "No extracted rule enforces Tailwind-only styling. The color rule detects only hardcoded hexadecimal colors and is assigned to the closer hardcoded-color gold rule; it does not target non-Tailwind styling generally."
+    },
+    {
+      "gold_id": "g14",
+      "category": "other",
+      "note": "No extracted rule targets use of semantic design tokens. The hardcoded-hex detector does not recognize whether a Tailwind color utility uses an approved semantic token and is assigned to the closer hardcoded-color gold rule."
+    },
+    {
+      "gold_id": "g16",
+      "category": "other",
+      "note": "No extracted Edit rule covers U.S. English. The compiler deliberately reported: \"Use U.S. English everywhere (general language style guidance, not tied to a specific tool call).\""
+    },
+    {
+      "gold_id": "g17",
+      "category": "other",
+      "note": "The sole extracted shortcut rule is assigned 1:1 to the closer keyboard-listener rule (g18). Its trigger detects keyboard APIs, not repeated UI actions generally, so no separate extracted rule remains for this gold rule."
+    },
+    {
+      "gold_id": "g19",
+      "category": "other",
+      "note": "No extracted Edit rule targets G-then-key chords. The compiler deliberately reported: \"Keep 'G then ...' chords for navigation (stylistic detail of the shortcut convention, not independently action-bindable).\""
+    },
+    {
+      "gold_id": "g20",
+      "category": "other",
+      "note": "No extracted Write rule targets creation or placement of Studio sub-components. The compiler deliberately reported: \"Studio uses Pages router; co-locate sub-components with parent (general file-organization convention, no specific actionable trigger).\""
+    },
+    {
+      "gold_id": "g22",
+      "category": "reference-depth",
+      "note": "The actionable detailed conventions require following the referenced studio-* skills, and no extracted Bash rule requires consulting them."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}

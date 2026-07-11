@@ -1,0 +1,18 @@
+{
+  "doc": "supabase",
+  "rules": [
+    {"name": "check-ui-index-before-primitive", "tool": "Write", "pattern": "packages/ui/.*\\.tsx$", "field": null, "path": null, "strength": "require-read", "evidence": "Check `packages/ui/index.tsx` before creating new primitives."},
+    {"name": "no-hardcoded-colors", "tool": "Edit", "pattern": "#[0-9a-fA-F]{3,8}\\b", "field": "new_string", "path": "\\.(tsx?|css|scss)$", "strength": "require-read", "evidence": "Tailwind only, semantic tokens (`bg-muted`, `text-foreground-light`), no hardcoded colors."},
+    {"name": "use-shortcut-registry", "tool": "Edit", "pattern": "addEventListener\\(\\s*['\"]key(down|up|press)['\"]|onKeyDown=|useHotkeys\\(", "field": "new_string", "path": "apps/studio/.*\\.(tsx?|jsx?)$", "strength": "require-read", "evidence": "when adding or changing repeated Studio UI actions, use the shared shortcut registry and primitives"},
+    {"name": "avoid-barrel-reexports-studio", "tool": "Write", "pattern": "apps/studio/.*/index\\.tsx?$", "field": null, "path": null, "strength": "require-read", "evidence": "Avoid barrel re-export files."}
+  ],
+  "uncompilable": [
+    "Toolchain/version requirement: pnpm 10 + Turborepo, Node >= 22 (environment fact, not an action).",
+    "Directory structure table describing purposes of apps/studio, apps/docs, apps/www, packages/ui, packages/common, e2e/studio (pure documentation, no obligation attached).",
+    "Common Commands code block listing pnpm scripts (usage catalog only, no must/never/before/after attached to any entry).",
+    "Import shared UI from 'ui' and use _Shadcn_-suffixed variants for form primitives (general import/naming style, no precise action-bindable trigger).",
+    "Use U.S. English everywhere (general language style guidance, not tied to a specific tool call).",
+    "Studio uses Pages router; co-locate sub-components with parent (general file-organization convention, no specific actionable trigger).",
+    "Keep 'G then ...' chords for navigation (stylistic detail of the shortcut convention, not independently action-bindable)."
+  ]
+}

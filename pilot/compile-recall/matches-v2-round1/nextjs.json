@@ -1,0 +1,316 @@
+{
+  "doc": "nextjs",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "read-readmes-before-edit",
+      "rationale": "Same Edit target: edits under repository subdirectories require reading README.md files along the directory path."
+    },
+    {
+      "gold_id": "g2",
+      "output_rule": "read-readmes-before-write",
+      "rationale": "Same Write target: creating files under repository subdirectories requires reading README.md files along the directory path."
+    },
+    {
+      "gold_id": "g3",
+      "output_rule": "start-dev-watch-before-editing-source",
+      "rationale": "The Edit trigger covers Next.js source and test paths and carries the same requirement to start the dev watch process before edits."
+    },
+    {
+      "gold_id": "g11",
+      "output_rule": "bootstrap-build-after-checkout",
+      "rationale": "The checkout command trigger and evidence directly express the required bootstrap build after switching branches."
+    },
+    {
+      "gold_id": "g15",
+      "output_rule": "use-new-test-for-new-test-files",
+      "rationale": "The Write trigger targets new test files and requires the pnpm new-test generator rather than manual creation."
+    },
+    {
+      "gold_id": "g18",
+      "output_rule": "no-settimeout-in-tests",
+      "rationale": "The Edit rule targets adding setTimeout in test code and directs use of retry() instead."
+    },
+    {
+      "gold_id": "g19",
+      "output_rule": "no-check-helper-in-tests",
+      "rationale": "The Edit rule targets deprecated check() calls in tests and specifies retry() plus expect()."
+    },
+    {
+      "gold_id": "g20",
+      "output_rule": "prefer-fixture-dirs-over-inline-files",
+      "rationale": "The Edit trigger detects inline files objects in tests and carries the same fixture-directory preference."
+    },
+    {
+      "gold_id": "g32",
+      "output_rule": "pr-description-llm-marker",
+      "rationale": "The gh pr create/edit trigger targets PR descriptions and requires the same trailing HTML marker."
+    },
+    {
+      "gold_id": "g39",
+      "output_rule": "no-literal-secrets-in-commands",
+      "rationale": "The Bash rule targets literal secret assignments in commands and preserves the requirement to mirror names and modes without secret values."
+    },
+    {
+      "gold_id": "g41",
+      "output_rule": "no-commit-env-secret-files",
+      "rationale": "The Bash trigger targets adding or committing .env files and carries the same prohibition and placeholder guidance."
+    },
+    {
+      "gold_id": "g42",
+      "output_rule": "no-remote-url-mutation-ssh",
+      "rationale": "The Bash trigger targets git remote URL mutation and carries the SSH-failure restriction against switching to HTTPS or other workarounds."
+    },
+    {
+      "gold_id": "g43",
+      "output_rule": "ssh-preflight-before-force-push-rebase",
+      "rationale": "The Bash trigger covers force pushes and rebases and injects the same lightweight SSH preflight guidance."
+    },
+    {
+      "gold_id": "g44",
+      "output_rule": "no-ai-attribution-commit",
+      "rationale": "The Bash rule triggers on git commit and prohibits the same generated attribution and co-author footers."
+    },
+    {
+      "gold_id": "g46",
+      "output_rule": "pre-validate-before-commit",
+      "rationale": "The commit trigger requires the documented formatting and ESLint pre-validation on changed files."
+    },
+    {
+      "gold_id": "g48",
+      "output_rule": "no-gh-pr-ready",
+      "rationale": "The Bash trigger exactly targets gh pr ready and requires leaving the PR in draft."
+    },
+    {
+      "gold_id": "g49",
+      "output_rule": "rebuild-before-mode-specific-tests",
+      "rationale": "The Bash trigger targets mode-specific integration-test commands and requires rebuilding when source changed."
+    },
+    {
+      "gold_id": "g50",
+      "output_rule": "new-flags-config-shared-wiring",
+      "rationale": "The Edit rule targets feature-flag configuration and its evidence requires type, schema, and user-bundled define-env wiring."
+    },
+    {
+      "gold_id": "g52",
+      "output_rule": "react-server-dom-webpack-entry-base-only",
+      "rationale": "The Edit rule enforces the same entry-base.ts import boundary and consumption through exported component modules."
+    },
+    {
+      "gold_id": "g53",
+      "output_rule": "app-page-no-relative-require",
+      "rationale": "The Edit rule targets require() in app-page.ts and prohibits internal relative module resolution there."
+    },
+    {
+      "gold_id": "g54",
+      "output_rule": "no-browser-back-in-act-tests",
+      "rationale": "The Edit trigger detects browser.back() in tests and carries the same router-act accordion/BFCache prohibition."
+    },
+    {
+      "gold_id": "g55",
+      "output_rule": "avoid-new-super-imports-rust",
+      "rationale": "The Edit trigger targets super:: in Rust and preserves the exception for inline mod blocks."
+    },
+    {
+      "gold_id": "g56",
+      "output_rule": "careful-highlight-line-numbers-docs",
+      "rationale": "The Edit trigger targets highlight attributes in documentation and requires counting actual code-block lines."
+    },
+    {
+      "gold_id": "g57",
+      "output_rule": "flag-nonstandard-header-reads",
+      "rationale": "The Edit trigger targets server header reads and carries the security-review requirement for nonstandard headers."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "No Write rule starts the watch process before creating source or integration-test files; the extracted watch rule is Edit-only."
+    },
+    {
+      "gold_id": "g5",
+      "category": "structure",
+      "note": "The keep-running instruction is embedded as a comment inside the watch-build code block and no extracted Bash rule covers it."
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "The mode/bundler command mapping is expressed through a labeled list of code-block commands; no extracted rule selects the matching focused test script."
+    },
+    {
+      "gold_id": "g7",
+      "category": "other",
+      "note": "The compiler deliberately skipped: 'Kill the background watch process when done iterating — cleanup reminder with no specific tool-call trigger.'"
+    },
+    {
+      "gold_id": "g8",
+      "category": "other",
+      "note": "The compiler deliberately skipped: 'Prefer `pnpm --filter=next types` over a full build when only checking type errors — context-dependent preference, not a fixed action trigger.'"
+    },
+    {
+      "gold_id": "g9",
+      "category": "implicit",
+      "note": "This is stated as a contextual preference after bootstrap, and no Bash rule covers the filtered-build choice."
+    },
+    {
+      "gold_id": "g10",
+      "category": "other",
+      "note": "No extracted Bash rule covers all full-build conditions; the checkout rule covers only the narrower branch-switch case and is matched to g11."
+    },
+    {
+      "gold_id": "g12",
+      "category": "structure",
+      "note": "The webpack selection is conveyed by examples inside a code block; no extracted Bash rule covers --webpack."
+    },
+    {
+      "gold_id": "g13",
+      "category": "other",
+      "note": "No extracted Bash rule blocks the nonexistent --no-turbopack flag."
+    },
+    {
+      "gold_id": "g14",
+      "category": "other",
+      "note": "The extracted generator rule is Write-only and is used for g15; there is no Bash rule for invoking pnpm new-test."
+    },
+    {
+      "gold_id": "g16",
+      "category": "structure",
+      "note": "The non-interactive --args requirement and argument format are primarily conveyed in a code block and were not extracted."
+    },
+    {
+      "gold_id": "g17",
+      "category": "other",
+      "note": "The compiler deliberately skipped: 'Never re-run the same test suite with different grep filters; capture output once and analyze from file (repeated under Context-Efficient Workflows) — stateful/temporal guidance across multiple calls, not a single-call trigger.'"
+    },
+    {
+      "gold_id": "g21",
+      "category": "other",
+      "note": "The compiler deliberately skipped: 'Run the pr-status script when the user asks about CI failures/PR reviews/status — triggered by user intent, not a tool call.'"
+    },
+    {
+      "gold_id": "g22",
+      "category": "other",
+      "note": "The compiler deliberately skipped: 'Prioritize blocking failures first: build, lint, types, then tests (repeated under CI Analysis Tips) — general prioritization judgment, not action-bindable.'"
+    },
+    {
+      "gold_id": "g23",
+      "category": "other",
+      "note": "The compiler deliberately skipped: 'Assume failures are real until disproven; treat Known Flaky Tests as context, not auto-dismissal — general judgment call.'"
+    },
+    {
+      "gold_id": "g24",
+      "category": "other",
+      "note": "The compiler deliberately skipped the broader rule as 'Always match exact CI env vars when reproducing CI failures locally — too broad/contextual to bind without firing on every routine test run.' The snapshot-only extracted rule is narrower and not the same target."
+    },
+    {
+      "gold_id": "g25",
+      "category": "other",
+      "note": "The compiler deliberately skipped: 'For module-resolution/build-graph fixes, use the normal mode-specific test command (repeated under Development Anti-Patterns) — advisory test-selection judgment, not a fixed trigger.'"
+    },
+    {
+      "gold_id": "g26",
+      "category": "reference-depth",
+      "note": "The actionable automated-triage workflow is delegated to the referenced pr-status-triage skill, and no extracted Bash rule invokes it."
+    },
+    {
+      "gold_id": "g27",
+      "category": "other",
+      "note": "The compiler deliberately skipped: 'Prioritize CI failures over review comments — general prioritization, not action-bindable.'"
+    },
+    {
+      "gold_id": "g28",
+      "category": "structure",
+      "note": "The compiler skipped the nested fast-check mapping: 'Common fast-check recipes (rust check/build → cargo fmt; lint/build → prettier --write) — conditioned on observing a specific CI failure type, not a static command trigger.'"
+    },
+    {
+      "gold_id": "g29",
+      "category": "structure",
+      "note": "The compiler skipped the nested fast-check mapping: 'Common fast-check recipes (rust check/build → cargo fmt; lint/build → prettier --write) — conditioned on observing a specific CI failure type, not a static command trigger.'"
+    },
+    {
+      "gold_id": "g30",
+      "category": "structure",
+      "note": "The failing-test recipe appears in the nested CI Analysis Tips list and no extracted Bash rule covers running the specific path."
+    },
+    {
+      "gold_id": "g31",
+      "category": "structure",
+      "note": "The development/production reproduction commands are supplied in a mode-labeled code block and no extracted rule selects the failing mode."
+    },
+    {
+      "gold_id": "g33",
+      "category": "implicit",
+      "note": "This is a soft development tip. The compiler deliberately grouped it under: 'Use `DEBUG=next:*` for debug logging / use `NEXT_TELEMETRY_DISABLED=1` when testing locally — soft dev tips, not obligations tied to an action.'"
+    },
+    {
+      "gold_id": "g34",
+      "category": "implicit",
+      "note": "This is a soft development tip. The compiler deliberately grouped it under: 'Use `DEBUG=next:*` for debug logging / use `NEXT_TELEMETRY_DISABLED=1` when testing locally — soft dev tips, not obligations tied to an action.'"
+    },
+    {
+      "gold_id": "g35",
+      "category": "structure",
+      "note": "The NODE_ENV guidance is embedded in a comparison list explaining two variables; no extracted Edit rule covers it."
+    },
+    {
+      "gold_id": "g36",
+      "category": "structure",
+      "note": "The __NEXT_DEV_SERVER guidance is embedded in a comparison list explaining two variables; no extracted Edit rule covers it."
+    },
+    {
+      "gold_id": "g37",
+      "category": "implicit",
+      "note": "The broad sensitivity presumption is contextual safety guidance rather than a concrete command pattern, and no extracted rule covers it."
+    },
+    {
+      "gold_id": "g38",
+      "category": "other",
+      "note": "The compiler deliberately skipped: 'Never print or paste secret values in chat responses, commits, or shared logs — not bindable to a specific tool call (chat responses aren't a tool).'"
+    },
+    {
+      "gold_id": "g40",
+      "category": "other",
+      "note": "The compiler deliberately skipped: 'If a required secret is missing locally, stop and ask the user rather than inventing placeholder credentials — judgment call on missing state, not a static trigger.'"
+    },
+    {
+      "gold_id": "g45",
+      "category": "implicit",
+      "note": "The compiler deliberately skipped: 'Keep commit messages concise and descriptive — general style/tone.'"
+    },
+    {
+      "gold_id": "g47",
+      "category": "implicit",
+      "note": "The compiler deliberately skipped: 'PR descriptions should focus on what changed and why — general style/tone.'"
+    },
+    {
+      "gold_id": "g51",
+      "category": "other",
+      "note": "No extracted Edit rule forces Node-only feature flags false in edge builds. define-env-edit-guardrails concerns pre-compiled runtime wiring, not this edge-build action."
+    }
+  ],
+  "unmatched_extracted": [
+    {
+      "output_rule": "no-ai-attribution-pr",
+      "class": "gold-miss",
+      "note": "This is a real document rule prohibiting generated attribution and co-author footers in PRs; frozen gold only lists the commit-targeted counterpart."
+    },
+    {
+      "output_rule": "define-env-edit-guardrails",
+      "class": "gold-miss",
+      "note": "This is a real action-bindable warning that edits to define-env.ts affect user bundling but not pre-compiled runtime internals; no gold rule has that target."
+    },
+    {
+      "output_rule": "dce-require-compile-time-branch",
+      "class": "gold-miss",
+      "note": "This is a real rule requiring require() calls to remain behind compile-time if/else branches for dead-code elimination; gold omitted it."
+    },
+    {
+      "output_rule": "snapshot-update-match-ci-env",
+      "class": "gold-miss",
+      "note": "This is a real rule specifically targeting snapshot updates and requiring the exact CI environment flags; gold's general CI-reproduction rule is a different target."
+    }
+  ],
+  "gold_amendments": []
+}

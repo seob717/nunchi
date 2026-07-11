@@ -1,0 +1,556 @@
+{
+  "doc": "airflow",
+  "judge": "llm:codex-cli(gpt-5)",
+  "matches": [
+    {
+      "gold_id": "g6",
+      "output_rule": "no-direct-pytest-python-airflow-on-host",
+      "rationale": "Same Bash trigger and same prohibition on direct host pytest, Python, or Airflow commands."
+    },
+    {
+      "gold_id": "g40",
+      "output_rule": "no-assert-in-production-code",
+      "rationale": "Same Edit target: adding assert in production Python code."
+    },
+    {
+      "gold_id": "g42",
+      "output_rule": "no-time-time-for-durations",
+      "rationale": "Same Edit target and same requirement to use monotonic time for durations."
+    },
+    {
+      "gold_id": "g46",
+      "output_rule": "no-new-raise-airflow-exception-edit",
+      "rationale": "Same Edit target: new direct AirflowException raises, with the same prescribed use of narrower exceptions."
+    },
+    {
+      "gold_id": "g47",
+      "output_rule": "translate-exceptions-to-httpexception",
+      "rationale": "Same Edit target: core API route exception translation to HTTPException with 404/400 status."
+    },
+    {
+      "gold_id": "g50",
+      "output_rule": "apache-license-header-new-files",
+      "rationale": "Same Write target: newly created repository source files require the Apache header."
+    },
+    {
+      "gold_id": "g52",
+      "output_rule": "newsfragment-only-if-user-facing",
+      "rationale": "Same Write target: newsfragments in consuming distributions only for certainly user-facing changes."
+    },
+    {
+      "gold_id": "g53",
+      "output_rule": "no-newsfragment-for-providers-or-airflow-ctl",
+      "rationale": "Same Write target and same prohibition for provider and airflow-ctl newsfragments."
+    },
+    {
+      "gold_id": "g56",
+      "output_rule": "no-unittest-testcase",
+      "rationale": "Same Edit target: Python tests using unittest.TestCase instead of pytest patterns."
+    },
+    {
+      "gold_id": "g57",
+      "output_rule": "prefer-autospec-mocking",
+      "rationale": "Same Edit target: test mocks should use spec or autospec."
+    },
+    {
+      "gold_id": "g63",
+      "output_rule": "no-caplog-in-tests",
+      "rationale": "Same Edit target: tests checking caplog rather than behavior."
+    },
+    {
+      "gold_id": "g65",
+      "output_rule": "commit-message-style-user-impact",
+      "rationale": "Same Bash commit trigger and the closest extracted rule for user-impact-focused plain commit subjects."
+    },
+    {
+      "gold_id": "g66",
+      "output_rule": "run-prek-install-before-commit",
+      "rationale": "Same Bash commit trigger and same requirement to run prek install."
+    },
+    {
+      "gold_id": "g68",
+      "output_rule": "no-self-co-authored-by",
+      "rationale": "Same Bash commit trigger and same ban on self/agent Co-Authored-By attribution."
+    },
+    {
+      "gold_id": "g69",
+      "output_rule": "no-destructive-push-to-upstream-or-main",
+      "rationale": "Same Bash push target and same prohibition on upstream or main pushes."
+    },
+    {
+      "gold_id": "g70",
+      "output_rule": "verify-remotes-before-push-or-pr",
+      "rationale": "Same Bash remote-operation target and requirement to inspect naming before push or PR creation."
+    },
+    {
+      "gold_id": "g74",
+      "output_rule": "self-review-checklist-before-pr",
+      "rationale": "Same Bash PR workflow target and requirement for self-review before submission."
+    },
+    {
+      "gold_id": "g77",
+      "output_rule": "rebase-before-push",
+      "rationale": "Same Bash push trigger and requirement to rebase on the latest target branch first."
+    },
+    {
+      "gold_id": "g78",
+      "output_rule": "pr-body-ai-disclosure",
+      "rationale": "Same Bash PR-creation target and prefilled body with checked AI disclosure."
+    },
+    {
+      "gold_id": "g79",
+      "output_rule": "pr-title-format",
+      "rationale": "Same Bash PR-creation target and title constraints: short, imperative, and user-impact focused."
+    },
+    {
+      "gold_id": "g81",
+      "output_rule": "no-issue-when-fix-is-imminent",
+      "rationale": "Same Bash issue-creation target and same instruction to skip a redundant issue when a PR is imminent."
+    },
+    {
+      "gold_id": "g82",
+      "output_rule": "tracking-issue-for-deferred-work",
+      "rationale": "Same Bash PR target: deferred or partial work must already have a tracking issue."
+    },
+    {
+      "gold_id": "g83",
+      "output_rule": "tracking-issue-full-url-in-comment",
+      "rationale": "Same Edit target and requirement for a full tracking-issue URL rather than a bare number."
+    },
+    {
+      "gold_id": "g84",
+      "output_rule": "no-vague-forward-looking-language",
+      "rationale": "Same deferred-work content target and prohibition on promising an issue later rather than linking one now."
+    },
+    {
+      "gold_id": "g87",
+      "output_rule": "attribution-footer-on-github-posts",
+      "rationale": "Same Bash GitHub-post target and attribution-footer requirement."
+    },
+    {
+      "gold_id": "g89",
+      "output_rule": "no-tagging-individuals",
+      "rationale": "Same Bash GitHub-message target and prohibition on unauthorized individual mentions."
+    },
+    {
+      "gold_id": "g91",
+      "output_rule": "no-hand-edit-magpie-snapshot",
+      "rationale": "Same Edit target and prohibition on modifying the apache-magpie snapshot directly."
+    },
+    {
+      "gold_id": "g96",
+      "output_rule": "no-destructive-git-ops-unless-requested",
+      "rationale": "Same Bash target and prohibition on destructive git operations without an explicit request."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g1",
+      "category": "other",
+      "note": "Compiler explicitly reported the Dag capitalization convention as general writing style and uncompilable."
+    },
+    {
+      "gold_id": "g2",
+      "category": "implicit",
+      "note": "No extracted Edit rule covers the softly scoped historical-context exception for spelling out the acronym."
+    },
+    {
+      "gold_id": "g3",
+      "category": "other",
+      "note": "Compiler reported one-time environment setup steps as bootstrap steps, not per-action triggers."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "Compiler reported initial commit-hook setup as an uncompilable bootstrap step; the commit-time rule is a different trigger."
+    },
+    {
+      "gold_id": "g5",
+      "category": "other",
+      "note": "Compiler reported Breeze shim installation as an uncompilable one-time bootstrap step."
+    },
+    {
+      "gold_id": "g7",
+      "category": "other",
+      "note": "Compiler reported that no trigger reliably distinguishes temporary-script writes."
+    },
+    {
+      "gold_id": "g8",
+      "category": "structure",
+      "note": "The single-test command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "The test-file command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g10",
+      "category": "structure",
+      "note": "The package-test command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g11",
+      "category": "other",
+      "note": "Compiler explicitly reported the missing-system-dependency fallback as reactive troubleshooting and skipped it."
+    },
+    {
+      "gold_id": "g12",
+      "category": "structure",
+      "note": "The uv Python-script command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g13",
+      "category": "structure",
+      "note": "The parallel core/provider command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g14",
+      "category": "structure",
+      "note": "The database-only parallel command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g15",
+      "category": "structure",
+      "note": "The non-database parallel command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g16",
+      "category": "structure",
+      "note": "The complete-provider-suite command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g17",
+      "category": "structure",
+      "note": "The Helm xdist command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g18",
+      "category": "structure",
+      "note": "The Kubernetes-version Helm variant appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g19",
+      "category": "structure",
+      "note": "The Helm test-type variant appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g20",
+      "category": "structure",
+      "note": "The named-suite command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g21",
+      "category": "structure",
+      "note": "The scripts-project pytest command is embedded in repository-structure documentation and was not extracted."
+    },
+    {
+      "gold_id": "g22",
+      "category": "structure",
+      "note": "The Breeze Airflow CLI example appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g23",
+      "category": "structure",
+      "note": "The non-provider mypy command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g24",
+      "category": "structure",
+      "note": "The provider mypy command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g25",
+      "category": "structure",
+      "note": "The ruff lint command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g26",
+      "category": "structure",
+      "note": "The ruff-format command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g27",
+      "category": "structure",
+      "note": "The pre-commit-stage command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g28",
+      "category": "structure",
+      "note": "The manual-stage command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g29",
+      "category": "structure",
+      "note": "The documentation-build command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g30",
+      "category": "structure",
+      "note": "The selective-checks command appears in the commands reference table and was not extracted."
+    },
+    {
+      "gold_id": "g31",
+      "category": "structure",
+      "note": "The integration-test backend options appear in the commands reference table and were not extracted."
+    },
+    {
+      "gold_id": "g32",
+      "category": "other",
+      "note": "Compiler explicitly reported Docker network pruning as reactive troubleshooting and skipped it."
+    },
+    {
+      "gold_id": "g33",
+      "category": "implicit",
+      "note": "The uv.lock conflict-recovery instruction was not extracted; the generated-file Edit rule targets hand editing, not the Bash regeneration sequence."
+    },
+    {
+      "gold_id": "g34",
+      "category": "other",
+      "note": "Compiler explicitly classified scheduler execution behavior as descriptive architecture rather than a tool-bound action."
+    },
+    {
+      "gold_id": "g35",
+      "category": "other",
+      "note": "Compiler explicitly classified worker DB/API access as descriptive architecture rather than a tool-bound action."
+    },
+    {
+      "gold_id": "g36",
+      "category": "implicit",
+      "note": "The distribution dependency declaration is embedded in architecture description and has no extracted Edit rule."
+    },
+    {
+      "gold_id": "g37",
+      "category": "other",
+      "note": "Compiler explicitly reported security vulnerability-classification guidance as reasoning guidance not tied to a tool call."
+    },
+    {
+      "gold_id": "g38",
+      "category": "other",
+      "note": "Compiler explicitly reported security hardening classification as reasoning guidance not tied to a tool call."
+    },
+    {
+      "gold_id": "g39",
+      "category": "other",
+      "note": "The extracted ruff rules use Edit and Write, so neither can match this Bash rule under the same-tool requirement."
+    },
+    {
+      "gold_id": "g41",
+      "category": "implicit",
+      "note": "Compiler explicitly reported comment-sparingly guidance as general coding style and extracted no matching Edit rule."
+    },
+    {
+      "gold_id": "g43",
+      "category": "other",
+      "note": "The extracted rule only forbids session.commit; it omits the gold rule's keyword-only session requirement, so the compound rule is not fully covered."
+    },
+    {
+      "gold_id": "g44",
+      "category": "implicit",
+      "note": "Compiler explicitly reported import placement and its exceptions as general style guidance."
+    },
+    {
+      "gold_id": "g45",
+      "category": "implicit",
+      "note": "Compiler explicitly reported heavy type-only import guarding as judgment-heavy with no reliable trigger."
+    },
+    {
+      "gold_id": "g48",
+      "category": "other",
+      "note": "The extracted bulk-write rule omits the gold rule's required indexed cleanup filters, so strict coverage is incomplete."
+    },
+    {
+      "gold_id": "g49",
+      "category": "implicit",
+      "note": "Compiler explicitly reported action-verb function naming as general naming style."
+    },
+    {
+      "gold_id": "g51",
+      "category": "other",
+      "note": "The extracted selective-checks rule requires the documentation update but omits the gold rule's same-PR test update."
+    },
+    {
+      "gold_id": "g54",
+      "category": "other",
+      "note": "No extracted Write rule covers routing task-sdk user-visible notes to airflow-core newsfragments."
+    },
+    {
+      "gold_id": "g55",
+      "category": "implicit",
+      "note": "Compiler explicitly reported exact changed-behavior coverage as judgment-based test-scope guidance."
+    },
+    {
+      "gold_id": "g58",
+      "category": "other",
+      "note": "The extracted patch-decorator rule omits the gold rule's conf_vars requirements and conditional decorator/context-manager behavior."
+    },
+    {
+      "gold_id": "g59",
+      "category": "other",
+      "note": "The extracted rule only bans datetime.now and does not require time_machine, so it does not cover the complete gold rule."
+    },
+    {
+      "gold_id": "g60",
+      "category": "implicit",
+      "note": "Compiler explicitly reported parametrizing similar tests as style and judgment guidance."
+    },
+    {
+      "gold_id": "g61",
+      "category": "implicit",
+      "note": "Compiler explicitly reported db_test marking as requiring semantic judgment about database access."
+    },
+    {
+      "gold_id": "g62",
+      "category": "implicit",
+      "note": "Compiler explicitly reported source-mirroring test locations as a descriptive convention."
+    },
+    {
+      "gold_id": "g64",
+      "category": "other",
+      "note": "Compiler explicitly reported that no trigger separates generated reports or scratch output from ordinary writes."
+    },
+    {
+      "gold_id": "g67",
+      "category": "other",
+      "note": "No extracted Bash rule targets commit-message bodies or the why-versus-what distinction."
+    },
+    {
+      "gold_id": "g71",
+      "category": "other",
+      "note": "No extracted rule covers re-inspecting remotes specifically after a rename or addition."
+    },
+    {
+      "gold_id": "g72",
+      "category": "other",
+      "note": "No extracted rule covers translating stale remote names and flagging stale documentation."
+    },
+    {
+      "gold_id": "g73",
+      "category": "other",
+      "note": "Compiler explicitly reported the existing-PR check as occurring before a bindable tool call."
+    },
+    {
+      "gold_id": "g75",
+      "category": "reference-depth",
+      "note": "The actionable checklist depends on reading referenced code-review instructions; no extracted rule covers that reference-depth requirement."
+    },
+    {
+      "gold_id": "g76",
+      "category": "structure",
+      "note": "The combined pre-push checks are spread through a deep numbered self-review checklist and were not extracted."
+    },
+    {
+      "gold_id": "g80",
+      "category": "other",
+      "note": "No extracted rule covers a brief PR description plus applicable issue references."
+    },
+    {
+      "gold_id": "g85",
+      "category": "structure",
+      "note": "The tracking-issue content requirements are a multi-part nested list and were not extracted."
+    },
+    {
+      "gold_id": "g86",
+      "category": "structure",
+      "note": "The already-open-PR repair sequence is a multi-step structured workflow and was not extracted."
+    },
+    {
+      "gold_id": "g88",
+      "category": "other",
+      "note": "No extracted rule distinguishes unapproved drafts or requires the no-human-review footer variant."
+    },
+    {
+      "gold_id": "g90",
+      "category": "reference-depth",
+      "note": "The snapshot-population requirement only becomes actionable through the referenced apache-magpie workflow."
+    },
+    {
+      "gold_id": "g92",
+      "category": "reference-depth",
+      "note": "Compiler explicitly reported the magpie review skill choice as a workflow/skill decision rather than a tool-call trigger."
+    },
+    {
+      "gold_id": "g93",
+      "category": "implicit",
+      "note": "Compiler explicitly reported asking before large cross-package refactors as too vague; the two extracted ask-before rules cover only dependency and migration subsets."
+    },
+    {
+      "gold_id": "g94",
+      "category": "other",
+      "note": "The extracted secret rule uses Edit, while the gold rule uses Bash; same-tool matching therefore fails."
+    },
+    {
+      "gold_id": "g95",
+      "category": "other",
+      "note": "The extracted rule covers only uv.lock, not the gold rule's general target of every generated file with an available workflow."
+    }
+  ],
+  "unmatched_extracted": [
+    {
+      "output_rule": "ruff-format-after-python-edit",
+      "class": "gold-miss",
+      "note": "Real Edit-bound ruff requirement; gold represents the operation as Bash, preventing a match."
+    },
+    {
+      "output_rule": "ruff-format-after-python-write",
+      "class": "gold-miss",
+      "note": "Real Write-bound ruff requirement; gold represents the operation as Bash, preventing a match."
+    },
+    {
+      "output_rule": "no-session-commit-in-airflow-core",
+      "class": "over-extraction",
+      "note": "Only a fragment of the compound gold requirement was extracted, omitting keyword-only session parameters."
+    },
+    {
+      "output_rule": "no-new-raise-airflow-exception-write",
+      "class": "duplicate",
+      "note": "Write-tool duplicate of the AirflowException prohibition already matched through the closer Edit rule."
+    },
+    {
+      "output_rule": "batch-bulk-delete-update-in-scheduler",
+      "class": "over-extraction",
+      "note": "Incomplete extraction of the documented rule because it omits the required indexed cleanup filters."
+    },
+    {
+      "output_rule": "keep-selective-checks-doc-in-sync",
+      "class": "over-extraction",
+      "note": "Incomplete extraction: it omits the required test changes."
+    },
+    {
+      "output_rule": "prefer-mock-patch-decorator",
+      "class": "over-extraction",
+      "note": "Captures only the patch-decorator fragment of a broader gold rule that also governs conf_vars."
+    },
+    {
+      "output_rule": "no-datetime-now-in-tests",
+      "class": "over-extraction",
+      "note": "Captures the prohibition but omits the affirmative time_machine requirement."
+    },
+    {
+      "output_rule": "no-conventional-commit-prefix",
+      "class": "duplicate",
+      "note": "Covers a second facet of g65 after the closest commit-style extraction was used for its one allowed match."
+    },
+    {
+      "output_rule": "no-commit-secrets",
+      "class": "gold-miss",
+      "note": "Real Edit-bound secret detection rule; gold models the prohibition as Bash, so same-tool matching fails."
+    },
+    {
+      "output_rule": "no-hand-edit-uv-lock",
+      "class": "gold-miss",
+      "note": "Real specific rule for uv.lock, but it does not cover gold's general generated-file rule."
+    },
+    {
+      "output_rule": "ask-before-new-dependency",
+      "class": "gold-miss",
+      "note": "Real action-bindable subset requiring confirmation for broad-impact dependency changes."
+    },
+    {
+      "output_rule": "ask-before-destructive-migration",
+      "class": "gold-miss",
+      "note": "Real action-bindable subset requiring confirmation for destructive migration changes."
+    }
+  ],
+  "gold_amendments": []
+}

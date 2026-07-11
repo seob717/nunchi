@@ -1,0 +1,120 @@
+{
+  "doc": "supabase",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g12",
+      "output_rule": "check-ui-index-before-primitive",
+      "rationale": "The Write rule uses the same evidence and targets creation of UI primitives under packages/ui, requiring consultation of packages/ui/index.tsx."
+    },
+    {
+      "gold_id": "g15",
+      "output_rule": "no-hardcoded-colors",
+      "rationale": "The Edit rule detects literal hexadecimal colors in styling-related files and cites the prohibition on hardcoded colors."
+    },
+    {
+      "gold_id": "g17",
+      "output_rule": "use-shortcut-registry",
+      "rationale": "The Edit rule targets Studio keyboard-action implementations and explicitly requires the shared shortcut registry for repeated Studio UI actions."
+    },
+    {
+      "gold_id": "g21",
+      "output_rule": "avoid-barrel-reexports-studio",
+      "rationale": "The Write rule targets Studio index files and cites the instruction to avoid barrel re-export files."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g1",
+      "category": "other",
+      "note": "The compiler deliberately skipped this, reporting: \"Toolchain/version requirement: pnpm 10 + Turborepo, Node >= 22 (environment fact, not an action).\""
+    },
+    {
+      "gold_id": "g2",
+      "category": "other",
+      "note": "The compiler deliberately skipped this, reporting: \"Toolchain/version requirement: pnpm 10 + Turborepo, Node >= 22 (environment fact, not an action).\""
+    },
+    {
+      "gold_id": "g3",
+      "category": "structure",
+      "note": "The dependency-install command appears as an entry in the Common Commands fenced code block; the compiler reported that command block as a usage catalog."
+    },
+    {
+      "gold_id": "g4",
+      "category": "structure",
+      "note": "The Studio development-server command appears as an entry in the Common Commands fenced code block; the compiler reported that command block as a usage catalog."
+    },
+    {
+      "gold_id": "g5",
+      "category": "structure",
+      "note": "The Studio unit-test command appears as an entry in the Common Commands fenced code block; the compiler reported that command block as a usage catalog."
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "The Studio end-to-end test command appears as an entry in the Common Commands fenced code block; the compiler reported that command block as a usage catalog."
+    },
+    {
+      "gold_id": "g7",
+      "category": "structure",
+      "note": "The Studio build command appears as an entry in the Common Commands fenced code block; the compiler reported that command block as a usage catalog."
+    },
+    {
+      "gold_id": "g8",
+      "category": "structure",
+      "note": "The Studio lint command appears as an entry in the Common Commands fenced code block; the compiler reported that command block as a usage catalog."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "The repository type-check command appears as an entry in the Common Commands fenced code block; the compiler reported that command block as a usage catalog."
+    },
+    {
+      "gold_id": "g10",
+      "category": "other",
+      "note": "The compiler deliberately skipped this, reporting: \"Import shared UI from 'ui' and use _Shadcn_-suffixed variants for form primitives (general import/naming style, no precise action-bindable trigger).\""
+    },
+    {
+      "gold_id": "g11",
+      "category": "other",
+      "note": "The compiler deliberately skipped this, reporting: \"Import shared UI from 'ui' and use _Shadcn_-suffixed variants for form primitives (general import/naming style, no precise action-bindable trigger).\""
+    },
+    {
+      "gold_id": "g13",
+      "category": "other",
+      "note": "No extracted Edit rule targets the use of non-Tailwind styling; the hardcoded-color rule covers only one narrower styling prohibition and is matched to g15."
+    },
+    {
+      "gold_id": "g14",
+      "category": "other",
+      "note": "No extracted Edit rule requires semantic design-token classes; the hardcoded-color rule does not ensure semantic tokens and is matched to g15."
+    },
+    {
+      "gold_id": "g16",
+      "category": "other",
+      "note": "The compiler deliberately skipped this, reporting: \"Use U.S. English everywhere (general language style guidance, not tied to a specific tool call).\""
+    },
+    {
+      "gold_id": "g18",
+      "category": "other",
+      "note": "The sole shortcut rule also overlaps this preference, but under the 1:1 constraint it is closer to g17 because its name and evidence explicitly require the shared registry for repeated Studio UI actions."
+    },
+    {
+      "gold_id": "g19",
+      "category": "other",
+      "note": "The compiler deliberately skipped this, reporting: \"Keep 'G then ...' chords for navigation (stylistic detail of the shortcut convention, not independently action-bindable).\""
+    },
+    {
+      "gold_id": "g20",
+      "category": "other",
+      "note": "The compiler deliberately skipped this, reporting: \"Studio uses Pages router; co-locate sub-components with parent (general file-organization convention, no specific actionable trigger).\""
+    },
+    {
+      "gold_id": "g22",
+      "category": "reference-depth",
+      "note": "The document delegates the detailed conventions to referenced studio-* skills, so making this actionable requires following those skill references."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}
