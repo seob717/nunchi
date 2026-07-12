@@ -1,0 +1,121 @@
+{
+  "doc": "supabase.es",
+  "lang": "es",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g12",
+      "output_rule": "consult-ui-index-before-new-component",
+      "rationale": "Same Write action: creating a new shared UI primitive/component triggers consulting packages/ui/index.tsx. The extracted path also includes Studio UI components, but its evidence directly states the gold requirement."
+    },
+    {
+      "gold_id": "g15",
+      "output_rule": "no-hardcoded-colors",
+      "rationale": "Same Edit target: the rule blocks adding hardcoded color values in component and stylesheet files."
+    },
+    {
+      "gold_id": "g18",
+      "output_rule": "studio-prefer-shortcut-registry",
+      "rationale": "Same Edit target: changes involving Studio keyboard handlers should prefer registered, discoverable shortcuts over one-off listeners. The extracted evidence also includes the separate G-then-key navigation clause, but 1:1 matching makes g18 the closest match because the trigger pattern specifically detects keyboard listeners and handlers."
+    },
+    {
+      "gold_id": "g20",
+      "output_rule": "studio-colocate-subcomponents",
+      "rationale": "Same Write target: creation of Studio TSX sub-components is governed by the requirement to co-locate them with the parent."
+    },
+    {
+      "gold_id": "g21",
+      "output_rule": "studio-avoid-barrel-files",
+      "rationale": "Same Write target: creation of Studio index files is checked to avoid barrel re-export files."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g1",
+      "category": "other",
+      "note": "Compiler self-reported this material as uncompilable: \"Estructura del monorepo (tabla de directorios) y lista de comandos habituales — documentación descriptiva sin obligación, prohibición u orden adjunta.\" No Bash rule for using pnpm 10 was extracted."
+    },
+    {
+      "gold_id": "g2",
+      "category": "other",
+      "note": "Compiler self-reported this material as uncompilable: \"Estructura del monorepo (tabla de directorios) y lista de comandos habituales — documentación descriptiva sin obligación, prohibición u orden adjunta.\" No Bash rule enforcing Node.js 22 or newer was extracted."
+    },
+    {
+      "gold_id": "g3",
+      "category": "other",
+      "note": "Compiler self-reported this material as uncompilable: \"Estructura del monorepo (tabla de directorios) y lista de comandos habituales — documentación descriptiva sin obligación, prohibición u orden adjunta.\" No dependency-install Bash rule was extracted."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "Compiler self-reported this material as uncompilable: \"Estructura del monorepo (tabla de directorios) y lista de comandos habituales — documentación descriptiva sin obligación, prohibición u orden adjunta.\" No Studio development-server Bash rule was extracted."
+    },
+    {
+      "gold_id": "g5",
+      "category": "other",
+      "note": "Compiler self-reported this material as uncompilable: \"Estructura del monorepo (tabla de directorios) y lista de comandos habituales — documentación descriptiva sin obligación, prohibición u orden adjunta.\" No Studio unit-test Bash rule was extracted."
+    },
+    {
+      "gold_id": "g6",
+      "category": "other",
+      "note": "Compiler self-reported this material as uncompilable: \"Estructura del monorepo (tabla de directorios) y lista de comandos habituales — documentación descriptiva sin obligación, prohibición u orden adjunta.\" No Studio E2E Bash rule was extracted."
+    },
+    {
+      "gold_id": "g7",
+      "category": "other",
+      "note": "Compiler self-reported this material as uncompilable: \"Estructura del monorepo (tabla de directorios) y lista de comandos habituales — documentación descriptiva sin obligación, prohibición u orden adjunta.\" No Studio build Bash rule was extracted."
+    },
+    {
+      "gold_id": "g8",
+      "category": "other",
+      "note": "Compiler self-reported this material as uncompilable: \"Estructura del monorepo (tabla de directorios) y lista de comandos habituales — documentación descriptiva sin obligación, prohibición u orden adjunta.\" No Studio lint Bash rule was extracted."
+    },
+    {
+      "gold_id": "g9",
+      "category": "other",
+      "note": "Compiler self-reported this material as uncompilable: \"Estructura del monorepo (tabla de directorios) y lista de comandos habituales — documentación descriptiva sin obligación, prohibición u orden adjunta.\" No repository type-check Bash rule was extracted."
+    },
+    {
+      "gold_id": "g10",
+      "category": "other",
+      "note": "Compiler self-reported this entry as uncompilable: \"Interfaz: importa componentes desde 'ui' y usa las variantes con sufijo _Shadcn_ para componentes básicos de formularios — general coding-style/import convention, not tied to one specific actionable trigger.\" No Edit rule for shared UI imports was extracted."
+    },
+    {
+      "gold_id": "g11",
+      "category": "other",
+      "note": "Compiler self-reported this entry as uncompilable: \"Interfaz: importa componentes desde 'ui' y usa las variantes con sufijo _Shadcn_ para componentes básicos de formularios — general coding-style/import convention, not tied to one specific actionable trigger.\" No Edit rule for _Shadcn_-suffixed form primitives was extracted."
+    },
+    {
+      "gold_id": "g13",
+      "category": "other",
+      "note": "The explicit Tailwind-only styling requirement was not extracted. The hardcoded-color rule is narrower and is already matched to g15; it does not target the choice of styling system."
+    },
+    {
+      "gold_id": "g14",
+      "category": "other",
+      "note": "The explicit requirement to use semantic Tailwind design tokens was not extracted. The hardcoded-color prohibition does not affirmatively target semantic-token use."
+    },
+    {
+      "gold_id": "g16",
+      "category": "other",
+      "note": "Compiler self-reported this entry as uncompilable: \"Idioma: usa inglés estadounidense en todas partes — general tone/language guidance, not bindable to a specific tool call.\" No Edit rule for U.S. English was extracted."
+    },
+    {
+      "gold_id": "g17",
+      "category": "other",
+      "note": "No extracted Edit rule targets repeated Studio UI actions broadly or use of both the shared shortcut registry and Shortcut primitives. The only shortcut extraction is keyed to keyboard handlers and is the closer 1:1 match for g18."
+    },
+    {
+      "gold_id": "g19",
+      "category": "other",
+      "note": "The G-then-key navigation clause appears only inside studio-prefer-shortcut-registry, which is already used for the closer g18 match and cannot be reused under the 1:1 rule."
+    },
+    {
+      "gold_id": "g22",
+      "category": "reference-depth",
+      "note": "The document directs Studio implementation work to the studio-* skills for detailed conventions, but no Bash rule requiring that consultation was extracted."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}

@@ -1,0 +1,74 @@
+{
+  "doc": "supabase.ja",
+  "rules": [
+    {
+      "name": "ui-import-shadcn-form-variants",
+      "tool": "Edit",
+      "pattern": "from\\s+['\"]ui['\"]",
+      "field": "new_string",
+      "path": "\\.(tsx|ts)$",
+      "strength": "require-read",
+      "evidence": "`'ui'` からインポートし、フォームのプリミティブには `_Shadcn_` 接尾辞付きのバリアントを使用してください。"
+    },
+    {
+      "name": "check-index-before-new-ui-primitive",
+      "tool": "Write",
+      "pattern": "packages/ui/.*\\.(tsx|ts)$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "新しいプリミティブを作成する前に、`packages/ui/index.tsx` を確認してください。"
+    },
+    {
+      "name": "no-hardcoded-colors",
+      "tool": "Edit",
+      "pattern": "#[0-9a-fA-F]{3,8}\\b|\\b(bg|text|border|ring|fill|stroke)-\\[#",
+      "field": "new_string",
+      "path": "\\.(tsx|ts|css)$",
+      "strength": "block",
+      "evidence": "色をハードコードしてはいけません。"
+    },
+    {
+      "name": "studio-use-shared-shortcut-registry",
+      "tool": "Edit",
+      "pattern": "addEventListener\\(\\s*['\"]key(down|up|press)['\"]|onKeyDown\\s*=|onKeyUp\\s*=",
+      "field": "new_string",
+      "path": "apps/studio/.*\\.(tsx|ts)$",
+      "strength": "require-read",
+      "evidence": "個別のキーボードリスナーよりも、登録済みで見つけやすいショートカットを優先してください。"
+    },
+    {
+      "name": "studio-nav-key-sequence-format",
+      "tool": "Edit",
+      "pattern": "apps/studio/state/shortcuts/",
+      "field": null,
+      "path": null,
+      "strength": "inject",
+      "evidence": "ナビゲーション用のキーシーケンスは `G then ...` のままにしてください。"
+    },
+    {
+      "name": "studio-colocate-subcomponents",
+      "tool": "Write",
+      "pattern": "apps/studio/.*\\.(tsx|ts)$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "サブコンポーネントは親コンポーネントと同じ場所に配置してください。"
+    },
+    {
+      "name": "studio-avoid-barrel-files",
+      "tool": "Write",
+      "pattern": "apps/studio/.*/index\\.(ts|tsx)$",
+      "field": null,
+      "path": null,
+      "strength": "inject",
+      "evidence": "barrel re-export ファイルは避けてください。"
+    }
+  ],
+  "uncompilable": [
+    "すべての箇所でアメリカ英語を使用する — 전체 텍스트에 걸친 일반 언어 스타일 규칙으로, 특정 도구 호출에 결부시킬 수 없음",
+    "Pages router 사용 중이라는 서술 — 규칙이 아닌 아키텍처 설명",
+    "よく使うコマンド 표는 실행 가능한 명령어 목록일 뿐 must/never/before/after 같은 의무가 붙어 있지 않아 문서화 자료이지 규칙이 아님",
+    "Studio의 상세 규약은 studio-* 스킬을 참조하라는 안내 — 규칙이 아닌 포인터"
+  ]
+}

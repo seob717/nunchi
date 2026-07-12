@@ -1,0 +1,253 @@
+{
+  "doc": "nextjs.ko",
+  "rules": [
+    {
+      "name": "read-readme-before-edit",
+      "tool": "Edit",
+      "pattern": "(packages|crates)/",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "하위 디렉터리(예: packages/*, crates/*)에서 파일을 수정하거나 생성하기 전에, 저장소 루트부터 대상 파일의 디렉터리까지 경로에 있는 모든 README.md 파일을 읽으세요."
+    },
+    {
+      "name": "read-readme-before-write",
+      "tool": "Write",
+      "pattern": "(packages|crates)/",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "하위 디렉터리(예: packages/*, crates/*)에서 파일을 수정하거나 생성하기 전에, 저장소 루트부터 대상 파일의 디렉터리까지 경로에 있는 모든 README.md 파일을 읽으세요."
+    },
+    {
+      "name": "start-dev-watch-before-editing-source",
+      "tool": "Edit",
+      "pattern": "(packages/next/src/|(^|/)test/)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Next.js 소스나 통합 테스트를 변경하는 경우, 수정하기 전에 별도의 터미널 세션에서 pnpm --filter=next dev를 시작하세요(이미 실행 중인 경우 제외). 이 단계를 건너뛴다면 그 이유를 명시하세요"
+    },
+    {
+      "name": "bootstrap-build-after-checkout",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+checkout",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "브랜치를 전환한 뒤에는 항상 전체 부트스트랩 빌드를 실행하세요"
+    },
+    {
+      "name": "use-new-test-for-new-test-files",
+      "tool": "Write",
+      "pattern": "test/.*\\.test\\.(ts|tsx|js)$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "테스트를 생성할 때는 반드시 `pnpm new-test`를 사용해야 합니다."
+    },
+    {
+      "name": "no-settimeout-in-tests",
+      "tool": "Edit",
+      "pattern": "setTimeout",
+      "field": "new_string",
+      "path": "test/.*\\.(ts|tsx)$",
+      "strength": "block",
+      "evidence": "// Bad - don't use setTimeout for waiting"
+    },
+    {
+      "name": "no-deprecated-check-in-tests",
+      "tool": "Edit",
+      "pattern": "\\bcheck\\(",
+      "field": "new_string",
+      "path": "test/.*\\.(ts|tsx)$",
+      "strength": "block",
+      "evidence": "`check()`는 더 이상 사용되지 않으므로 사용하지 마세요. 대신 `retry()` + `expect()`를 사용하세요"
+    },
+    {
+      "name": "prefer-fixture-dir-over-inline-files",
+      "tool": "Edit",
+      "pattern": "files:\\s*\\{",
+      "field": "new_string",
+      "path": "test/.*\\.(ts|tsx)$",
+      "strength": "inject",
+      "evidence": "// Avoid - inline file definitions are harder to maintain"
+    },
+    {
+      "name": "pr-description-requires-llm-marker",
+      "tool": "Bash",
+      "pattern": "gh\\s+pr\\s+(create|edit)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "PR 설명을 작성할 때는 설명 맨 아래에 다음 HTML 주석을 반드시 포함해야 합니다."
+    },
+    {
+      "name": "no-ai-generated-footer",
+      "tool": "Bash",
+      "pattern": "(Generated with Claude Code|Co-Authored-By:\\s*Claude)",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "커밋이나 PR에 \"Generated with Claude Code\" 또는 공동 작성자 푸터를 추가하지 마세요"
+    },
+    {
+      "name": "no-gh-pr-ready",
+      "tool": "Bash",
+      "pattern": "gh\\s+pr\\s+ready",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "PR을 \"ready for review\"로 표시하지 마세요(`gh pr ready`)."
+    },
+    {
+      "name": "pre-commit-format-and-lint",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "느린 lint-staged 실패(매번 약 2분)를 방지하려면 커밋 전에 사전 검증하세요."
+    },
+    {
+      "name": "rebuild-before-integration-tests",
+      "tool": "Bash",
+      "pattern": "pnpm\\s+test-(dev|start)-(turbo|webpack)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Next.js 통합 테스트를 실행할 때 소스 파일이 변경되었다면 반드시 재빌드해야 합니다."
+    },
+    {
+      "name": "match-ci-env-vars-for-test-repro",
+      "tool": "Bash",
+      "pattern": "pnpm\\s+test-(dev|start)-(turbo|webpack)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "IS_WEBPACK_TEST=1과 같은 주요 차이는 번들러 선택과 스냅샷 출력을 바꿀 수 있으므로, 모듈 해석 수정 사항을 검증할 때는 CI 명령어와 모드를 사용하세요."
+    },
+    {
+      "name": "new-flag-requires-schema-and-define-env",
+      "tool": "Edit",
+      "pattern": "config-shared\\.ts$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "새 플래그: config-shared.ts에 타입을 추가하고, config-schema.ts에 스키마를 추가하며, 사용자 번들 코드에서 사용하는 경우 define-env.ts에도 추가하세요."
+    },
+    {
+      "name": "edge-node-import-flags-in-define-env",
+      "tool": "Edit",
+      "pattern": "define-env\\.ts$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "edge 빌드에서는 Node 전용 import를 제어하는 기능 플래그를 강제로 false로 설정하되, 이 작업은 define-env.ts에서 수행하세요."
+    },
+    {
+      "name": "react-server-dom-webpack-import-location",
+      "tool": "Edit",
+      "pattern": "react-server-dom-webpack",
+      "field": "new_string",
+      "path": "\\.(ts|tsx)$",
+      "strength": "require-read",
+      "evidence": "`react-server-dom-webpack/*` import는 반드시 `entry-base.ts`에 있어야 합니다. 다른 곳에서는 컴포넌트 모듈 export를 통해 사용하세요."
+    },
+    {
+      "name": "dce-require-in-conditional-branch",
+      "tool": "Edit",
+      "pattern": "require\\(",
+      "field": "new_string",
+      "path": "\\.(ts|tsx)$",
+      "strength": "require-read",
+      "evidence": "DCE를 위해 require()를 컴파일 시점 if/else 분기 안에 유지하세요(조기 반환/throw 패턴은 피하세요)."
+    },
+    {
+      "name": "no-relative-require-in-app-page",
+      "tool": "Edit",
+      "pattern": "require\\(['\"]\\.\\.?/",
+      "field": "new_string",
+      "path": "app-page\\.ts$",
+      "strength": "block",
+      "evidence": "사용자의 프로젝트에서 해석할 수 없으므로 상대 경로로 내부 모듈을 require할 수 없습니다. 대신 entry-base.ts에서 새 헬퍼를 export하고 템플릿에서 entryBase.*를 통해 접근하세요."
+    },
+    {
+      "name": "no-new-super-import-rust",
+      "tool": "Edit",
+      "pattern": "use\\s+super::",
+      "field": "new_string",
+      "path": "\\.rs$",
+      "strength": "block",
+      "evidence": "새로운 `super::` import는 인라인 `mod` 블록(예: `mod tests { ... }`)을 제외하면 추가하지 마세요."
+    },
+    {
+      "name": "verify-highlight-line-numbers-in-docs",
+      "tool": "Edit",
+      "pattern": "highlight=\\{",
+      "field": "new_string",
+      "path": "\\.(md|mdx)$",
+      "strength": "require-read",
+      "evidence": "코드 블록에 `highlight={...}` 속성을 추가할 때는 코드 블록 안의 실제 줄 번호를 신중하게 세세요"
+    },
+    {
+      "name": "no-browser-back-in-router-act-tests",
+      "tool": "Edit",
+      "pattern": "browser\\.back\\(\\)",
+      "field": "new_string",
+      "path": "test/.*\\.(ts|tsx)$",
+      "strength": "block",
+      "evidence": "아코디언 링크가 이미 보이는 페이지로 돌아가기 위해 `browser.back()`을 절대 사용하지 마세요."
+    },
+    {
+      "name": "no-secret-files-in-git-add",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+(add|commit).*(\\.env\\b|credentials|secret)",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "로컬 시크릿 파일은 절대 커밋하지 마세요."
+    },
+    {
+      "name": "no-remote-url-change-on-ssh-failure",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+remote\\s+set-url",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "사용자가 명시적으로 요청하지 않는 한 리모트를 HTTPS로 전환하거나, 원격 URL을 변경하거나, 반복해서 재시도하거나, 다른 인증 우회 방법을 시도하지 마세요."
+    },
+    {
+      "name": "ssh-precheck-before-force-push-or-rebase",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+(push.*(--force|-f\\b)|rebase)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "부분 클론 객체를 가져올 수 있는 강제 푸시나 스택 리베이스 전에는 가벼운 SSH 사전 점검을 우선 수행하세요."
+    }
+  ],
+  "uncompilable": [
+    "빌드 명령어 선택 가이드(핵심 파일만 수정 시 pnpm --filter=next build 우선, 타입만 확인 시 pnpm --filter=next types 우선) — 상황 판단 기반이라 고정 트리거 불가",
+    "--no-turbopack 플래그는 존재하지 않는다는 안내 — 순수 정보성, 의무/금지 없음",
+    "PR 상태 트리아지 우선순위 원칙(빌드→린트→타입→테스트 순, Known Flaky Tests 자동 무시 금지, 리뷰 의견보다 CI 실패 우선) — 특정 툴 호출에 결부되지 않는 판단 원칙",
+    "사용자가 CI 실패/PR 리뷰/PR 상태를 질문하면 pr-status 스크립트를 실행하라는 안내 — 트리거가 사용자 의도이지 특정 도구 호출이 아님",
+    "CI 실패 유형별 빠른 대응 팁(cargo fmt --check 후 cargo fmt, prettier 오류 시 prettier --write, 테스트 실패 시 로컬 재실행) — 조건부 사후 대응이라 고정 트리거 아님",
+    "커밋 메시지는 간결·설명적으로, PR 설명은 무엇·왜에 초점 — 문체/톤 가이드",
+    "작업을 검증 가능한 단위로 나누고 각 단계 검증 후 다음으로 진행하라는 원칙 — 특정 툴 호출에 결부되지 않는 일반 워크플로 원칙",
+    "대용량 파일은 grep 후 offset/limit로 읽고, 생성 파일(dist/, node_modules/, .next/)은 검색만 하고 읽지 말라는 지침 — Read 툴 대상이라 Bash/Edit/Write 스키마로 표현 불가",
+    "동일 테스트를 다른 grep 필터로 재실행 금지, 동일 API 응답 재조회 금지 — 반복 여부라는 상태 기반 제약이라 단발성 정규식 트리거로 표현 불가",
+    "수정할 때마다 빌드하지 말고 여러 수정을 모아 한 번만 빌드 — 빈도 기반 제약이라 특정 명령 트리거로 표현 불가",
+    "시크릿 값을 채팅/로그에 노출 금지, 명령어에 실제 시크릿 값 직접 넣지 않기, 필수 시크릿 없으면 임의 자리표시자 대신 사용자에게 요청, 명령 출력 공유 시 민감값 가리기 — 특정 파일명·명령 패턴으로 한정할 수 없는 범용 안전수칙",
+    "사전 컴파일된 런타임 내부에서 플래그 사용 시 런타임 환경변수도 연결하라는 지침 — '사용한다면'이라는 조건이 모호해 고정 트리거 불명확",
+    "edge 번들링 회귀는 특정 e2e 테스트로 검증, 전체 스택 추적엔 __NEXT_SHOW_IGNORE_LISTED, cache components/PPR 테스트 시 일반 app-dir e2e 사용, 장난감 앱으로 빠른 스모크 테스트 — 상황별 조언으로 고정 액션 트리거 아님",
+    "정확한 로그 메시지 대신 콘텐츠 패턴/순서로 테스트 검증, 스냅샷 업데이트 시 CI와 동일 환경 플래그 사용(구체적 커맨드 미명시), 모드별 테스트는 skipStart+수동 next.start() 구조 필요 — 코드 관습이라 신뢰할 만한 정규식 트리거 부재",
+    "라우터 act 테스트에서 항상 LinkAccordion을 사용해 프리페치 시점을 제어하라는 지침 — 긍정 요구사항이라 금지 패턴처럼 정규식화하기 어려움",
+    "cargo fmt 실행 안내, ICE 발생 시 incremental 디렉터리 삭제, 브랜치 전환 후 이상 동작 시 오래된 네이티브 바이너리 삭제 후 재설치 — 조건부 트러블슈팅 팁",
+    "Node.js 소스맵 관련 사실 설명(--enable-source-maps 필요, webpack/tsc 경로 포맷 차이, cwd 차이) — 정보성 설명, 의무/금지 없음",
+    "SSH 서명 오류 발생 시 즉시 중단하고 사용자에게 요청하라는 지침 — 실패 이후의 대응이라 사전 액션 트리거로 표현 불가",
+    "PR 리뷰 시 비표준 HTTP 헤더를 읽는 코드를 보안 리뷰 대상으로 표시하라는 지침 — 특정 툴 호출로 결부하기 어려운 리뷰 판단 가이드",
+    "디버그 로깅엔 DEBUG=next:*, 로컬 테스트엔 NEXT_TELEMETRY_DISABLED=1 사용 권장 — 특정 명령에 결부되지 않는 환경변수 팁",
+    "전문 스킬 목록(각 상황별로 어떤 스킬을 쓰라는 안내) — 규칙이 아닌 참고 카탈로그"
+  ]
+}

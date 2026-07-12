@@ -1,0 +1,10 @@
+{
+  "doc": "microfolio.en",
+  "rules": [],
+  "uncompilable": [
+    "Development Commands table (pnpm dev/build/deploy/preview/lint/format/optimize-images/clean-images) is a usage catalog listing what each command does, with no must/never/before/after obligation attached to any of them — documentation, not a rule.",
+    "Package manager and Node.js version notes ('pnpm locked to 9.12.0', 'Node.js 20+ required', 'No test framework configured') are environment facts, not action-triggered obligations or prohibitions.",
+    "Architecture section (Content System, Data Loading, Key Utilities, Styling, Components, Build & Deployment, Internationalization) is descriptive reference documentation of how the codebase is structured — no imperative, prohibition, or ordering language tied to any tool call.",
+    "Project Metadata Schema YAML block documents the frontmatter fields available for project index.md files (title, date, coordinates, type, tags, authors, featured) with explanatory comments, but never states which fields are required, forbidden, or must be validated before/after an edit — it's a schema reference, not a constraint."
+  ]
+}

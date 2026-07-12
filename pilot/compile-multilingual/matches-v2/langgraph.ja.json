@@ -1,0 +1,41 @@
+{
+  "doc": "langgraph",
+  "lang": "ja",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "run-format-lint-test-before-pr",
+      "rationale": "The Bash rule is the combined pre-PR check for modified libraries and explicitly includes formatting in its named target. It also covers linting and testing, but the 1:1 constraint permits assigning this combined extraction to only one of the three gold rules."
+    },
+    {
+      "gold_id": "g5",
+      "output_rule": "no-sphinx-double-backtick",
+      "rationale": "The Edit rule blocks Sphinx-style double-backtick inline-code syntax, exactly matching the prohibited edit. Its file-path scope is narrower than the gold rule, which is still a match under the partial-coverage rule."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g2",
+      "category": "structure",
+      "note": "Linting is covered only inside the single combined extracted rule already assigned to g1; 1:1 matching leaves no separate extracted rule for this gold rule."
+    },
+    {
+      "gold_id": "g3",
+      "category": "structure",
+      "note": "Testing is covered only inside the single combined extracted rule already assigned to g1; 1:1 matching leaves no separate extracted rule for this gold rule."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "Compiler-self-reported skip: \"Note that the TEST env var can be used to run a specific test file or pass extra pytest options — describes an optional capability, not an action requirement.\""
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "The document's positive single-backtick instruction was not emitted as its own Edit rule; the only related extraction is the double-backtick prohibition already matched to g5."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}

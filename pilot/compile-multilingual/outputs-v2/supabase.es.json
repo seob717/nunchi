@@ -1,0 +1,55 @@
+{
+  "doc": "supabase.es",
+  "rules": [
+    {
+      "name": "consult-ui-index-before-new-component",
+      "tool": "Write",
+      "pattern": "(packages/ui|apps/studio/components/ui)/.*\\.tsx$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Consulta `packages/ui/index.tsx` antes de crear nuevos componentes básicos."
+    },
+    {
+      "name": "no-hardcoded-colors",
+      "tool": "Edit",
+      "pattern": "#[0-9a-fA-F]{3,8}\\b|rgb\\(|rgba\\(|hsl\\(|hsla\\(",
+      "field": "new_string",
+      "path": "\\.(tsx|jsx|css|scss)$",
+      "strength": "block",
+      "evidence": "no uses colores codificados de forma fija."
+    },
+    {
+      "name": "studio-prefer-shortcut-registry",
+      "tool": "Edit",
+      "pattern": "addEventListener\\(\\s*['\"]keydown['\"]|onKeyDown|onKeyPress|useHotkeys",
+      "field": "new_string",
+      "path": "^apps/studio/.*\\.(tsx|ts)$",
+      "strength": "require-read",
+      "evidence": "Da preferencia a los atajos registrados y fáciles de descubrir frente a los listeners de teclado específicos; reserva los acordes `G then ...` para la navegación."
+    },
+    {
+      "name": "studio-avoid-barrel-files",
+      "tool": "Write",
+      "pattern": "apps/studio/.*index\\.(ts|tsx)$",
+      "field": null,
+      "path": null,
+      "strength": "inject",
+      "evidence": "Evita los archivos de reexportación de tipo barrel."
+    },
+    {
+      "name": "studio-colocate-subcomponents",
+      "tool": "Write",
+      "pattern": "apps/studio/.*\\.tsx$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Coloca los subcomponentes junto a su componente padre."
+    }
+  ],
+  "uncompilable": [
+    "Idioma: usa inglés estadounidense en todas partes — general tone/language guidance, not bindable to a specific tool call.",
+    "Interfaz: importa componentes desde 'ui' y usa las variantes con sufijo _Shadcn_ para componentes básicos de formularios — general coding-style/import convention, not tied to one specific actionable trigger.",
+    "Estructura del monorepo (tabla de directorios) y lista de comandos habituales — documentación descriptiva sin obligación, prohibición u orden adjunta."
+  ]
+}

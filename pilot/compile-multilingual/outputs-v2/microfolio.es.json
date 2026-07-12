@@ -1,0 +1,16 @@
+{
+  "doc": "microfolio.es",
+  "rules": [],
+  "uncompilable": [
+    "Development commands table (pnpm dev/build/deploy/preview/lint/format/optimize-images/clean-images) is a plain usage catalog with no attached obligation or ordering — documentation, not a rule",
+    "Custom component naming convention (all custom components use the 'Ak' prefix) is a descriptive coding-style fact about the existing codebase, not an imperative tied to a specific file path or action",
+    "Package manager pinned to pnpm 9.12.0 and Node.js 20+ requirement — environment/tooling info, not bindable to a specific tool call",
+    "Content system layout (project files under /content/projects/{slug}/, homepage/about content files) — architectural description, not a constraint on an edit/write action",
+    "Data loading architecture (+page.server.js pattern, shared loader in $lib/utils/projects.js, content parsing via split on '---' + yaml + marked) — descriptive, not prescriptive",
+    "Core utilities descriptions (paths.js, projects.js, imageMetadata.js, config.js, i18n.js) — documentation of what exists, no obligation",
+    "Styling setup (Tailwind CSS 4, theme.css, dark mode via prefers-color-scheme, IBM Plex Sans font) — general styling/coding-style info, not action-bindable",
+    "Build/deploy details (adapter-static output to /build, prerender entries generated from /content/projects/, vite-plugin-static-copy behavior, base path '/microfolio' in production, CUSTOM_DOMAIN=true env var for custom domains, +layout.js prerender/trailingSlash settings) — descriptive configuration notes, only one uses imperative phrasing ('Establezca la variable de entorno CUSTOM_DOMAIN=true') but it's conditional deployment advice with no specific tool-call trigger",
+    "Internationalization setup (locale strings in src/lib/locales, default locale in config.js, RTL auto-detection) — architectural description",
+    "Project metadata YAML schema example (title/date/location/coordinates/description/type/tags/authors/featured) is an illustrative schema, not phrased as a must/never constraint on content authors"
+  ]
+}

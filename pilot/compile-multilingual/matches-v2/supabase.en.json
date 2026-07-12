@@ -1,0 +1,121 @@
+{
+  "doc": "supabase",
+  "lang": "en",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g11",
+      "output_rule": "import-shadcn-ui-variants",
+      "rationale": "The extracted rule targets direct Radix imports in component files and, by name and evidence, directs form primitives to the _Shadcn_ variants. Its evidence also mentions importing from 'ui', but the _Shadcn_ form-primitive requirement is the closest single gold rule."
+    },
+    {
+      "gold_id": "g12",
+      "output_rule": "check-ui-index-before-new-primitive",
+      "rationale": "The tool and evidence exactly target checking packages/ui/index.tsx in connection with creating a new UI primitive."
+    },
+    {
+      "gold_id": "g15",
+      "output_rule": "no-hardcoded-colors",
+      "rationale": "The rule blocks hexadecimal hardcoded color values in styling files, which is the same target as the gold rule. It only detects one subset of hardcoded colors, but partial coverage still matches."
+    },
+    {
+      "gold_id": "g18",
+      "output_rule": "prefer-shortcut-registry-over-listeners",
+      "rationale": "The rule targets one-off Studio keydown listeners and its evidence directs authors toward registered, discoverable shortcuts, matching the keyboard-shortcut handling intent."
+    },
+    {
+      "gold_id": "g21",
+      "output_rule": "avoid-barrel-reexport-files",
+      "rationale": "The Write rule targets Studio index files and cites the instruction to avoid barrel re-export files, matching the gold target. Its filename pattern covers only a subset of possible barrel files, which is permitted partial coverage."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g1",
+      "category": "implicit",
+      "note": "No extracted Bash rule requires pnpm 10 for package-management or monorepo script commands."
+    },
+    {
+      "gold_id": "g2",
+      "category": "implicit",
+      "note": "No extracted Bash rule binds the Node >= 22 repository requirement to Node-based commands."
+    },
+    {
+      "gold_id": "g3",
+      "category": "structure",
+      "note": "The dependency-install command appears in the Common Commands code block, but no Bash rule was extracted for pnpm install."
+    },
+    {
+      "gold_id": "g4",
+      "category": "structure",
+      "note": "The Studio development command appears in the Common Commands code block, but no Bash rule was extracted for pnpm dev:studio."
+    },
+    {
+      "gold_id": "g5",
+      "category": "structure",
+      "note": "The Studio unit-test command appears in the Common Commands code block, but no Bash rule was extracted for pnpm test:studio."
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "The Studio E2E command appears in the Common Commands code block, but no Bash rule was extracted for the e2e/studio-prefixed command."
+    },
+    {
+      "gold_id": "g7",
+      "category": "structure",
+      "note": "The Studio build command appears in the Common Commands code block, but no Bash rule was extracted for the studio filter."
+    },
+    {
+      "gold_id": "g8",
+      "category": "structure",
+      "note": "The Studio lint command appears in the Common Commands code block, but no Bash rule was extracted for the studio filter."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "The repository type-check command appears in the Common Commands code block, but no Bash rule was extracted for pnpm typecheck."
+    },
+    {
+      "gold_id": "g10",
+      "category": "structure",
+      "note": "The only candidate combines the adjacent UI-import and _Shadcn_ clauses and is assigned 1:1 to the closer form-primitive gold rule g11; there is no separate extracted rule for importing shared components from 'ui'."
+    },
+    {
+      "gold_id": "g13",
+      "category": "structure",
+      "note": "The styling sentence was collapsed into the no-hardcoded-colors extraction, which is assigned 1:1 to g15; no separate extracted rule enforces Tailwind-only styling."
+    },
+    {
+      "gold_id": "g14",
+      "category": "structure",
+      "note": "The styling sentence was collapsed into the no-hardcoded-colors extraction, which is assigned 1:1 to g15; no separate extracted rule requires semantic design tokens."
+    },
+    {
+      "gold_id": "g16",
+      "category": "other",
+      "note": "Compiler-reported skip: \"Use U.S. English everywhere — general language/tone guidance not tied to a specific tool call.\""
+    },
+    {
+      "gold_id": "g17",
+      "category": "structure",
+      "note": "The shortcut paragraph yielded a rule only for one-off keydown listeners; no extracted Edit rule targets repeated Studio UI actions using both the shared registry and Shortcut primitives."
+    },
+    {
+      "gold_id": "g19",
+      "category": "structure",
+      "note": "No extracted Edit rule reserves G-then-key shortcut chords for navigation."
+    },
+    {
+      "gold_id": "g20",
+      "category": "other",
+      "note": "Compiler-reported skip: \"Co-locate sub-components with parent — general code-organization guidance too vague to bind to a specific action via regex.\""
+    },
+    {
+      "gold_id": "g22",
+      "category": "reference-depth",
+      "note": "No extracted Bash rule requires consulting the referenced studio-* skills when beginning Studio implementation work needing detailed conventions."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}

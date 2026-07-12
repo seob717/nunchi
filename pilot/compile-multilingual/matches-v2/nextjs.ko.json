@@ -1,0 +1,302 @@
+{
+  "doc": "nextjs",
+  "lang": "ko",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "read-readme-before-edit",
+      "rationale": "Same Edit target: files under repository subdirectories require reading the README.md chain first."
+    },
+    {
+      "gold_id": "g2",
+      "output_rule": "read-readme-before-write",
+      "rationale": "Same Write target: creating files under repository subdirectories requires reading the README.md chain first."
+    },
+    {
+      "gold_id": "g3",
+      "output_rule": "start-dev-watch-before-editing-source",
+      "rationale": "Same Edit target for Next.js source or tests; the extraction also preserves the already-running and explain-skip qualifications."
+    },
+    {
+      "gold_id": "g11",
+      "output_rule": "bootstrap-build-after-checkout",
+      "rationale": "A git checkout is used as the branch-switch trigger and the evidence requires the full bootstrap build afterward."
+    },
+    {
+      "gold_id": "g15",
+      "output_rule": "use-new-test-for-new-test-files",
+      "rationale": "Same Write target: creation of a test suite/file must go through pnpm new-test."
+    },
+    {
+      "gold_id": "g18",
+      "output_rule": "no-settimeout-in-tests",
+      "rationale": "Same Edit target: test waiting implemented with setTimeout is prohibited. The extraction omits the positive retry() replacement, but partial coverage matches."
+    },
+    {
+      "gold_id": "g19",
+      "output_rule": "no-deprecated-check-in-tests",
+      "rationale": "Same Edit target and it preserves both the check() prohibition and retry()+expect() replacement."
+    },
+    {
+      "gold_id": "g20",
+      "output_rule": "prefer-fixture-dir-over-inline-files",
+      "rationale": "Same Edit target: inline files objects in tests are discouraged in favor of fixture directories."
+    },
+    {
+      "gold_id": "g25",
+      "output_rule": "match-ci-env-vars-for-test-repro",
+      "rationale": "Closest 1:1 target is validating module-resolution fixes with the ordinary mode-specific test command so CI bundler/package resolution behavior is exercised. The extracted rule additionally emphasizes matching CI mode/environment."
+    },
+    {
+      "gold_id": "g32",
+      "output_rule": "pr-description-requires-llm-marker",
+      "rationale": "Same Bash target for gh pr create/edit and the evidence requires the marker at the bottom of the PR description."
+    },
+    {
+      "gold_id": "g41",
+      "output_rule": "no-secret-files-in-git-add",
+      "rationale": "Same Bash target: staging or committing local secret/environment files is blocked. The placeholder-only documentation clause is omitted."
+    },
+    {
+      "gold_id": "g42",
+      "output_rule": "no-remote-url-change-on-ssh-failure",
+      "rationale": "Same Bash target: remote URL changes/HTTPS workarounds after SSH failure are prohibited unless requested."
+    },
+    {
+      "gold_id": "g43",
+      "output_rule": "ssh-precheck-before-force-push-or-rebase",
+      "rationale": "Same Bash target: force-push or rebase in a partial-clone context requires a lightweight SSH preflight."
+    },
+    {
+      "gold_id": "g44",
+      "output_rule": "no-ai-generated-footer",
+      "rationale": "Same Bash target: commits must not contain Generated with Claude Code or Claude co-author footers."
+    },
+    {
+      "gold_id": "g46",
+      "output_rule": "pre-commit-format-and-lint",
+      "rationale": "Same Bash target: before committing changed files, run the prescribed formatting and lint pre-validation."
+    },
+    {
+      "gold_id": "g48",
+      "output_rule": "no-gh-pr-ready",
+      "rationale": "Same Bash target: gh pr ready is prohibited; the evidence also says to leave readiness to the user."
+    },
+    {
+      "gold_id": "g49",
+      "output_rule": "rebuild-before-integration-tests",
+      "rationale": "Same Bash target: running a Next.js integration test after source changes requires rebuilding first."
+    },
+    {
+      "gold_id": "g50",
+      "output_rule": "new-flag-requires-schema-and-define-env",
+      "rationale": "Same Edit target for adding a feature flag; the extraction covers type, schema, and conditional define-env wiring."
+    },
+    {
+      "gold_id": "g51",
+      "output_rule": "edge-node-import-flags-in-define-env",
+      "rationale": "Same Edit target: edge flags guarding Node-only imports must be forced false in define-env.ts."
+    },
+    {
+      "gold_id": "g52",
+      "output_rule": "react-server-dom-webpack-import-location",
+      "rationale": "Same Edit target: react-server-dom-webpack imports outside entry-base.ts are disallowed and exports should be consumed elsewhere."
+    },
+    {
+      "gold_id": "g53",
+      "output_rule": "no-relative-require-in-app-page",
+      "rationale": "Same Edit target: app-page.ts must not use relative requires for internal modules."
+    },
+    {
+      "gold_id": "g54",
+      "output_rule": "no-browser-back-in-router-act-tests",
+      "rationale": "Same Edit target: browser.back() is prohibited when returning to router-act pages whose accordion links are visible."
+    },
+    {
+      "gold_id": "g55",
+      "output_rule": "no-new-super-import-rust",
+      "rationale": "Same Edit target: new Rust super:: imports are avoided except inside inline mod blocks."
+    },
+    {
+      "gold_id": "g56",
+      "output_rule": "verify-highlight-line-numbers-in-docs",
+      "rationale": "Same Edit target: documentation highlight attributes require checking actual code-block line numbers. The extraction omits the clause about highlighting only relevant code."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g4",
+      "category": "structure",
+      "note": "The watch-before-change rule was compiled only for Edit; no Write rule targets creation of Next.js source or integration-test files."
+    },
+    {
+      "gold_id": "g5",
+      "category": "implicit",
+      "note": "No extracted Bash rule represents keeping the background watch process alive throughout iteration."
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "The document's mode/bundler command matrix was not compiled into a focused-test Bash rule."
+    },
+    {
+      "gold_id": "g7",
+      "category": "implicit",
+      "note": "No extracted Bash rule captures the session-end obligation to terminate a watch process the agent started."
+    },
+    {
+      "gold_id": "g8",
+      "category": "other",
+      "note": "Compiler skip: \"빌드 명령어 선택 가이드(핵심 파일만 수정 시 pnpm --filter=next build 우선, 타입만 확인 시 pnpm --filter=next types 우선) — 상황 판단 기반이라 고정 트리거 불가\"."
+    },
+    {
+      "gold_id": "g9",
+      "category": "other",
+      "note": "Compiler skip: \"빌드 명령어 선택 가이드(핵심 파일만 수정 시 pnpm --filter=next build 우선, 타입만 확인 시 pnpm --filter=next types 우선) — 상황 판단 기반이라 고정 트리거 불가\"."
+    },
+    {
+      "gold_id": "g10",
+      "category": "structure",
+      "note": "No extracted rule covers all-build selection for branch/bootstrap, pre-CI, or multi-package changes; the integration-test rebuild extraction has a different trigger."
+    },
+    {
+      "gold_id": "g12",
+      "category": "structure",
+      "note": "The explicit --webpack commands were not compiled into a Bash rule for forcing Webpack."
+    },
+    {
+      "gold_id": "g13",
+      "category": "other",
+      "note": "Compiler skip: \"--no-turbopack 플래그는 존재하지 않는다는 안내 — 순수 정보성, 의무/금지 없음\"."
+    },
+    {
+      "gold_id": "g14",
+      "category": "structure",
+      "note": "The compiler emitted only a Write rule for new tests, not the Bash obligation to invoke pnpm new-test."
+    },
+    {
+      "gold_id": "g16",
+      "category": "structure",
+      "note": "No Bash rule captures the AI-agent non-interactive --args invocation and argument format."
+    },
+    {
+      "gold_id": "g17",
+      "category": "other",
+      "note": "Compiler skip: \"동일 테스트를 다른 grep 필터로 재실행 금지, 동일 API 응답 재조회 금지 — 반복 여부라는 상태 기반 제약이라 단발성 정규식 트리거로 표현 불가\"."
+    },
+    {
+      "gold_id": "g21",
+      "category": "other",
+      "note": "Compiler skip: \"사용자가 CI 실패/PR 리뷰/PR 상태를 질문하면 pr-status 스크립트를 실행하라는 안내 — 트리거가 사용자 의도이지 특정 도구 호출이 아님\"."
+    },
+    {
+      "gold_id": "g22",
+      "category": "other",
+      "note": "Compiler skip: \"PR 상태 트리아지 우선순위 원칙(빌드→린트→타입→테스트 순, Known Flaky Tests 자동 무시 금지, 리뷰 의견보다 CI 실패 우선) — 특정 툴 호출에 결부되지 않는 판단 원칙\"."
+    },
+    {
+      "gold_id": "g23",
+      "category": "other",
+      "note": "Compiler skip: \"PR 상태 트리아지 우선순위 원칙(빌드→린트→타입→테스트 순, Known Flaky Tests 자동 무시 금지, 리뷰 의견보다 CI 실패 우선) — 특정 툴 호출에 결부되지 않는 판단 원칙\"."
+    },
+    {
+      "gold_id": "g24",
+      "category": "structure",
+      "note": "The sole CI-mode extraction is more specifically bound to module-resolution validation and is matched to g25; no remaining rule covers general local CI reproduction."
+    },
+    {
+      "gold_id": "g26",
+      "category": "other",
+      "note": "Compiler skip: \"전문 스킬 목록(각 상황별로 어떤 스킬을 쓰라는 안내) — 규칙이 아닌 참고 카탈로그\"."
+    },
+    {
+      "gold_id": "g27",
+      "category": "other",
+      "note": "Compiler skip: \"PR 상태 트리아지 우선순위 원칙(빌드→린트→타입→테스트 순, Known Flaky Tests 자동 무시 금지, 리뷰 의견보다 CI 실패 우선) — 특정 툴 호출에 결부되지 않는 판단 원칙\"."
+    },
+    {
+      "gold_id": "g28",
+      "category": "other",
+      "note": "Compiler skip: \"CI 실패 유형별 빠른 대응 팁(cargo fmt --check 후 cargo fmt, prettier 오류 시 prettier --write, 테스트 실패 시 로컬 재실행) — 조건부 사후 대응이라 고정 트리거 아님\"."
+    },
+    {
+      "gold_id": "g29",
+      "category": "other",
+      "note": "Compiler skip: \"CI 실패 유형별 빠른 대응 팁(cargo fmt --check 후 cargo fmt, prettier 오류 시 prettier --write, 테스트 실패 시 로컬 재실행) — 조건부 사후 대응이라 고정 트리거 아님\"."
+    },
+    {
+      "gold_id": "g30",
+      "category": "other",
+      "note": "Compiler skip: \"CI 실패 유형별 빠른 대응 팁(cargo fmt --check 후 cargo fmt, prettier 오류 시 prettier --write, 테스트 실패 시 로컬 재실행) — 조건부 사후 대응이라 고정 트리거 아님\"."
+    },
+    {
+      "gold_id": "g31",
+      "category": "structure",
+      "note": "No Bash extraction represents selecting the development or production test script matching the failing mode."
+    },
+    {
+      "gold_id": "g33",
+      "category": "other",
+      "note": "Compiler skip: \"디버그 로깅엔 DEBUG=next:*, 로컬 테스트엔 NEXT_TELEMETRY_DISABLED=1 사용 권장 — 특정 명령에 결부되지 않는 환경변수 팁\"."
+    },
+    {
+      "gold_id": "g34",
+      "category": "other",
+      "note": "Compiler skip: \"디버그 로깅엔 DEBUG=next:*, 로컬 테스트엔 NEXT_TELEMETRY_DISABLED=1 사용 권장 — 특정 명령에 결부되지 않는 환경변수 팁\"."
+    },
+    {
+      "gold_id": "g35",
+      "category": "structure",
+      "note": "No Edit rule was extracted for choosing NODE_ENV as a build-time development-bundle guard."
+    },
+    {
+      "gold_id": "g36",
+      "category": "structure",
+      "note": "No Edit rule was extracted for choosing __NEXT_DEV_SERVER as a dev-server-only runtime guard."
+    },
+    {
+      "gold_id": "g37",
+      "category": "other",
+      "note": "Compiler skip: \"시크릿 값을 채팅/로그에 노출 금지, 명령어에 실제 시크릿 값 직접 넣지 않기, 필수 시크릿 없으면 임의 자리표시자 대신 사용자에게 요청, 명령 출력 공유 시 민감값 가리기 — 특정 파일명·명령 패턴으로 한정할 수 없는 범용 안전수칙\"."
+    },
+    {
+      "gold_id": "g38",
+      "category": "other",
+      "note": "Compiler skip: \"시크릿 값을 채팅/로그에 노출 금지, 명령어에 실제 시크릿 값 직접 넣지 않기, 필수 시크릿 없으면 임의 자리표시자 대신 사용자에게 요청, 명령 출력 공유 시 민감값 가리기 — 특정 파일명·명령 패턴으로 한정할 수 없는 범용 안전수칙\"."
+    },
+    {
+      "gold_id": "g39",
+      "category": "other",
+      "note": "Compiler skip: \"시크릿 값을 채팅/로그에 노출 금지, 명령어에 실제 시크릿 값 직접 넣지 않기, 필수 시크릿 없으면 임의 자리표시자 대신 사용자에게 요청, 명령 출력 공유 시 민감값 가리기 — 특정 파일명·명령 패턴으로 한정할 수 없는 범용 안전수칙\"."
+    },
+    {
+      "gold_id": "g40",
+      "category": "other",
+      "note": "Compiler skip: \"시크릿 값을 채팅/로그에 노출 금지, 명령어에 실제 시크릿 값 직접 넣지 않기, 필수 시크릿 없으면 임의 자리표시자 대신 사용자에게 요청, 명령 출력 공유 시 민감값 가리기 — 특정 파일명·명령 패턴으로 한정할 수 없는 범용 안전수칙\"."
+    },
+    {
+      "gold_id": "g45",
+      "category": "other",
+      "note": "Compiler skip: \"커밋 메시지는 간결·설명적으로, PR 설명은 무엇·왜에 초점 — 문체/톤 가이드\"."
+    },
+    {
+      "gold_id": "g47",
+      "category": "other",
+      "note": "Compiler skip: \"커밋 메시지는 간결·설명적으로, PR 설명은 무엇·왜에 초점 — 문체/톤 가이드\"."
+    },
+    {
+      "gold_id": "g57",
+      "category": "other",
+      "note": "Compiler skip: \"PR 리뷰 시 비표준 HTTP 헤더를 읽는 코드를 보안 리뷰 대상으로 표시하라는 지침 — 특정 툴 호출로 결부하기 어려운 리뷰 판단 가이드\"."
+    }
+  ],
+  "unmatched_extracted": [
+    {
+      "output_rule": "dce-require-in-conditional-branch",
+      "class": "gold-miss",
+      "note": "The document contains a real Edit-bindable rule requiring require() calls to remain inside compile-time if/else branches for DCE, but frozen gold has no corresponding rule."
+    }
+  ],
+  "gold_amendments": []
+}

@@ -1,0 +1,41 @@
+{
+  "doc": "langgraph",
+  "lang": "en",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "run-format-lint-test-before-pr",
+      "rationale": "Same Bash tool and same pre-PR formatting action: the extracted compound rule explicitly requires `make format` in the modified library's directory before creating a pull request. It also covers linting and testing, but under the 1:1 rule it is assigned to this single closest gold rule."
+    },
+    {
+      "gold_id": "g5",
+      "output_rule": "no-sphinx-double-backticks",
+      "rationale": "Same Edit tool and same target: the pattern blocks Sphinx-style double-backtick inline code formatting in source files, with evidence specifically limiting the instruction to docstrings and comments."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g2",
+      "category": "structure",
+      "note": "The lint requirement is present only inside the compound extracted rule `run-format-lint-test-before-pr`, which is already assigned to g1 and cannot be reused under the 1:1 constraint."
+    },
+    {
+      "gold_id": "g3",
+      "category": "structure",
+      "note": "The test-suite requirement is present only inside the compound extracted rule `run-format-lint-test-before-pr`, which is already assigned to g1 and cannot be reused under the 1:1 constraint."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "Compiler self-reported this as uncompilable: \"TEST=path/to/test.py make test usage note for running a single test file — describes an optional variable, not an obligation or prohibition\"."
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "The single-backtick instruction appears only in the evidence of `no-sphinx-double-backticks`, whose trigger and blocking pattern most closely match g5; that extracted rule cannot also be assigned to g6 under the 1:1 constraint."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}

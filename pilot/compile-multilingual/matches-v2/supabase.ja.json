@@ -1,0 +1,121 @@
+{
+  "doc": "supabase",
+  "lang": "ja",
+  "judge": "llm:codex-1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g10",
+      "output_rule": "ui-import-shadcn-form-variants",
+      "rationale": "The Edit rule directly targets imports from 'ui', matching the shared-UI import action. Its evidence also mentions _Shadcn_ form variants, but 1:1 matching assigns this combined extraction to the closer, pattern-backed import rule."
+    },
+    {
+      "gold_id": "g12",
+      "output_rule": "check-index-before-new-ui-primitive",
+      "rationale": "The Write rule targets files under packages/ui and its evidence explicitly requires checking packages/ui/index.tsx before creating a primitive."
+    },
+    {
+      "gold_id": "g15",
+      "output_rule": "no-hardcoded-colors",
+      "rationale": "The Edit rule detects hardcoded hexadecimal and arbitrary Tailwind color values, and its evidence forbids hardcoded colors."
+    },
+    {
+      "gold_id": "g18",
+      "output_rule": "studio-use-shared-shortcut-registry",
+      "rationale": "The Edit rule targets one-off Studio keyboard handlers and explicitly prefers registered, discoverable shortcuts, matching the keyboard-shortcut handling intent."
+    },
+    {
+      "gold_id": "g19",
+      "output_rule": "studio-nav-key-sequence-format",
+      "rationale": "The Edit rule is scoped to the Studio shortcut registry and its evidence explicitly reserves 'G then ...' sequences for navigation."
+    },
+    {
+      "gold_id": "g20",
+      "output_rule": "studio-colocate-subcomponents",
+      "rationale": "The Write rule targets Studio TypeScript component files and requires sub-components to be placed with their parent."
+    },
+    {
+      "gold_id": "g21",
+      "output_rule": "studio-avoid-barrel-files",
+      "rationale": "The Write rule targets Studio index.ts/index.tsx creation and explicitly says to avoid barrel re-export files."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g1",
+      "category": "implicit",
+      "note": "The pnpm 10 requirement is present only in the repository-description sentence; no extracted Bash rule targets package or monorepo commands generally."
+    },
+    {
+      "gold_id": "g2",
+      "category": "implicit",
+      "note": "The Node >= 22 prerequisite is stated in descriptive repository metadata, but no extracted Bash rule targets Node-based repository commands."
+    },
+    {
+      "gold_id": "g3",
+      "category": "other",
+      "note": "Compiler-self-reported skip: \"よく使うコマンド 표는 실행 가능한 명령어 목록일 뿐 must/never/before/after 같은 의무가 붙어 있지 않아 문서화 자료이지 규칙이 아님\". This omitted pnpm install."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "Compiler-self-reported skip: \"よく使うコマンド 표는 실행 가능한 명령어 목록일 뿐 must/never/before/after 같은 의무가 붙어 있지 않아 문서화 자료이지 규칙이 아님\". This omitted pnpm dev:studio."
+    },
+    {
+      "gold_id": "g5",
+      "category": "other",
+      "note": "Compiler-self-reported skip: \"よく使うコマンド 표는 실행 가능한 명령어 목록일 뿐 must/never/before/after 같은 의무가 붙어 있지 않아 문서화 자료이지 규칙이 아님\". This omitted pnpm test:studio."
+    },
+    {
+      "gold_id": "g6",
+      "category": "other",
+      "note": "Compiler-self-reported skip: \"よく使うコマンド 표는 실행 가능한 명령어 목록일 뿐 must/never/before/after 같은 의무가 붙어 있지 않아 문서화 자료이지 규칙이 아님\". This omitted the e2e/studio E2E command."
+    },
+    {
+      "gold_id": "g7",
+      "category": "other",
+      "note": "Compiler-self-reported skip: \"よく使うコマンド 표는 실행 가능한 명령어 목록일 뿐 must/never/before/after 같은 의무가 붙어 있지 않아 문서화 자료이지 규칙이 아님\". This omitted the filtered Studio build command."
+    },
+    {
+      "gold_id": "g8",
+      "category": "other",
+      "note": "Compiler-self-reported skip: \"よく使うコマンド 표는 실행 가능한 명령어 목록일 뿐 must/never/before/after 같은 의무가 붙어 있지 않아 문서화 자료이지 규칙이 아님\". This omitted the filtered Studio lint command."
+    },
+    {
+      "gold_id": "g9",
+      "category": "other",
+      "note": "Compiler-self-reported skip: \"よく使うコマンド 표는 실행 가능한 명령어 목록일 뿐 must/never/before/after 같은 의무가 붙어 있지 않아 문서화 자료이지 규칙이 아님\". This omitted pnpm typecheck."
+    },
+    {
+      "gold_id": "g11",
+      "category": "structure",
+      "note": "The compiler merged this form-primitive requirement into ui-import-shadcn-form-variants. That extracted rule is used for the closer import target g10, and its trigger does not independently target form-primitive usage, so 1:1 matching leaves g11 unmatched."
+    },
+    {
+      "gold_id": "g13",
+      "category": "structure",
+      "note": "The compound styling sentence was not decomposed into a rule requiring Tailwind-only styling; the sole styling extraction covers only hardcoded colors."
+    },
+    {
+      "gold_id": "g14",
+      "category": "structure",
+      "note": "The compound styling sentence was not decomposed into a rule requiring semantic Tailwind color tokens; the sole styling extraction covers only hardcoded colors."
+    },
+    {
+      "gold_id": "g16",
+      "category": "other",
+      "note": "Compiler-self-reported skip: \"すべての箇所でアメリカ英語を使用する — 전체 텍스트에 걸친 일반 언어 스타일 규칙으로, 특정 도구 호출에 결부시킬 수 없음\"."
+    },
+    {
+      "gold_id": "g17",
+      "category": "structure",
+      "note": "The compiler extracted a narrower keyboard-listener rule and used it for the closer keyboard-shortcut preference g18, but did not extract the broader requirement binding repeated Studio UI actions to both the shared registry and Shortcut primitives."
+    },
+    {
+      "gold_id": "g22",
+      "category": "other",
+      "note": "Compiler-self-reported skip: \"Studio의 상세 규약은 studio-* 스킬을 참조하라는 안내 — 규칙이 아닌 포인터\"."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}

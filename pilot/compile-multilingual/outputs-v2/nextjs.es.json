@@ -1,0 +1,339 @@
+{
+  "doc": "nextjs.es",
+  "rules": [
+    {
+      "name": "read-readmes-before-edit",
+      "tool": "Edit",
+      "pattern": "^(packages|crates|turbopack)/",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Antes de editar o crear archivos en cualquier subdirectorio (por ejemplo, packages/*, crates/*), lee todos los archivos README.md que haya en la ruta desde la raíz del repositorio hasta el directorio del archivo de destino"
+    },
+    {
+      "name": "read-readmes-before-write",
+      "tool": "Write",
+      "pattern": "^(packages|crates|turbopack)/",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Antes de editar o crear archivos en cualquier subdirectorio (por ejemplo, packages/*, crates/*), lee todos los archivos README.md que haya en la ruta desde la raíz del repositorio hasta el directorio del archivo de destino"
+    },
+    {
+      "name": "start-dev-watch-before-editing-source",
+      "tool": "Edit",
+      "pattern": "^(packages/next/src|test)/",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Si estás modificando el código fuente de Next.js o pruebas de integración, inicia pnpm --filter=next dev en una sesión de terminal independiente antes de realizar cambios"
+    },
+    {
+      "name": "build-all-after-branch-checkout",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+checkout",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Ejecuta siempre una compilación de inicialización completa después de cambiar de rama: git checkout <branch> / pnpm build-all"
+    },
+    {
+      "name": "use-new-test-for-test-generation",
+      "tool": "Write",
+      "pattern": "^test/.*\\.test\\.(ts|tsx|js)$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Es obligatorio generar las pruebas con pnpm new-test."
+    },
+    {
+      "name": "use-retry-not-settimeout-in-tests",
+      "tool": "Edit",
+      "pattern": "setTimeout\\(",
+      "field": "new_string",
+      "path": "test/.*\\.(ts|tsx)$",
+      "strength": "require-read",
+      "evidence": "Usa retry() de next-test-utils en lugar de setTimeout para esperar"
+    },
+    {
+      "name": "no-check-use-retry-expect",
+      "tool": "Edit",
+      "pattern": "\\bcheck\\(",
+      "field": "new_string",
+      "path": "test/.*\\.(ts|tsx)$",
+      "strength": "block",
+      "evidence": "NO uses check(): está obsoleto. Usa retry() + expect() en su lugar"
+    },
+    {
+      "name": "prefer-real-fixture-dirs-over-inline-files",
+      "tool": "Edit",
+      "pattern": "files:\\s*\\{",
+      "field": "new_string",
+      "path": "test/.*\\.(ts|tsx)$",
+      "strength": "inject",
+      "evidence": "Prefiere directorios reales de datos de prueba en vez de objetos files en línea"
+    },
+    {
+      "name": "pr-description-llm-marker",
+      "tool": "Bash",
+      "pattern": "gh\\s+pr\\s+create",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Al redactar descripciones de PR, DEBES incluir el siguiente comentario HTML al final de la descripción: <!-- NEXT_JS_LLM_PR -->"
+    },
+    {
+      "name": "no-ai-footer-in-commits",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "NO añadas pies de página «Generated with Claude Code» ni de coautoría a los commits o las PR"
+    },
+    {
+      "name": "no-ai-footer-in-prs",
+      "tool": "Bash",
+      "pattern": "gh\\s+pr\\s+create",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "NO añadas pies de página «Generated with Claude Code» ni de coautoría a los commits o las PR"
+    },
+    {
+      "name": "no-mark-pr-ready",
+      "tool": "Bash",
+      "pattern": "gh\\s+pr\\s+ready",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "NO marques las PR como «ready for review» (gh pr ready): déjalas en modo borrador"
+    },
+    {
+      "name": "prettier-eslint-before-commit",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Realiza una validación previa antes de crear el commit para evitar fallos lentos de lint-staged (~2 min cada uno)"
+    },
+    {
+      "name": "rebuild-before-integration-tests",
+      "tool": "Bash",
+      "pattern": "pnpm\\s+(test-dev-turbo|test-dev-webpack|test-start-turbo|test-start-webpack)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Al ejecutar pruebas de integración de Next.js, debes volver a compilar si los archivos fuente han cambiado"
+    },
+    {
+      "name": "reproduce-ci-env-vars-for-test-repro",
+      "tool": "Bash",
+      "pattern": "pnpm\\s+(test-dev-turbo|test-dev-webpack|test-start-turbo|test-start-webpack)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Reproducción local de fallos de CI: Usa siempre exactamente las mismas variables de entorno de CI ... IS_WEBPACK_TEST=1"
+    },
+    {
+      "name": "match-ci-env-flags-when-updating-snapshots",
+      "tool": "Bash",
+      "pattern": "pnpm\\s+(test-dev-turbo|test-dev-webpack|test-start-turbo|test-start-webpack).*(-u\\b|--updateSnapshot\\b)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Al actualizar instantáneas, ejecuta siempre la prueba con los mismos indicadores de entorno exactos que usa el trabajo de CI"
+    },
+    {
+      "name": "dce-require-behind-branch",
+      "tool": "Edit",
+      "pattern": "\\brequire\\(",
+      "field": "new_string",
+      "path": "^packages/next/src/.*\\.tsx?$",
+      "strength": "require-read",
+      "evidence": "Mantén require() detrás de ramas if/else en tiempo de compilación para DCE (evita patrones de retorno anticipado o lanzamiento de excepciones)"
+    },
+    {
+      "name": "edge-build-force-false-node-only-flags",
+      "tool": "Edit",
+      "pattern": "define-env\\.ts$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "En compilaciones edge, fuerza a false en define-env.ts los indicadores de funcionalidad que controlen importaciones exclusivas de Node."
+    },
+    {
+      "name": "react-server-dom-webpack-imports-entry-base-only",
+      "tool": "Edit",
+      "pattern": "react-server-dom-webpack",
+      "field": "new_string",
+      "path": "^(?!.*entry-base\\.ts$).*\\.tsx?$",
+      "strength": "require-read",
+      "evidence": "Las importaciones de react-server-dom-webpack/* deben permanecer en entry-base.ts; en otros lugares, accede a ellas mediante las exportaciones del módulo de componentes."
+    },
+    {
+      "name": "new-flag-wire-config-shared-and-schema",
+      "tool": "Edit",
+      "pattern": "config-shared\\.ts$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Indicadores nuevos: añade el tipo en config-shared.ts, el esquema en config-schema.ts y define-env.ts cuando se use en código empaquetado del usuario."
+    },
+    {
+      "name": "new-flag-wire-runtime-env-values",
+      "tool": "Edit",
+      "pattern": "(next-server\\.ts|export/worker\\.ts)$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Si se utiliza un indicador en componentes internos precompilados del entorno de ejecución, conecta también los valores del entorno de ejecución (next-server.ts/export/worker.ts según sea necesario)."
+    },
+    {
+      "name": "rust-avoid-super-imports",
+      "tool": "Edit",
+      "pattern": "use\\s+super::",
+      "field": "new_string",
+      "path": "\\.rs$",
+      "strength": "inject",
+      "evidence": "Evita añadir nuevas importaciones super::, salvo en bloques mod en línea (por ejemplo, mod tests { ... }); prefiere rutas con raíz en crate::"
+    },
+    {
+      "name": "app-page-no-relative-internal-requires",
+      "tool": "Edit",
+      "pattern": "require\\(['\"]\\.\\./",
+      "field": "new_string",
+      "path": "app-page\\.ts$",
+      "strength": "block",
+      "evidence": "No puedes requerir módulos internos mediante rutas relativas porque no podrán resolverse desde el proyecto del usuario."
+    },
+    {
+      "name": "flag-nonstandard-header-reads-for-security-review",
+      "tool": "Edit",
+      "pattern": "headers(\\.get\\(|\\.has\\(|\\[)",
+      "field": "new_string",
+      "path": "^packages/next/src/server/.*\\.tsx?$",
+      "strength": "require-read",
+      "evidence": "Al revisar PR: si el código nuevo lee un encabezado de solicitud que no es un encabezado HTTP estándar ... señálalo para que se realice una revisión de seguridad."
+    },
+    {
+      "name": "doc-codeblock-highlight-line-accuracy",
+      "tool": "Edit",
+      "pattern": "highlight=\\{",
+      "field": "new_string",
+      "path": "docs/.*\\.mdx?$",
+      "strength": "require-read",
+      "evidence": "Al añadir atributos highlight={...} a los bloques de código, cuenta con cuidado los números de línea reales dentro del bloque de código"
+    },
+    {
+      "name": "no-browser-back-in-router-act-tests",
+      "tool": "Edit",
+      "pattern": "browser\\.back\\(\\)",
+      "field": "new_string",
+      "path": "test/.*\\.(ts|tsx)$",
+      "strength": "block",
+      "evidence": "Nunca uses browser.back() para volver a una página en la que los enlaces del acordeón ya estén visibles: BFCache restaura el estado y activa nuevas cargas anticipadas sin control."
+    },
+    {
+      "name": "capture-test-output-dont-rerun",
+      "tool": "Bash",
+      "pattern": "pnpm\\s+(test-dev-turbo|test-dev-webpack|test-start-turbo|test-start-webpack)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "No vuelvas a ejecutar nunca el mismo conjunto de pruebas con filtros grep diferentes. Captura la salida una sola vez en un archivo y luego léela desde allí"
+    },
+    {
+      "name": "capture-api-response-dont-requery",
+      "tool": "Bash",
+      "pattern": "(gh\\s+api\\b|\\bcurl\\b)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Guarda la respuesta en una variable o un archivo ... No vuelvas a solicitar los mismos datos de la API para analizarlos desde distintos ángulos"
+    },
+    {
+      "name": "types-check-instead-of-full-build",
+      "tool": "Bash",
+      "pattern": "pnpm\\s+--filter=next\\s+build",
+      "field": null,
+      "path": null,
+      "strength": "inject",
+      "evidence": "Solo para errores de tipos: Usa pnpm --filter=next types (~10 s) en lugar de pnpm --filter=next build (~60 s)."
+    },
+    {
+      "name": "telemetry-disabled-for-local-tests",
+      "tool": "Bash",
+      "pattern": "pnpm\\s+(test-dev-turbo|test-dev-webpack|test-start-turbo|test-start-webpack)",
+      "field": null,
+      "path": null,
+      "strength": "inject",
+      "evidence": "Usa NEXT_TELEMETRY_DISABLED=1 al realizar pruebas locales"
+    },
+    {
+      "name": "group-edits-before-build",
+      "tool": "Bash",
+      "pattern": "pnpm\\s+(build|build-all)\\b",
+      "field": null,
+      "path": null,
+      "strength": "inject",
+      "evidence": "Agrupa los cambios relacionados en varios archivos y, después, ejecuta una sola compilación, no una compilación por modificación"
+    },
+    {
+      "name": "never-secrets-in-commit",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "Nunca muestres ni pegues valores secretos (tokens, claves de API, cookies) en respuestas de chat, commits o registros compartidos."
+    },
+    {
+      "name": "never-commit-secret-files",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+add\\s+.*(\\.env\\b|credentials|secrets?\\.(json|ya?ml)|\\.pem\\b)",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "Nunca incluyas archivos de secretos locales en un commit"
+    },
+    {
+      "name": "ssh-no-remote-url-change-on-auth-failure",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+remote\\s+(set-url|add)",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "No cambies los remotos a HTTPS, no modifiques sus URL, no lo intentes repetidamente ni pruebes otra solución alternativa de autenticación, salvo que el usuario lo solicite explícitamente."
+    },
+    {
+      "name": "ssh-preflight-before-force-push-rebase",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+(push\\s+(--force|-f)\\b|rebase\\b)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Antes de realizar un push forzado o un rebase de una pila que pueda hidratar objetos de un clon parcial, prefiere una comprobación preliminar ligera de SSH."
+    }
+  ],
+  "uncompilable": [
+    "No existe la opción --no-turbopack: informational note about bundler flags, not an obligation tied to an action.",
+    "Usa DEBUG=next:* para el registro de depuración: debugging tip, not tied to a specific tool call.",
+    "Reglas generales de triaje de PR/CI (prioriza bloqueantes, asume fallos reales, desconfía de flaky-list): general prioritization heuristics, not bound to one tool call.",
+    "Ejecuta scripts/pr-status.js cuando el usuario pregunte por CI/PR: triggered by user intent, not by a tool-call precondition.",
+    "Lectura eficiente de archivos grandes (grep primero, no releer secciones sin cambios, solo grep en dist/node_modules/.next): all target the Read tool, which isn't a supported trigger tool (Bash|Edit|Write only).",
+    "Descomposición y verificación de tareas (dividir en pasos verificables, verificar antes de continuar, preguntar si no está clara la verificación): general process methodology, not action-bindable.",
+    "No dependas de mensajes de registro exactos en las pruebas: too vague/broad a style note to bind to a reliable, low-noise regex.",
+    "Pruebas específicas de un modo necesitan skipStart:true + next.start() manual: too contextual/informational to bind as a proactive edit trigger.",
+    "__NEXT_SHOW_IGNORE_LISTED=true para trazas completas: a debugging tip, not an obligation tied to an action.",
+    "Usa siempre LinkAccordion para controlar cargas anticipadas en pruebas act del enrutador: no precise, non-noisy pattern distinguishes router-act tests from other act() usage.",
+    "Binario nativo de Turbopack obsoleto tras cambiar de rama (eliminar *.node y reinstalar): reactive troubleshooting for a symptom, not a proactive pre-action rule.",
+    "Error interno del compilador de Rust (eliminar directorios */incremental): reactive troubleshooting, not action-bindable.",
+    "cargo fmt usa orden ASCII: informational fact, not an obligation to perform an action.",
+    "Particularidades de mapas de código fuente de Node.js (rutas varían, findSourceMap necesita flag): reference/informational material.",
+    "Si falta un secreto local obligatorio, detente y pregunta al usuario en vez de inventarlo: a judgment call about missing input, not tied to a specific tool call.",
+    "Replica los nombres/modos del entorno de CI pero sin valores secretos literales en los comandos: the 'no secret literals' half can't be reliably regex-matched, and the env-var-name half duplicates the CI-reproduction rule.",
+    "Al compartir salida de comandos, resúmela y oculta valores sensibles: governs how output is presented after the fact, not a specific tool call to gate."
+  ]
+}

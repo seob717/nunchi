@@ -1,0 +1,41 @@
+{
+  "doc": "langgraph.es",
+  "lang": "es",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "run-make-checks-before-pr",
+      "rationale": "Same Bash target: before creating a pull request after library changes, the extracted rule requires the library-local make checks and explicitly includes make format. It also bundles make lint and make test, but under the 1:1 rule it is assigned to this single gold rule."
+    },
+    {
+      "gold_id": "g5",
+      "output_rule": "no-sphinx-double-backtick",
+      "rationale": "Same Edit target: the pattern blocks Sphinx-style double-backtick inline code, and the evidence expressly limits the instruction to inline code references in docstrings and comments."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g2",
+      "category": "structure",
+      "note": "The only Bash extraction bundles make lint with format and test in one rule and is already consumed by g1; 1:1 matching forbids reusing it."
+    },
+    {
+      "gold_id": "g3",
+      "category": "structure",
+      "note": "The only Bash extraction bundles make test with format and lint in one rule and is already consumed by g1; 1:1 matching forbids reusing it."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"TEST env var syntax for scoping `make test` to a specific file/pytest options — usage documentation, not an obligation or prohibition.\""
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "The extracted Edit rule's evidence includes the single-backtick requirement, but that rule is already consumed by the closer g5 prohibition and cannot be reused under 1:1 matching."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}

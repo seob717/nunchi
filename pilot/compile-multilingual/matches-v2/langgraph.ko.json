@@ -1,0 +1,47 @@
+{
+  "doc": "langgraph",
+  "lang": "ko",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "pr-run-checks-before-create",
+      "rationale": "The Bash rule is triggered when creating a pull request and its Korean evidence explicitly requires running make format in the modified library directory beforehand. It also combines make lint and make test, but under the 1:1 rule it is assigned only to the first and equally close gold rule, g1."
+    },
+    {
+      "gold_id": "g5",
+      "output_rule": "no-sphinx-double-backtick-edit",
+      "rationale": "The Edit rule blocks the same Sphinx-style double-backtick inline-code form, and its evidence explicitly scopes the prohibition to docstrings and comments."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g2",
+      "category": "structure",
+      "note": "The compiler merged make lint with the format and test requirements into pr-run-checks-before-create. That extracted rule is already assigned to the equally close g1 and cannot be reused under the 1:1 constraint."
+    },
+    {
+      "gold_id": "g3",
+      "category": "structure",
+      "note": "The compiler merged make test with the format and lint requirements into pr-run-checks-before-create. That extracted rule is already assigned to the equally close g1 and cannot be reused under the 1:1 constraint."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "Compiler-reported skip: \"TEST 변수로 특정 테스트 파일·pytest 옵션 지정 가능하다는 설명은 사용 방법 안내(문서화)일 뿐 의무·금지·순서 지시가 없어 규칙 대상 아님\""
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "The explicit positive clause requiring single backticks appears in the same compound bullet as the double-backtick prohibition, but the compiler extracted only the prohibition and produced no separate Edit rule for using single backticks."
+    }
+  ],
+  "unmatched_extracted": [
+    {
+      "output_rule": "no-sphinx-double-backtick-write",
+      "class": "gold-miss",
+      "note": "This is a real action-bindable Write prohibition supported by the document's instruction against double backticks in docstrings and comments, but the frozen gold ruleset lists only the corresponding Edit rule."
+    }
+  ],
+  "gold_amendments": []
+}

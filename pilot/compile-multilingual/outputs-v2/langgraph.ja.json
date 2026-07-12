@@ -1,0 +1,28 @@
+{
+  "doc": "langgraph.ja",
+  "rules": [
+    {
+      "name": "run-format-lint-test-before-pr",
+      "tool": "Bash",
+      "pattern": "gh\\s+pr\\s+create",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "いずれかのライブラリのコードを変更した場合は、プルリクエストを作成する前に、そのライブラリのディレクトリで以下のコマンドを実行してください。"
+    },
+    {
+      "name": "no-sphinx-double-backtick",
+      "tool": "Edit",
+      "pattern": "``[^`]+``",
+      "field": "new_string",
+      "path": "\\.(py|ts|tsx|js|jsx)$",
+      "strength": "block",
+      "evidence": "Sphinx 形式の二重バッククォート（``code``）は絶対に使用しないでください。"
+    }
+  ],
+  "uncompilable": [
+    "Library overview table (checkpoint, cli, langgraph, sdk-js, etc.) — pure reference documentation listing what each library is, no obligation or prohibition attached.",
+    "Note that the TEST env var can be used to run a specific test file or pass extra pytest options — describes an optional capability, not an action requirement.",
+    "Dependency map diagram plus the statement that changes to a library may affect all downstream dependents — contextual/informational, no specific action is prescribed."
+  ]
+}

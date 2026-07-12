@@ -1,0 +1,322 @@
+{
+  "doc": "nextjs.es",
+  "lang": "es",
+  "judge": "llm:codex-0.144.1(GPT-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "read-readmes-before-edit",
+      "rationale": "Same Edit trigger for files under repository subdirectories and the same requirement to read every README on the path."
+    },
+    {
+      "gold_id": "g2",
+      "output_rule": "read-readmes-before-write",
+      "rationale": "Same Write trigger for creating files under repository subdirectories and the same README-chain requirement."
+    },
+    {
+      "gold_id": "g3",
+      "output_rule": "start-dev-watch-before-editing-source",
+      "rationale": "Same Edit target: Next.js source or integration tests, with the watch process required before changes. The extraction omits the already-running and explicit-skip-explanation clauses."
+    },
+    {
+      "gold_id": "g8",
+      "output_rule": "types-check-instead-of-full-build",
+      "rationale": "Same Bash target and substitution of the fast types command for a full Next.js build when checking only types."
+    },
+    {
+      "gold_id": "g11",
+      "output_rule": "build-all-after-branch-checkout",
+      "rationale": "Same branch-switch Bash trigger and full bootstrap build requirement."
+    },
+    {
+      "gold_id": "g15",
+      "output_rule": "use-new-test-for-test-generation",
+      "rationale": "Same Write target for new test-suite files and requirement to generate them with pnpm new-test. The extraction does not spell out the template structure/fixture rationale."
+    },
+    {
+      "gold_id": "g17",
+      "output_rule": "capture-test-output-dont-rerun",
+      "rationale": "Same Bash target: avoid rerunning a suite for different grep filters and capture output once for later analysis."
+    },
+    {
+      "gold_id": "g18",
+      "output_rule": "use-retry-not-settimeout-in-tests",
+      "rationale": "Same Edit target for asynchronous waiting in tests, replacing setTimeout with retry()."
+    },
+    {
+      "gold_id": "g19",
+      "output_rule": "no-check-use-retry-expect",
+      "rationale": "Same Edit target banning deprecated check() and prescribing retry() plus expect()."
+    },
+    {
+      "gold_id": "g20",
+      "output_rule": "prefer-real-fixture-dirs-over-inline-files",
+      "rationale": "Same Edit target for inline nextTestSetup files objects and preference for real fixture directories."
+    },
+    {
+      "gold_id": "g24",
+      "output_rule": "reproduce-ci-env-vars-for-test-repro",
+      "rationale": "Same Bash target for local CI-failure reproduction with the exact CI environment, explicitly including IS_WEBPACK_TEST=1."
+    },
+    {
+      "gold_id": "g32",
+      "output_rule": "pr-description-llm-marker",
+      "rationale": "Same Bash target for creating a PR description and the required trailing NEXT_JS_LLM_PR comment. The regex covers creation rather than every possible update command."
+    },
+    {
+      "gold_id": "g34",
+      "output_rule": "telemetry-disabled-for-local-tests",
+      "rationale": "Same Bash target for local test commands and injection of NEXT_TELEMETRY_DISABLED=1."
+    },
+    {
+      "gold_id": "g38",
+      "output_rule": "never-secrets-in-commit",
+      "rationale": "Same Bash target forbidding secret values in commits or shared output. The extraction is narrowed to git commit and omits other emitting commands."
+    },
+    {
+      "gold_id": "g39",
+      "output_rule": "match-ci-env-flags-when-updating-snapshots",
+      "rationale": "Same Bash target of constructing a local CI-equivalent command with exact environment flags, narrowed to snapshot-update test commands; it omits the no-literal-secret clause."
+    },
+    {
+      "gold_id": "g41",
+      "output_rule": "never-commit-secret-files",
+      "rationale": "Same Bash target blocking staging local secret/environment files. The extraction omits the placeholder-only documentation clause."
+    },
+    {
+      "gold_id": "g42",
+      "output_rule": "ssh-no-remote-url-change-on-auth-failure",
+      "rationale": "Same Bash target blocking remote URL changes after SSH authentication failure unless requested."
+    },
+    {
+      "gold_id": "g43",
+      "output_rule": "ssh-preflight-before-force-push-rebase",
+      "rationale": "Same Bash target for a force push or rebase that may hydrate partial-clone objects, requiring an SSH preflight."
+    },
+    {
+      "gold_id": "g44",
+      "output_rule": "no-ai-footer-in-commits",
+      "rationale": "Same Bash commit target and prohibition on generated-by or co-author footers."
+    },
+    {
+      "gold_id": "g46",
+      "output_rule": "prettier-eslint-before-commit",
+      "rationale": "Same Bash target requiring formatting/lint pre-validation before committing changed files."
+    },
+    {
+      "gold_id": "g48",
+      "output_rule": "no-mark-pr-ready",
+      "rationale": "Same Bash target blocking gh pr ready and leaving the PR in draft."
+    },
+    {
+      "gold_id": "g49",
+      "output_rule": "rebuild-before-integration-tests",
+      "rationale": "Same Bash target requiring a rebuild before Next.js integration tests after source changes."
+    },
+    {
+      "gold_id": "g50",
+      "output_rule": "new-flag-wire-config-shared-and-schema",
+      "rationale": "Same Edit target for adding a feature flag and wiring its type, schema, and define-env entry where applicable."
+    },
+    {
+      "gold_id": "g51",
+      "output_rule": "edge-build-force-false-node-only-flags",
+      "rationale": "Same Edit target for forcing Node-only-import feature flags false in edge builds in define-env.ts."
+    },
+    {
+      "gold_id": "g52",
+      "output_rule": "react-server-dom-webpack-imports-entry-base-only",
+      "rationale": "Same Edit target keeping react-server-dom-webpack imports in entry-base.ts and consuming exports elsewhere."
+    },
+    {
+      "gold_id": "g53",
+      "output_rule": "app-page-no-relative-internal-requires",
+      "rationale": "Same Edit target blocking relative internal requires from app-page.ts."
+    },
+    {
+      "gold_id": "g54",
+      "output_rule": "no-browser-back-in-router-act-tests",
+      "rationale": "Same Edit target blocking browser.back() for the specified router-act accordion scenario."
+    },
+    {
+      "gold_id": "g55",
+      "output_rule": "rust-avoid-super-imports",
+      "rationale": "Same Edit target avoiding new super:: imports in Rust, with the inline-mod exception."
+    },
+    {
+      "gold_id": "g56",
+      "output_rule": "doc-codeblock-highlight-line-accuracy",
+      "rationale": "Same Edit target for highlight attributes in documentation code blocks and accurate line counting. The extraction omits explicitly saying to highlight only relevant code."
+    },
+    {
+      "gold_id": "g57",
+      "output_rule": "flag-nonstandard-header-reads-for-security-review",
+      "rationale": "Same Edit target for newly read nonstandard request headers in server code and security-review escalation."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g4",
+      "category": "structure",
+      "note": "No Write rule starts or accounts for skipping the Next.js watch process when creating source or integration-test files; the extracted watch rule is Edit-only."
+    },
+    {
+      "gold_id": "g5",
+      "category": "implicit",
+      "note": "No extracted Bash rule preserves the already-started watch process throughout iterative development."
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "No extracted Bash rule selects the focused test script by both development/production mode and Turbopack/Webpack bundler."
+    },
+    {
+      "gold_id": "g7",
+      "category": "implicit",
+      "note": "No extracted Bash rule handles end-of-session cleanup of a watch process started by the agent."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "No extracted Bash rule prefers the filtered Next.js build specifically for an already-bootstrapped workspace with core-only edits."
+    },
+    {
+      "gold_id": "g10",
+      "category": "structure",
+      "note": "No single extracted Bash rule covers full build-all for bootstrap, pre-CI, or cross-package changes; the checkout-only rule is reserved for the closer g11."
+    },
+    {
+      "gold_id": "g12",
+      "category": "other",
+      "note": "No extracted Bash rule forces Webpack with --webpack."
+    },
+    {
+      "gold_id": "g13",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"No existe la opción --no-turbopack: informational note about bundler flags, not an obligation tied to an action.\""
+    },
+    {
+      "gold_id": "g14",
+      "category": "structure",
+      "note": "No Bash extraction binds pnpm new-test to test generation; the only new-test extraction is a Write rule used for g15."
+    },
+    {
+      "gold_id": "g16",
+      "category": "reference-depth",
+      "note": "No extracted Bash rule captures the non-interactive --args invocation and documented appDir/name/type argument format."
+    },
+    {
+      "gold_id": "g21",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"Ejecuta scripts/pr-status.js cuando el usuario pregunte por CI/PR: triggered by user intent, not by a tool-call precondition.\""
+    },
+    {
+      "gold_id": "g22",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"Reglas generales de triaje de PR/CI (prioriza bloqueantes, asume fallos reales, desconfía de flaky-list): general prioritization heuristics, not bound to one tool call.\""
+    },
+    {
+      "gold_id": "g23",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"Reglas generales de triaje de PR/CI (prioriza bloqueantes, asume fallos reales, desconfía de flaky-list): general prioritization heuristics, not bound to one tool call.\""
+    },
+    {
+      "gold_id": "g25",
+      "category": "reference-depth",
+      "note": "No extracted Bash rule requires the normal mode-specific test command for module-resolution or build-graph fixes."
+    },
+    {
+      "gold_id": "g26",
+      "category": "reference-depth",
+      "note": "No extracted Bash rule invokes the pr-status-triage skill for automated analysis."
+    },
+    {
+      "gold_id": "g27",
+      "category": "implicit",
+      "note": "No extracted Bash rule represents choosing CI failures ahead of review comments."
+    },
+    {
+      "gold_id": "g28",
+      "category": "structure",
+      "note": "No extracted Bash rule maps rust check/build CI failures to cargo fmt -- --check followed by cargo fmt."
+    },
+    {
+      "gold_id": "g29",
+      "category": "structure",
+      "note": "No extracted Bash rule maps lint/build Prettier failures to pnpm prettier --write on the affected file."
+    },
+    {
+      "gold_id": "g30",
+      "category": "structure",
+      "note": "No extracted Bash rule requires running the specific CI-failing test path locally."
+    },
+    {
+      "gold_id": "g31",
+      "category": "structure",
+      "note": "No extracted Bash rule chooses the test script matching the failing development or production mode."
+    },
+    {
+      "gold_id": "g33",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"Usa DEBUG=next:* para el registro de depuración: debugging tip, not tied to a specific tool call.\""
+    },
+    {
+      "gold_id": "g35",
+      "category": "structure",
+      "note": "No extraction targets choosing NODE_ENV != production for development-bundle-only build-time guards; the DCE extraction concerns require placement, not this guard choice."
+    },
+    {
+      "gold_id": "g36",
+      "category": "structure",
+      "note": "No extraction targets choosing __NEXT_DEV_SERVER for dev-server-only execution guards."
+    },
+    {
+      "gold_id": "g37",
+      "category": "implicit",
+      "note": "No extracted Bash rule treats all accessed environment-variable values as sensitive, apart from narrower commit-secret handling."
+    },
+    {
+      "gold_id": "g40",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"Si falta un secreto local obligatorio, detente y pregunta al usuario en vez de inventarlo: a judgment call about missing input, not tied to a specific tool call.\""
+    },
+    {
+      "gold_id": "g45",
+      "category": "implicit",
+      "note": "No extracted Bash rule requires concise, descriptive commit messages."
+    },
+    {
+      "gold_id": "g47",
+      "category": "implicit",
+      "note": "No extracted Bash rule requires PR descriptions to focus on what changed and why."
+    }
+  ],
+  "unmatched_extracted": [
+    {
+      "output_rule": "no-ai-footer-in-prs",
+      "class": "gold-miss",
+      "note": "Real document rule prohibiting generated-by/co-author footers in PRs; gold has the commit-targeted counterpart but no PR-footer rule."
+    },
+    {
+      "output_rule": "dce-require-behind-branch",
+      "class": "gold-miss",
+      "note": "Real action-bindable Edit rule requiring require() calls to stay behind compile-time branches for DCE; it is not semantically the NODE_ENV guard rule."
+    },
+    {
+      "output_rule": "new-flag-wire-runtime-env-values",
+      "class": "gold-miss",
+      "note": "Real action-bindable Edit rule for wiring runtime environment values when a flag is used in precompiled runtime components; gold g50 covers the separate type/schema/user-bundle wiring."
+    },
+    {
+      "output_rule": "capture-api-response-dont-requery",
+      "class": "gold-miss",
+      "note": "Real Bash rule to cache an API response and avoid repeat queries for different analyses; no gold rule lists it."
+    },
+    {
+      "output_rule": "group-edits-before-build",
+      "class": "gold-miss",
+      "note": "Real Bash rule to group related edits and perform one build rather than one build per edit; no gold rule lists it."
+    }
+  ],
+  "gold_amendments": []
+}

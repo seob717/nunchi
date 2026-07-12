@@ -1,0 +1,27 @@
+{
+  "doc": "microfolio.ja",
+  "rules": [
+    {
+      "name": "custom-component-ak-prefix",
+      "tool": "Write",
+      "pattern": "/(?!\\+)[^/]+\\.svelte$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "すべてのカスタムコンポーネントには Ak プレフィックスを使用します（例: AkHeader、AkFooter、AkProjectCard、AkFilters、AkOptimizedImage）。"
+    }
+  ],
+  "uncompilable": [
+    "Dev commands table (pnpm dev/build/deploy/preview/lint/format/optimize-images/clean-images) is a usage catalog with no attached obligation/prohibition — documentation, not a rule.",
+    "Package manager pinned to pnpm 9.12.0 and Node.js 20+ requirement is a stated environment fact, not phrased as an obligation/prohibition bound to a specific tool call.",
+    "'テストフレームワークは設定されていません' (no test framework configured) is a factual note, not an actionable rule.",
+    "Content system directory layout (content/projects/{slug}/ structure, index.md/thumbnail/images/videos/documents) is architectural description with no must/never language.",
+    "Data loading architecture (+page.server.js patterns, projects.js loader, YAML/Markdown parsing pattern) is descriptive of existing code, not an instruction for future actions.",
+    "Key utilities list ($lib/utils/paths.js, projects.js, imageMetadata.js, config.js, i18n.js) is reference documentation, not a rule.",
+    "Styling section (Tailwind 4 setup, theme.css, dark mode via prefers-color-scheme, IBM Plex Sans font) is general styling/architecture description, not an action-bound rule.",
+    "Datatable components composing the /list view via @vincjo/datatables is descriptive, not an obligation.",
+    "Build/deploy details (adapter-static output, svelte.config.js prerender scanning, vite-plugin-static-copy behavior, base path logic, CUSTOM_DOMAIN env var, +layout.js prerender/trailingSlash settings) describe existing configuration, not instructions to follow when acting.",
+    "Internationalization section (locale file location, default locale config, RTL auto-detection) is architectural description with no obligation language.",
+    "Project metadata YAML schema block is a reference example of frontmatter fields, with no explicit 'must include' or 'never omit' language attached."
+  ]
+}

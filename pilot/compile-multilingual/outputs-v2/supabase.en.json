@@ -1,0 +1,54 @@
+{
+  "doc": "supabase.en",
+  "rules": [
+    {
+      "name": "check-ui-index-before-new-primitive",
+      "tool": "Write",
+      "pattern": "packages/ui/.*\\.(tsx|ts)$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Check `packages/ui/index.tsx` before creating new primitives."
+    },
+    {
+      "name": "import-shadcn-ui-variants",
+      "tool": "Edit",
+      "pattern": "from\\s+['\"]@radix-ui",
+      "field": "new_string",
+      "path": "\\.(tsx|jsx)$",
+      "strength": "require-read",
+      "evidence": "import from 'ui', use `_Shadcn_` suffixed variants for form primitives"
+    },
+    {
+      "name": "no-hardcoded-colors",
+      "tool": "Edit",
+      "pattern": "#[0-9a-fA-F]{3,8}\\b",
+      "field": "new_string",
+      "path": "\\.(tsx|jsx|css|scss)$",
+      "strength": "block",
+      "evidence": "Tailwind only, semantic tokens (`bg-muted`, `text-foreground-light`), no hardcoded colors."
+    },
+    {
+      "name": "prefer-shortcut-registry-over-listeners",
+      "tool": "Edit",
+      "pattern": "addEventListener\\(\\s*['\"]keydown['\"]",
+      "field": "new_string",
+      "path": "apps/studio/.*\\.(tsx|ts)$",
+      "strength": "require-read",
+      "evidence": "Prefer registered, discoverable shortcuts over one-off keyboard listeners"
+    },
+    {
+      "name": "avoid-barrel-reexport-files",
+      "tool": "Write",
+      "pattern": "apps/studio/.*index\\.tsx?$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Avoid barrel re-export files."
+    }
+  ],
+  "uncompilable": [
+    "Use U.S. English everywhere — general language/tone guidance not tied to a specific tool call.",
+    "Co-locate sub-components with parent — general code-organization guidance too vague to bind to a specific action via regex."
+  ]
+}
