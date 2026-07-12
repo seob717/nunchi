@@ -1,0 +1,91 @@
+{
+  "doc": "token-monitor",
+  "lang": "ko",
+  "judge": "llm:codex-1(gpt-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "release-commit-convention",
+      "rationale": "Both bind Bash git commit activity in the release procedure to logical commit units and Conventional Commits."
+    },
+    {
+      "gold_id": "g2",
+      "output_rule": "pr-create-target-main",
+      "rationale": "Both target creating the release PR from the current branch into main."
+    },
+    {
+      "gold_id": "g4",
+      "output_rule": "pr-merge-squash",
+      "rationale": "Both target gh pr merge and require a squash merge after CI passes."
+    },
+    {
+      "gold_id": "g7",
+      "output_rule": "release-workflow-watch-status",
+      "rationale": "The evidence explicitly requires checking status with gh run watch after launching the Release workflow. The trigger pattern only captures workflow launch rather than gh run watch, so coverage is narrower/imprecise, but it is directed at the same launch-and-follow-up action."
+    },
+    {
+      "gold_id": "g11",
+      "output_rule": "pr-merge-requires-ci",
+      "rationale": "The extracted evidence is the exact prohibition on merging immediately after PR creation without first checking CI."
+    },
+    {
+      "gold_id": "g14",
+      "output_rule": "package-json-version-sync",
+      "rationale": "The Edit rule targets package.json during a manual local version change, matching package.json as the file to edit. Its evidence additionally mentions the synchronization follow-up, but its tool and pattern do not make it a Bash rule for g15."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g3",
+      "category": "other",
+      "note": "No extracted Bash rule targets gh pr checks --watch or waiting for release-PR CI checks."
+    },
+    {
+      "gold_id": "g5",
+      "category": "other",
+      "note": "The compiler self-reported this as uncompilable: \"릴리스 명령어 코드블록(gh workflow run Release -f bump=patch/minor/major)은 사용법 카탈로그일 뿐 별도 의무가 붙어있지 않음\". The workflow-watch extraction does not capture the required bump selection and is used for g7."
+    },
+    {
+      "gold_id": "g6",
+      "category": "structure",
+      "note": "No extracted rule represents the conditional prohibition on merging when CI fails. The merge/CI extraction is reserved for the closer, exact immediate-merge prohibition in g11."
+    },
+    {
+      "gold_id": "g8",
+      "category": "other",
+      "note": "The compiler self-reported this as uncompilable: \"'이미 main 브랜치에 있고 변경사항이 없으면 릴리즈만 실행'은 계획 단계의 조건 분기 로직으로 특정 도구 호출에 직접 결합하기 어려움\"."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "No unused extraction captures the ordered post-creation step of waiting for CI Tests or manually cancelling them before merge. The sole CI-gated merge extraction is the closer exact match for g11."
+    },
+    {
+      "gold_id": "g10",
+      "category": "structure",
+      "note": "No extraction targets the compound one-line command chaining gh pr create && gh pr merge."
+    },
+    {
+      "gold_id": "g12",
+      "category": "other",
+      "note": "The compiler self-reported this as uncompilable: \"Release 트리거가 workflow_dispatch뿐이라는 설명(main push로는 릴리스되지 않음)은 CI 메커니즘 설명이며 모델 행동에 대한 의무/금지가 아님\"."
+    },
+    {
+      "gold_id": "g13",
+      "category": "other",
+      "note": "No extracted Edit rule prohibits manual local version edits when using the Release workflow. The package.json extraction instead permits and constrains the separate manual-change path."
+    },
+    {
+      "gold_id": "g15",
+      "category": "structure",
+      "note": "The required Bash follow-up node scripts/sync-version.mjs was not extracted. package-json-version-sync is an Edit rule, and Edit/Write content equivalence does not extend to this separate Bash act."
+    },
+    {
+      "gold_id": "g16",
+      "category": "implicit",
+      "note": "No Bash extraction captures the recommendation to choose workflow-driven automatic version management."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}

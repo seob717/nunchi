@@ -1,0 +1,275 @@
+{
+  "doc": "3dollars-ios",
+  "rules": [
+    {
+      "name": "make-project-before-xcodebuild-build",
+      "tool": "Bash",
+      "pattern": "xcodebuild\\s+build",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "빌드 전 반드시 `make project` 실행 (Tuist 프로젝트 생성)"
+    },
+    {
+      "name": "swiftlint-after-code-edit",
+      "tool": "Edit",
+      "pattern": "\\.swift$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "코드 작성 후 반드시 SwiftLint 검증 수행"
+    },
+    {
+      "name": "swiftlint-after-code-write",
+      "tool": "Write",
+      "pattern": "\\.swift$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "코드 작성 후 반드시 SwiftLint 검증 수행"
+    },
+    {
+      "name": "no-direct-xcodeproj-edit",
+      "tool": "Edit",
+      "pattern": "\\.xcodeproj",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "모든 소스 파일은 생성되므로 `.xcodeproj` 파일을 직접 편집하지 마세요"
+    },
+    {
+      "name": "no-direct-xcodeproj-write",
+      "tool": "Write",
+      "pattern": "\\.xcodeproj",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "모든 소스 파일은 생성되므로 `.xcodeproj` 파일을 직접 편집하지 마세요"
+    },
+    {
+      "name": "viewmodel-structure-edit",
+      "tool": "Edit",
+      "pattern": "ViewModel\\.swift$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "모든 화면(ViewController)용 ViewModel은 아래 구조를 반드시 따릅니다"
+    },
+    {
+      "name": "viewmodel-structure-write",
+      "tool": "Write",
+      "pattern": "ViewModel\\.swift$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "모든 화면(ViewController)용 ViewModel은 아래 구조를 반드시 따릅니다"
+    },
+    {
+      "name": "viewcontroller-structure-edit",
+      "tool": "Edit",
+      "pattern": "ViewController\\.swift$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "모든 ViewController는 BaseViewController를 상속합니다 (Common 모듈에서 `import Common` 필요)"
+    },
+    {
+      "name": "viewcontroller-structure-write",
+      "tool": "Write",
+      "pattern": "ViewController\\.swift$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "모든 ViewController는 BaseViewController를 상속합니다 (Common 모듈에서 `import Common` 필요)"
+    },
+    {
+      "name": "api-enum-requesttype-structure-edit",
+      "tool": "Edit",
+      "pattern": "Api\\.swift$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "모든 API는 enum + RequestType 프로토콜 확장으로 구현합니다"
+    },
+    {
+      "name": "api-enum-requesttype-structure-write",
+      "tool": "Write",
+      "pattern": "Api\\.swift$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "모든 API는 enum + RequestType 프로토콜 확장으로 구현합니다"
+    },
+    {
+      "name": "repository-protocol-impl-structure-edit",
+      "tool": "Edit",
+      "pattern": "Repository(Impl)?\\.swift$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Repository는 Protocol + Impl 구조로 분리합니다"
+    },
+    {
+      "name": "repository-protocol-impl-structure-write",
+      "tool": "Write",
+      "pattern": "Repository(Impl)?\\.swift$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Repository는 Protocol + Impl 구조로 분리합니다"
+    },
+    {
+      "name": "no-registerid-static-property-edit",
+      "tool": "Edit",
+      "pattern": "static\\s+(let|var)\\s+(registerId|reuseIdentifier)",
+      "field": "new_string",
+      "path": "\\.swift$",
+      "strength": "block",
+      "evidence": "셀 내부에 registerId(혹은 reuseIdentifier)와 같은 static 프로퍼티를 별도로 생성하지 않습니다 (registerId 사용 금지)"
+    },
+    {
+      "name": "no-registerid-static-property-write",
+      "tool": "Write",
+      "pattern": "static\\s+(let|var)\\s+(registerId|reuseIdentifier)",
+      "field": "content",
+      "path": "\\.swift$",
+      "strength": "block",
+      "evidence": "셀 내부에 registerId(혹은 reuseIdentifier)와 같은 static 프로퍼티를 별도로 생성하지 않습니다 (registerId 사용 금지)"
+    },
+    {
+      "name": "collectionviewcell-inherit-base-edit",
+      "tool": "Edit",
+      "pattern": ":\\s*UICollectionViewCell\\b",
+      "field": "new_string",
+      "path": "\\.swift$",
+      "strength": "require-read",
+      "evidence": "새로 생성하는 모든 UICollectionViewCell은 반드시 BaseCollectionViewCell을 상속합니다"
+    },
+    {
+      "name": "collectionviewcell-inherit-base-write",
+      "tool": "Write",
+      "pattern": ":\\s*UICollectionViewCell\\b",
+      "field": "content",
+      "path": "\\.swift$",
+      "strength": "require-read",
+      "evidence": "새로 생성하는 모든 UICollectionViewCell은 반드시 BaseCollectionViewCell을 상속합니다"
+    },
+    {
+      "name": "snapkit-leading-trailing-edit",
+      "tool": "Edit",
+      "pattern": "\\.(left|right)\\s*\\.",
+      "field": "new_string",
+      "path": "\\.swift$",
+      "strength": "require-read",
+      "evidence": "SnapKit 사용 시 left, right 대신 leading, trailing을 사용합니다"
+    },
+    {
+      "name": "snapkit-leading-trailing-write",
+      "tool": "Write",
+      "pattern": "\\.(left|right)\\s*\\.",
+      "field": "content",
+      "path": "\\.swift$",
+      "strength": "require-read",
+      "evidence": "SnapKit 사용 시 left, right 대신 leading, trailing을 사용합니다"
+    },
+    {
+      "name": "designsystem-only-ui-values-edit",
+      "tool": "Edit",
+      "pattern": "UIColor\\(|UIFont\\(|\\.systemFont\\(",
+      "field": "new_string",
+      "path": "\\.swift$",
+      "strength": "require-read",
+      "evidence": "색상, 폰트, 아이콘, 버튼 등은 반드시 DesignSystem(Colors, Fonts, Icons 등)으로만 사용합니다"
+    },
+    {
+      "name": "designsystem-only-ui-values-write",
+      "tool": "Write",
+      "pattern": "UIColor\\(|UIFont\\(|\\.systemFont\\(",
+      "field": "content",
+      "path": "\\.swift$",
+      "strength": "require-read",
+      "evidence": "색상, 폰트, 아이콘, 버튼 등은 반드시 DesignSystem(Colors, Fonts, Icons 등)으로만 사용합니다"
+    },
+    {
+      "name": "no-then-library-edit",
+      "tool": "Edit",
+      "pattern": "\\.then\\s*[\\{(]|import\\s+Then",
+      "field": "new_string",
+      "path": "\\.swift$",
+      "strength": "block",
+      "evidence": "신규 코드에서 `then` 라이브러리 사용 금지"
+    },
+    {
+      "name": "no-then-library-write",
+      "tool": "Write",
+      "pattern": "\\.then\\s*[\\{(]|import\\s+Then",
+      "field": "content",
+      "path": "\\.swift$",
+      "strength": "block",
+      "evidence": "신규 코드에서 `then` 라이브러리 사용 금지"
+    },
+    {
+      "name": "no-swiftui-edit",
+      "tool": "Edit",
+      "pattern": "import\\s+SwiftUI",
+      "field": "new_string",
+      "path": "\\.swift$",
+      "strength": "require-read",
+      "evidence": "SwiftUI 사용 안 함 - UIKit만 사용"
+    },
+    {
+      "name": "no-swiftui-write",
+      "tool": "Write",
+      "pattern": "import\\s+SwiftUI",
+      "field": "content",
+      "path": "\\.swift$",
+      "strength": "require-read",
+      "evidence": "SwiftUI 사용 안 함 - UIKit만 사용"
+    },
+    {
+      "name": "commit-message-convention",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "Git-flow 브랜치 전략, 커밋 메시지 컨벤션(feat/fix/docs 등) 준수"
+    },
+    {
+      "name": "import-order-edit",
+      "tool": "Edit",
+      "pattern": "^import\\s+\\w+",
+      "field": "new_string",
+      "path": "\\.swift$",
+      "strength": "inject",
+      "evidence": "Import 순서: 표준 → 내부모듈 → 서드파티. 각 분류 사이에는 한 줄 띄어서 사용합니다"
+    },
+    {
+      "name": "import-order-write",
+      "tool": "Write",
+      "pattern": "^import\\s+\\w+",
+      "field": "content",
+      "path": "\\.swift$",
+      "strength": "inject",
+      "evidence": "Import 순서: 표준 → 내부모듈 → 서드파티. 각 분류 사이에는 한 줄 띄어서 사용합니다"
+    }
+  ],
+  "uncompilable": [
+    "프로젝트 개요 설명(앱 소개, 목적) — 특정 액션에 결부되지 않는 배경 정보",
+    "Tuist 모듈러 아키텍처 및 Core/Feature 모듈 디렉토리 구성 설명 — 참고용 구조 문서",
+    "SDU 모듈 사용법 예시 코드 — 의무·금지가 결부되지 않은 사용 카탈로그",
+    "코드 기반 UI만 사용(스토리보드 미사용) — 특정 파일 확장자·경로 금지가 명시되지 않은 전반적 아키텍처 방향성",
+    "클래스/구조체/enum PascalCase, 변수/함수/상수 camelCase — SwiftLint가 전역적으로 담당하는 일반 네이밍 컨벤션",
+    "파일 구성 순서(Import → 선언 → Nested Types → ... → Extensions) — 정규식으로 판별 불가한 파일 내부 배치 관례",
+    "메서드 순서(Lifecycle → Setup → Binding → Action → Helper) — 코드 배치 순서에 관한 일반 스타일 관례",
+    "Combine 구독은 cancellables에, Task는 taskBag에 저장 — 특정 프로퍼티 존재를 전제해야 하는 모호한 저장 관례",
+    "주석은 '왜'에 집중, 문서화 주석은 Swift 표준 사용 — 주석 작성 톤에 관한 일반 가이드",
+    "API/Repository/Model 네이밍은 서버 정의 네이밍과 동일하게 — 의미론적 정확성 요구로 정규식 트리거 불가",
+    "Route 처리는 extension으로 분리 / ViewModel은 생성자 주입 — ViewController 구조 규칙(single trigger)에 흡수되는 세부 사항",
+    "SwiftLint 오류가 있으면 빌드 실패 — 결과를 서술하는 사실 문장으로 액션에 대한 의무·금지가 아님",
+    "빌드 설정(Bundle ID, API URL, 딥링크 스킴, iOS 배포 타겟, 앱 버전) — 참고용 데이터",
+    "Git-flow 브랜치 전략 사용 / 메인 개발 브랜치 develop — 구체적 브랜치 네이밍 규칙이 명시되지 않아 트리거 구성 불가",
+    "한국어·영어 현지화 지원, API 문서 링크 — 참고 정보",
+    "Skills 카탈로그(feature-implementer, ios-viewmodel-pattern 등) 설명 — 사용법 안내 문서로 의무·금지가 결부되지 않음"
+  ]
+}

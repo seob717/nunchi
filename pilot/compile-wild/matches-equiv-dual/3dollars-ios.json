@@ -1,0 +1,187 @@
+{
+  "doc": "3dollars-ios",
+  "lang": "ko",
+  "judge": "llm:codex-1.0(gpt-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "make-project-before-xcodebuild-build",
+      "rationale": "Same Bash build action; the extracted xcodebuild build trigger enforces the documented make project prerequisite."
+    },
+    {
+      "gold_id": "g5",
+      "output_rule": "no-direct-xcodeproj-edit",
+      "rationale": "Same Edit action and .xcodeproj target; both prohibit direct editing."
+    },
+    {
+      "gold_id": "g6",
+      "output_rule": "viewmodel-structure-write",
+      "rationale": "Same Write target for screen ViewModel files and the evidence identifies the mandatory documented structure."
+    },
+    {
+      "gold_id": "g7",
+      "output_rule": "viewcontroller-structure-write",
+      "rationale": "Same Write target for ViewController files; the evidence includes both BaseViewController inheritance and importing Common."
+    },
+    {
+      "gold_id": "g11",
+      "output_rule": "snapkit-leading-trailing-edit",
+      "rationale": "Same Edit content target: introducing left/right horizontal constraint syntax instead of leading/trailing."
+    },
+    {
+      "gold_id": "g12",
+      "output_rule": "designsystem-only-ui-values-edit",
+      "rationale": "Same Edit content target for non-DesignSystem UI values. The pattern covers only direct color/font construction and omits icons, buttons, and other resource forms, but partial coverage matches."
+    },
+    {
+      "gold_id": "g13",
+      "output_rule": "no-then-library-write",
+      "rationale": "Same Write content target: new Swift code using Then. The extraction omits the affirmative standard-Swift alternative, but covers the prohibition."
+    },
+    {
+      "gold_id": "g14",
+      "output_rule": "api-enum-requesttype-structure-write",
+      "rationale": "Same Write target for API definitions and the required enum plus RequestType conformance structure."
+    },
+    {
+      "gold_id": "g15",
+      "output_rule": "repository-protocol-impl-structure-write",
+      "rationale": "Same Write target for repositories and the Protocol plus Impl split."
+    },
+    {
+      "gold_id": "g17",
+      "output_rule": "collectionviewcell-inherit-base-write",
+      "rationale": "Same Write content target for newly declared UICollectionViewCell subclasses; evidence requires BaseCollectionViewCell."
+    },
+    {
+      "gold_id": "g18",
+      "output_rule": "no-registerid-static-property-edit",
+      "rationale": "Same Edit content target: adding a static registerId or reuseIdentifier property in Swift cell code."
+    },
+    {
+      "gold_id": "g19",
+      "output_rule": "no-swiftui-write",
+      "rationale": "Same Write UI-code target. The extraction detects import SwiftUI and thus only partially covers the broader UIKit-only rule."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g2",
+      "category": "reference-depth",
+      "note": "No extracted Bash rule checks that Debug builds use the three-dollar-in-my-pocket-debug scheme, despite the explicit build command and warning."
+    },
+    {
+      "gold_id": "g3",
+      "category": "reference-depth",
+      "note": "No extracted Bash rule checks that Release builds use the three-dollar-in-my-pocket scheme, despite the explicit build command and warning."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "The only SwiftLint-after-code rules are bound to Edit/Write, while the gold rule is a Bash validation-command requirement; strict same-tool matching therefore fails."
+    },
+    {
+      "gold_id": "g8",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"Route 처리는 extension으로 분리 / ViewModel은 생성자 주입 — ViewController 구조 규칙(single trigger)에 흡수되는 세부 사항\". The extracted ViewController structure rule is already used for g7 and its evidence does not express initializer injection."
+    },
+    {
+      "gold_id": "g9",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"Route 처리는 extension으로 분리 / ViewModel은 생성자 주입 — ViewController 구조 규칙(single trigger)에 흡수되는 세부 사항\". The extracted ViewController structure rule is already used for g7 and its evidence does not express extension-based route handling."
+    },
+    {
+      "gold_id": "g10",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"코드 기반 UI만 사용(스토리보드 미사용) — 특정 파일 확장자·경로 금지가 명시되지 않은 전반적 아키텍처 방향성\". No extracted rule captures either code-only UI or the requirement to build Auto Layout with SnapKit."
+    },
+    {
+      "gold_id": "g16",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"API/Repository/Model 네이밍은 서버 정의 네이밍과 동일하게 — 의미론적 정확성 요구로 정규식 트리거 불가\"."
+    }
+  ],
+  "unmatched_extracted": [
+    {
+      "output_rule": "swiftlint-after-code-edit",
+      "class": "over-extraction",
+      "note": "The document requires running SwiftLint as a Bash validation step after code changes; it does not impose an Edit-tool content restriction."
+    },
+    {
+      "output_rule": "swiftlint-after-code-write",
+      "class": "over-extraction",
+      "note": "The document requires running SwiftLint as a Bash validation step after code changes; it does not impose a Write-tool content restriction."
+    },
+    {
+      "output_rule": "no-direct-xcodeproj-write",
+      "class": "duplicate",
+      "note": "Write-side pair of no-direct-xcodeproj-edit, which is matched to g5; g5 is act-specific Edit and cannot take both."
+    },
+    {
+      "output_rule": "viewmodel-structure-edit",
+      "class": "duplicate",
+      "note": "Edit-side member of the same content/structure rule matched to g6 through its Write member."
+    },
+    {
+      "output_rule": "viewcontroller-structure-edit",
+      "class": "duplicate",
+      "note": "Edit-side member of the same content/structure rule matched to g7 through its Write member."
+    },
+    {
+      "output_rule": "api-enum-requesttype-structure-edit",
+      "class": "duplicate",
+      "note": "Edit-side member of the API structure pair matched to g14 through its Write member."
+    },
+    {
+      "output_rule": "repository-protocol-impl-structure-edit",
+      "class": "duplicate",
+      "note": "Edit-side member of the repository structure pair matched to g15 through its Write member."
+    },
+    {
+      "output_rule": "no-registerid-static-property-write",
+      "class": "duplicate",
+      "note": "Write-side member of the same cell-content prohibition matched to g18 through its Edit member."
+    },
+    {
+      "output_rule": "collectionviewcell-inherit-base-edit",
+      "class": "duplicate",
+      "note": "Edit-side member of the same cell inheritance content rule matched to g17 through its Write member."
+    },
+    {
+      "output_rule": "snapkit-leading-trailing-write",
+      "class": "duplicate",
+      "note": "Write-side member of the same constraint-content rule matched to g11 through its Edit member."
+    },
+    {
+      "output_rule": "designsystem-only-ui-values-write",
+      "class": "duplicate",
+      "note": "Write-side member of the same UI-resource content rule matched to g12 through its Edit member."
+    },
+    {
+      "output_rule": "no-then-library-edit",
+      "class": "duplicate",
+      "note": "Edit-side member of the same new-code content prohibition matched to g13 through its Write member."
+    },
+    {
+      "output_rule": "no-swiftui-edit",
+      "class": "duplicate",
+      "note": "Edit-side member of the same UI-code content prohibition matched to g19 through its Write member."
+    },
+    {
+      "output_rule": "commit-message-convention",
+      "class": "gold-miss",
+      "note": "The document contains a real action-bindable rule requiring feat/fix/docs-style commit-message convention, but gold does not list it."
+    },
+    {
+      "output_rule": "import-order-edit",
+      "class": "gold-miss",
+      "note": "The document contains a real content-structure rule ordering Swift imports and separating groups, but gold does not list it."
+    },
+    {
+      "output_rule": "import-order-write",
+      "class": "gold-miss",
+      "note": "Write-side extraction of the real import-order content rule omitted from gold."
+    }
+  ],
+  "gold_amendments": []
+}

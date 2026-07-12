@@ -1,0 +1,59 @@
+{
+  "doc": "pinpoint",
+  "rules": [
+    {
+      "name": "no-direct-commit-to-master",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "master에는 절대 직접 커밋하지 않습니다."
+    },
+    {
+      "name": "qa-pr-before-commit",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "커밋/푸시 전에 반드시 `/qa-pr` 스킬을 실행하세요. QA 판정이 FAIL이면 커밋하지 마세요."
+    },
+    {
+      "name": "qa-pr-before-push",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+push",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "커밋/푸시 전에 반드시 `/qa-pr` 스킬을 실행하세요."
+    },
+    {
+      "name": "deep-path-import-edit",
+      "tool": "Edit",
+      "pattern": "from\\s+['\"]@pinpoint-fe/ui['\"]",
+      "field": "new_string",
+      "path": "\\.(ts|tsx)$",
+      "strength": "inject",
+      "evidence": "`@pinpoint-fe/ui`의 임포트는 딥 패스 사용: `@pinpoint-fe/ui/src/constants`, `@pinpoint-fe/ui/src/hooks` 등"
+    },
+    {
+      "name": "deep-path-import-write",
+      "tool": "Write",
+      "pattern": "from\\s+['\"]@pinpoint-fe/ui['\"]",
+      "field": "content",
+      "path": "\\.(ts|tsx)$",
+      "strength": "inject",
+      "evidence": "`@pinpoint-fe/ui`의 임포트는 딥 패스 사용: `@pinpoint-fe/ui/src/constants`, `@pinpoint-fe/ui/src/hooks` 등"
+    }
+  ],
+  "uncompilable": [
+    "명령어 섹션(yarn dev/build/lint/test/storybook 등) — 의무·금지·순서가 붙지 않은 단순 명령어 카탈로그",
+    "모노레포 구조 및 아키텍처 설명(페이지→컴포넌트→훅 패턴, 상태 관리, API 레이어, UI 컴포넌트, 시각화 라이브러리) — 서술적 배경 정보일 뿐 특정 액션에 대한 의무·금지가 없음",
+    "Prettier/ESLint/TypeScript strict 등 코드 스타일 전반 설정 — 툴체인이 자동 강제하며 특정 툴 호출에 결부되지 않는 일반 스타일 안내",
+    "ServerMap을 제외한 모든 페이지가 React.lazy()로 지연 로딩된다는 관례 — 실제로 구속해야 할 파일(라우트 설정 등)이 문서에 명시되지 않아 특정 Edit/Write 트리거에 매핑하기 어려움",
+    "i18n 로케일 구성 설명(locales/ 디렉토리에 en/ko 포함) — 의무·금지 표현 없는 서술적 정보",
+    "`.claude/` 리소스를 현재 디렉토리에서 못 찾으면 상위 디렉토리로 탐색하는 절차 — Bash/Edit/Write가 아닌 Read/Glob 성격의 일반 탐색 절차라 지정된 트리거 도구에 결부되지 않음",
+    "빌드 통합 설명(yarn move:dist, BASE_PATH로 Maven 정적 자산 배포) — 의무·금지가 없는 배경 정보"
+  ]
+}

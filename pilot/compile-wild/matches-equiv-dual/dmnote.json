@@ -1,0 +1,82 @@
+{
+  "doc": "dmnote",
+  "lang": "ko",
+  "judge": "llm:codex-1.0(gpt-5)",
+  "matches": [
+    {
+      "gold_id": "g2",
+      "output_rule": "build-lint-validation-before-commit",
+      "rationale": "Both constrain the commit workflow by requiring validation gates before the relevant commit. The extraction is only partial: it omits the Sonnet-delegation condition, direct diff inspection, and the explicit TypeScript/test gate details."
+    },
+    {
+      "gold_id": "g3",
+      "output_rule": "final-review-before-final-commit",
+      "rationale": "The Bash trigger and evidence directly prohibit the final work-completion commit until /agent-review has run."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g1",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"핵심 코드 수정은 메인 에이전트가 직접 수행하고 서브에이전트에 위임하지 않는다 — Agent 도구 위임 여부에 관한 지침으로 Bash/Edit/Write 트리거에 바인딩 불가\"."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"구현 작업을 논리적 단위로 나누어 단계별 구현·커밋 — 일반적 작업 관행이며 구체적 트리거 없음\"."
+    },
+    {
+      "gold_id": "g5",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"TDD(Red-Green-Refactor) 방법론 적용 — 복잡한 비즈니스 로직 구현 시 권고되는 방법론이며 특정 파일 패턴으로 바인딩 불가\". The skipped compound entry includes the Red requirement."
+    },
+    {
+      "gold_id": "g6",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"TDD(Red-Green-Refactor) 방법론 적용 — 복잡한 비즈니스 로직 구현 시 권고되는 방법론이며 특정 파일 패턴으로 바인딩 불가\". The skipped compound entry includes the Green requirement."
+    },
+    {
+      "gold_id": "g7",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"TDD(Red-Green-Refactor) 방법론 적용 — 복잡한 비즈니스 로직 구현 시 권고되는 방법론이며 특정 파일 패턴으로 바인딩 불가\". The skipped compound entry includes the Refactor requirement."
+    },
+    {
+      "gold_id": "g8",
+      "category": "structure",
+      "note": "The Rust validation commands appear as a language-specific bullet under the build/lint section, but no extracted rule targets running cargo check and cargo clippy for Rust changes."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "The TypeScript validation commands appear as a language-specific bullet under the build/lint section. The only validation extraction instead targets git commit and gives no TypeScript-specific trigger or commands; it is used for the closer commit-gate gold rule g2."
+    },
+    {
+      "gold_id": "g10",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"구현 작업을 논리적 단위로 나누어 단계별 구현·커밋 — 일반적 작업 관행이며 구체적 트리거 없음\"."
+    },
+    {
+      "gold_id": "g11",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"커밋 메시지는 변경 내용에 맞게 작성 — 일반적 스타일 가이드로 구체적 액션 바인딩 불가\"."
+    },
+    {
+      "gold_id": "g12",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"버그 원인 추적 시 /agent-debug 사용(메인 선분석→서브에이전트 READ-ONLY 조사→메인 수정) — Skill 도구 사용 지침으로 Bash/Edit/Write 트리거 불가\"."
+    }
+  ],
+  "unmatched_extracted": [
+    {
+      "output_rule": "agent-plan-before-implementation-edit",
+      "class": "gold-miss",
+      "note": "The document contains a real action-bindable prohibition on editing implementation files before the mandatory /agent-plan step, but the frozen gold set has no rule for it."
+    },
+    {
+      "output_rule": "agent-plan-before-implementation-write",
+      "class": "gold-miss",
+      "note": "The document contains a real action-bindable prohibition on writing implementation files before the mandatory /agent-plan step, but the frozen gold set has no rule for it."
+    }
+  ],
+  "gold_amendments": []
+}

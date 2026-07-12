@@ -1,0 +1,68 @@
+{
+  "doc": "token-monitor",
+  "rules": [
+    {
+      "name": "release-commit-convention",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "변경사항을 논리적 단위별로 나눠서 커밋 (conventional commit 형식)"
+    },
+    {
+      "name": "pr-create-target-main",
+      "tool": "Bash",
+      "pattern": "gh(\\s+-\\S+(\\s+\\S+)?)*\\s+pr\\s+create",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "현재 브랜치에서 main으로 PR 생성"
+    },
+    {
+      "name": "pr-merge-requires-ci",
+      "tool": "Bash",
+      "pattern": "gh(\\s+-\\S+(\\s+\\S+)?)*\\s+pr\\s+merge",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "PR 생성 직후 바로 머지하지 말 것 — 항상 CI 상태를 확인한 후 머지"
+    },
+    {
+      "name": "pr-merge-squash",
+      "tool": "Bash",
+      "pattern": "gh(\\s+-\\S+(\\s+\\S+)?)*\\s+pr\\s+merge",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "CI 통과 후 squash merge"
+    },
+    {
+      "name": "release-workflow-watch-status",
+      "tool": "Bash",
+      "pattern": "gh(\\s+-\\S+(\\s+\\S+)?)*\\s+workflow\\s+run",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "릴리즈 워크플로우 실행 후 `gh run watch`로 상태 확인"
+    },
+    {
+      "name": "package-json-version-sync",
+      "tool": "Edit",
+      "pattern": "package\\.json$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "로컬에서 수동 변경 시: `package.json` 수정 후 `node scripts/sync-version.mjs` 실행"
+    }
+  ],
+  "uncompilable": [
+    "릴리즈 키워드(패치/마이너/메이저 출시해줘) - 버전 타입 매핑표는 사용자 명령어 해석용 정보이며 특정 도구 호출에 결합되지 않음",
+    "'키워드 입력 시 파이프라인을 자동 실행한다'는 트리거는 사용자 발화에 반응하는 메타 규칙으로, 도구 호출 패턴에 결합되지 않음",
+    "'이미 main 브랜치에 있고 변경사항이 없으면 릴리즈만 실행'은 계획 단계의 조건 분기 로직으로 특정 도구 호출에 직접 결합하기 어려움",
+    "Release 트리거가 workflow_dispatch뿐이라는 설명(main push로는 릴리스되지 않음)은 CI 메커니즘 설명이며 모델 행동에 대한 의무/금지가 아님",
+    "릴리스 명령어 코드블록(gh workflow run Release -f bump=patch/minor/major)은 사용법 카탈로그일 뿐 별도 의무가 붙어있지 않음",
+    "'워크플로우가 자동으로 수행하는 것' 목록(버전 bump, 체인지로그 생성, 커밋+태그+push, 빌드+릴리스)은 CI 자동 동작 설명이며 규칙이 아님",
+    "package.json이 버전 관리 기준이라는 설명(sync 스크립트가 tauri.conf.json/Cargo.toml에 반영)은 정보성 컨텍스트로 액션에 결합된 규칙이 아님"
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "doc": "3dollars-ios",
+  "lang": "ko",
+  "judge": "llm:codex-1.0(gpt-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "run-make-project-before-xcodebuild",
+      "rationale": "Both are Bash rules triggered by an Xcode build and require running `make project` first."
+    },
+    {
+      "gold_id": "g5",
+      "output_rule": "no-direct-xcodeproj-edit",
+      "rationale": "Both block directly editing generated `.xcodeproj` files."
+    },
+    {
+      "gold_id": "g6",
+      "output_rule": "viewmodel-structure-pattern",
+      "rationale": "The rule targets screen ViewModel files and cites the mandatory documented structure. Edit and Write are equivalent here because this constrains file content and structure."
+    },
+    {
+      "gold_id": "g7",
+      "output_rule": "viewcontroller-mvvm-pattern",
+      "rationale": "The extracted rule targets ViewController files and requires BaseViewController inheritance and the Common import. Edit and Write are equivalent for this content constraint."
+    },
+    {
+      "gold_id": "g10",
+      "output_rule": "code-based-ui-only-no-storyboard-xib",
+      "rationale": "Both constrain UI creation to code rather than storyboard/XIB. The extraction covers the code-only clause but its trigger does not enforce the compound SnapKit clause."
+    },
+    {
+      "gold_id": "g11",
+      "output_rule": "snapkit-leading-trailing-over-left-right",
+      "rationale": "Both target left/right tokens in Swift horizontal constraints and require leading/trailing under SnapKit."
+    },
+    {
+      "gold_id": "g12",
+      "output_rule": "designsystem-only-colors-fonts-icons",
+      "rationale": "Both require DesignSystem resources for UI styling. The extraction detects direct UIColor and UIFont usage but omits icons, buttons, and other resource forms."
+    },
+    {
+      "gold_id": "g13",
+      "output_rule": "no-then-library-in-new-code",
+      "rationale": "Both prohibit `.then` in newly written Swift content. Edit and Write are equivalent because this is a constraint on file content."
+    },
+    {
+      "gold_id": "g14",
+      "output_rule": "api-enum-requesttype-structure",
+      "rationale": "Both require API definitions to use an enum extended with RequestType. Edit and Write are equivalent for this structural content rule."
+    },
+    {
+      "gold_id": "g15",
+      "output_rule": "repository-protocol-impl-structure",
+      "rationale": "Both require repositories to be separated into Protocol and Impl types. Edit and Write are equivalent for this structural content rule."
+    },
+    {
+      "gold_id": "g16",
+      "output_rule": "network-naming-matches-server",
+      "rationale": "Both target naming of API, Repository, and model/request/response declarations and require server-defined names."
+    },
+    {
+      "gold_id": "g17",
+      "output_rule": "collectionviewcell-base-class",
+      "rationale": "Both require newly created collection-view cells to inherit from BaseCollectionViewCell."
+    },
+    {
+      "gold_id": "g18",
+      "output_rule": "no-registerid-static-property",
+      "rationale": "Both block adding static registerId or reuseIdentifier properties inside cell files."
+    },
+    {
+      "gold_id": "g19",
+      "output_rule": "uikit-only-no-swiftui",
+      "rationale": "Both prohibit SwiftUI in UI code and require UIKit. Edit and Write are equivalent because this constrains the content of Swift files."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g2",
+      "category": "other",
+      "note": "No Bash rule enforces the Debug scheme. The compiler self-reported: `Debug/Release 빌드용 스킴 이름 안내 — 참고 정보일 뿐 위반 가능한 규칙 아님`."
+    },
+    {
+      "gold_id": "g3",
+      "category": "other",
+      "note": "No Bash rule enforces the Release scheme. The compiler self-reported: `Debug/Release 빌드용 스킴 이름 안내 — 참고 정보일 뿐 위반 가능한 규칙 아님`."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "The only SwiftLint extraction is an Edit rule on Swift files, while the gold rule is a Bash rule about choosing and running post-change validation; the required tool is not the same."
+    },
+    {
+      "gold_id": "g8",
+      "category": "structure",
+      "note": "Initializer injection is an explicit sibling bullet in the ViewController/MVVM section, but no distinct extracted rule targets wiring a ViewModel into a ViewController."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "Separating route handling into an extension is an explicit sibling bullet in the ViewController/MVVM section, but no distinct extracted rule targets route handling."
+    }
+  ],
+  "unmatched_extracted": [
+    {
+      "output_rule": "run-swiftlint-after-code-changes",
+      "class": "gold-miss",
+      "note": "This is a real Edit-bindable reminder on changed Swift files, but the frozen gold set lists the SwiftLint requirement only as a Bash rule, so strict tool matching leaves this extraction unused."
+    },
+    {
+      "output_rule": "commit-message-convention",
+      "class": "gold-miss",
+      "note": "The document explicitly requires feat/fix/docs-style commit-message convention, and this is a real Bash-bindable rule absent from the frozen gold ruleset."
+    }
+  ],
+  "gold_amendments": []
+}

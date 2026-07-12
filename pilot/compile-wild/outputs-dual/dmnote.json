@@ -1,0 +1,52 @@
+{
+  "doc": "dmnote",
+  "rules": [
+    {
+      "name": "agent-plan-before-implementation-edit",
+      "tool": "Edit",
+      "pattern": ".*",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "이것은 이 프로젝트의 **절대 규칙**입니다: ... **위반 금지**: 파일을 먼저 읽거나, 코드를 분석하거나, 계획을 직접 세우는 행위는 이 규칙의 위반입니다."
+    },
+    {
+      "name": "agent-plan-before-implementation-write",
+      "tool": "Write",
+      "pattern": ".*",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "구현 요청이면 → **즉시 `Skill(skill: \"agent-plan\", args: \"사용자 요청 내용\")`을 호출한다** ... Read, Grep, Glob, Agent 등 다른 도구는 `/agent-plan` 스킬 실행 후에만 사용한다"
+    },
+    {
+      "name": "final-review-before-final-commit",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "**최종 커밋(작업 완료 커밋) 전에는 반드시 `/agent-review`를 실행한다** (절대 규칙) ... **위반 금지**: 최종 커밋 전 `/agent-review` 없이 작업을 완료하는 행위는 이 규칙의 위반입니다."
+    },
+    {
+      "name": "build-lint-validation-before-commit",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "리뷰 요청 전에 검증을 먼저 통과시키고, 리뷰어에게는 도구가 못 잡는 로직/동작에 집중하도록 합니다."
+    }
+  ],
+  "uncompilable": [
+    "핵심 코드 수정은 메인 에이전트가 직접 수행하고 서브에이전트에 위임하지 않는다 — Agent 도구 위임 여부에 관한 지침으로 Bash/Edit/Write 트리거에 바인딩 불가",
+    "서브에이전트 모델 선택 가이드 표(opus/sonnet 등 역할별 모델) — Agent 도구 파라미터 선택 지침일 뿐 특정 액션에 대한 의무·금지가 없음",
+    "기계적 구현 위임(소넷) 4개 조건(패턴 확정, worktree 격리, diff 검수, 최종 review 필수) — Agent 도구 위임 조건으로 Bash/Edit/Write 트리거 불가",
+    "TDD(Red-Green-Refactor) 방법론 적용 — 복잡한 비즈니스 로직 구현 시 권고되는 방법론이며 특정 파일 패턴으로 바인딩 불가",
+    "구현 작업을 논리적 단위로 나누어 단계별 구현·커밋 — 일반적 작업 관행이며 구체적 트리거 없음",
+    "커밋 메시지는 변경 내용에 맞게 작성 — 일반적 스타일 가이드로 구체적 액션 바인딩 불가",
+    "최종 보고에 변경 파일 목록·커밋 요약·리뷰 피드백·잔여 리스크 명시 — 도구 호출이 아닌 최종 텍스트 응답 형식 가이드",
+    "버그 원인 추적 시 /agent-debug 사용(메인 선분석→서브에이전트 READ-ONLY 조사→메인 수정) — Skill 도구 사용 지침으로 Bash/Edit/Write 트리거 불가",
+    "사소한 변경·긴급 핫픽스에 대한 plan/review 생략 예외 — 위 규칙들에 대한 예외 조건일 뿐 그 자체로 별도 액션 트리거를 갖는 규칙이 아님"
+  ]
+}

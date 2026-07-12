@@ -1,0 +1,91 @@
+{
+  "doc": "token-monitor",
+  "lang": "ko",
+  "judge": "llm:codex-1(gpt-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "conventional-commit-format",
+      "rationale": "Same Bash commit action and the evidence explicitly requires logical commit units in Conventional Commit format."
+    },
+    {
+      "gold_id": "g2",
+      "output_rule": "pr-target-main-branch",
+      "rationale": "Same Bash PR-creation action; the evidence specifies creating the PR from the current branch into main."
+    },
+    {
+      "gold_id": "g7",
+      "output_rule": "release-workflow-watch-status",
+      "rationale": "The rule evidence explicitly requires checking status with gh run watch after launching the Release workflow."
+    },
+    {
+      "gold_id": "g11",
+      "output_rule": "no-merge-before-ci-passes",
+      "rationale": "Same Bash merge action, with evidence exactly prohibiting an immediate post-creation merge and requiring a CI check first."
+    },
+    {
+      "gold_id": "g14",
+      "output_rule": "package-json-manual-version-sync",
+      "rationale": "Same manual version-edit target and same Edit tool: package.json is the file to edit. The extraction additionally mentions the synchronization follow-up, but its Edit trigger covers the gold action."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g3",
+      "category": "other",
+      "note": "No extracted Bash rule targets waiting for CI with gh pr checks --watch."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "No unused extracted rule requires squash-merging the release PR after CI passes; the sole merge extraction is closest to and consumed by g11."
+    },
+    {
+      "gold_id": "g5",
+      "category": "other",
+      "note": "No extracted rule targets launching Release with the requested patch/minor/major bump; the workflow-related extraction instead expresses the later status check."
+    },
+    {
+      "gold_id": "g6",
+      "category": "other",
+      "note": "No unused extracted rule specifically prohibits merging when CI fails; the sole merge extraction is closest to and consumed by g11."
+    },
+    {
+      "gold_id": "g8",
+      "category": "other",
+      "note": "Compiler-reported skip: \"이미 main 브랜치에 있고 변경사항이 없으면 릴리즈만 실행 — 조건부 워크플로우 분기 로직으로 단일 tool 트리거로 표현 불가\"."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "The required PR-to-CI-to-merge procedure, including the manual-cancel alternative, was not extracted as its own rule; the single merge rule is closest to g11 and cannot be reused."
+    },
+    {
+      "gold_id": "g10",
+      "category": "other",
+      "note": "No extracted Bash rule targets the specifically prohibited one-line gh pr create && gh pr merge chain."
+    },
+    {
+      "gold_id": "g12",
+      "category": "other",
+      "note": "Compiler-reported skip: \"Release 트리거는 workflow_dispatch만 사용되고 main push로는 릴리스되지 않는다는 설명 — 시스템 동작 설명일 뿐 에이전트 행동 규칙이 아님\"."
+    },
+    {
+      "gold_id": "g13",
+      "category": "implicit",
+      "note": "The document implies that a workflow-driven release should not involve manual local version edits, but no extracted Edit rule binds that prohibition."
+    },
+    {
+      "gold_id": "g15",
+      "category": "reference-depth",
+      "note": "The extracted package.json rule is Edit-only and is consumed by g14; no Bash rule captures the referenced follow-up node scripts/sync-version.mjs command."
+    },
+    {
+      "gold_id": "g16",
+      "category": "implicit",
+      "note": "The recommendation to choose workflow-based automatic version management was not extracted as a Bash action rule."
+    }
+  ],
+  "unmatched_extracted": [],
+  "gold_amendments": []
+}
