@@ -1,0 +1,52 @@
+{
+  "sampled_at": "2026-07-12",
+  "protocol": "DESIGN-compile-wild-ko.md §2 (6481dfa)",
+  "excluded": [
+    {
+      "repo": "diegosouzapw/OmniRoute",
+      "reason": "docs/i18n/ko/ 경로의 영어 원문 번역본 — 야생 한국어 저작이 아님 (§2 수기 제외)"
+    },
+    {
+      "repo": "junh0328/prepare_frontend_interview",
+      "reason": "면접 핸드북 모음집 — 실제 소프트웨어 프로젝트 지침이 아님 (§2 수기 제외)"
+    }
+  ],
+  "docs": [
+    {
+      "id": "pinpoint",
+      "repo": "pinpoint-apm/pinpoint",
+      "path": "web-frontend/src/main/v3/.claude/CLAUDE.md",
+      "stars": 13837,
+      "pinned_url": "https://raw.githubusercontent.com/pinpoint-apm/pinpoint/26a6e69bac0a589a31bb92c8be95dab6d55b372b/web-frontend/src/main/v3/.claude/CLAUDE.md",
+      "sha256": "ae71e753c52df34cffc069135fafc7baa5bb7b67700b9a82cf0c21efc498caff",
+      "bytes": 7213
+    },
+    {
+      "id": "dmnote",
+      "repo": "DmNote-App/DmNote",
+      "path": ".claude/CLAUDE.md",
+      "stars": 483,
+      "pinned_url": "https://raw.githubusercontent.com/DmNote-App/DmNote/ea1f9158a1a89fb6a3d13cdec480ae01526d891c/.claude/CLAUDE.md",
+      "sha256": "6b2124d150804976c1c758741a8a013c73feafaca53a7b7618c1aa0b7a68bc06",
+      "bytes": 5881
+    },
+    {
+      "id": "token-monitor",
+      "repo": "soulduse/ai-token-monitor",
+      "path": "CLAUDE.md",
+      "stars": 274,
+      "pinned_url": "https://raw.githubusercontent.com/soulduse/ai-token-monitor/7899aea8e6a1dafdcf06e6db4173e9301dfbe403/CLAUDE.md",
+      "sha256": "b54ecab262898515424da592d64a5e3e905418bae2c220df5455d7ec439b3afc",
+      "bytes": 2886
+    },
+    {
+      "id": "3dollars-ios",
+      "repo": "3dollar-in-my-pocket/3dollars-in-my-pocket-ios",
+      "path": "CLAUDE.md",
+      "stars": 222,
+      "pinned_url": "https://raw.githubusercontent.com/3dollar-in-my-pocket/3dollars-in-my-pocket-ios/6497d23b927bd54164069146e8de5204c5dfe7dc/CLAUDE.md",
+      "sha256": "799477cee77748b66107aac077b1ed8e29a38fb8703dda02d8a6ec3137c4d80d",
+      "bytes": 16625
+    }
+  ]
+}

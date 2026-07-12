@@ -1,0 +1,498 @@
+[
+  {
+    "id": "diegosouzapw__OmniRoute__docs_i18n_ko_CLAUDE.md",
+    "repo": "diegosouzapw/OmniRoute",
+    "path": "docs/i18n/ko/CLAUDE.md",
+    "stars": 15897,
+    "pinned_url": "https://raw.githubusercontent.com/diegosouzapw/OmniRoute/9cd18bf9a11b7d2e8c037c374631b492adabf469/docs/i18n/ko/CLAUDE.md",
+    "sha256": "2fc9b1fa18ff128694972e04d31c3f6140f11e2e0501dfba134f7b919573a5ce",
+    "bytes": 28800,
+    "hangul": 4170,
+    "hangul_ratio": 0.43,
+    "queries": [
+      "하지 마세요",
+      "해야 합니다"
+    ],
+    "description": "Never stop coding. Free AI gateway: one endpoint, 231+ providers (50+ free), con"
+  },
+  {
+    "id": "pinpoint-apm__pinpoint__web-frontend_src_main_v3_.claude_CLAUDE.md",
+    "repo": "pinpoint-apm/pinpoint",
+    "path": "web-frontend/src/main/v3/.claude/CLAUDE.md",
+    "stars": 13837,
+    "pinned_url": "https://raw.githubusercontent.com/pinpoint-apm/pinpoint/26a6e69bac0a589a31bb92c8be95dab6d55b372b/web-frontend/src/main/v3/.claude/CLAUDE.md",
+    "sha256": "ae71e753c52df34cffc069135fafc7baa5bb7b67700b9a82cf0c21efc498caff",
+    "bytes": 7213,
+    "hangul": 1033,
+    "hangul_ratio": 0.42,
+    "queries": [
+      "하지 마세요"
+    ],
+    "description": "APM, (Application Performance Management) tool for large-scale distributed syste"
+  },
+  {
+    "id": "junh0328__prepare_frontend_interview",
+    "repo": "junh0328/prepare_frontend_interview",
+    "path": "CLAUDE.md",
+    "stars": 1722,
+    "pinned_url": "https://raw.githubusercontent.com/junh0328/prepare_frontend_interview/97a21982530eaab364998bfdac87596dad8c50f0/CLAUDE.md",
+    "sha256": "a1709162d22f269556ecde9c90df04d473d02a684f3be3fc02c0fa65bee5c7c1",
+    "bytes": 15672,
+    "hangul": 2508,
+    "hangul_ratio": 0.72,
+    "queries": [
+      "금지"
+    ],
+    "description": "📚 프론트엔드 기술 면접을 위한 핸드북 만들기"
+  },
+  {
+    "id": "DmNote-App__DmNote__.claude_CLAUDE.md",
+    "repo": "DmNote-App/DmNote",
+    "path": ".claude/CLAUDE.md",
+    "stars": 483,
+    "pinned_url": "https://raw.githubusercontent.com/DmNote-App/DmNote/ea1f9158a1a89fb6a3d13cdec480ae01526d891c/.claude/CLAUDE.md",
+    "sha256": "6b2124d150804976c1c758741a8a013c73feafaca53a7b7618c1aa0b7a68bc06",
+    "bytes": 5881,
+    "hangul": 1319,
+    "hangul_ratio": 0.78,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": "A Fully Customizable Key Viewer Optimized for DJMAX RESPECT V, Ready for Any Gam"
+  },
+  {
+    "id": "soulduse__ai-token-monitor",
+    "repo": "soulduse/ai-token-monitor",
+    "path": "CLAUDE.md",
+    "stars": 274,
+    "pinned_url": "https://raw.githubusercontent.com/soulduse/ai-token-monitor/7899aea8e6a1dafdcf06e6db4173e9301dfbe403/CLAUDE.md",
+    "sha256": "b54ecab262898515424da592d64a5e3e905418bae2c220df5455d7ec439b3afc",
+    "bytes": 2886,
+    "hangul": 530,
+    "hangul_ratio": 0.48,
+    "queries": [
+      "금지"
+    ],
+    "description": "macOS menu bar app for tracking Claude Code token usage and costs"
+  },
+  {
+    "id": "3dollar-in-my-pocket__3dollars-in-my-pocket-ios",
+    "repo": "3dollar-in-my-pocket/3dollars-in-my-pocket-ios",
+    "path": "CLAUDE.md",
+    "stars": 222,
+    "pinned_url": "https://raw.githubusercontent.com/3dollar-in-my-pocket/3dollars-in-my-pocket-ios/6497d23b927bd54164069146e8de5204c5dfe7dc/CLAUDE.md",
+    "sha256": "799477cee77748b66107aac077b1ed8e29a38fb8703dda02d8a6ec3137c4d80d",
+    "bytes": 16625,
+    "hangul": 1680,
+    "hangul_ratio": 0.38,
+    "queries": [
+      "금지"
+    ],
+    "description": "[AppStore] 전국 붕어빵 지도 프로젝트 가슴속3천원"
+  },
+  {
+    "id": "ongjin__garu",
+    "repo": "ongjin/garu",
+    "path": "CLAUDE.md",
+    "stars": 152,
+    "pinned_url": "https://raw.githubusercontent.com/ongjin/garu/8f66c7e6a5f582201d2b6f701e6eff9c3176660d/CLAUDE.md",
+    "sha256": "9033d709b065097bf9fdb8e7b9900b97c5130fb878b3aaa2aad1151ea7d8af48",
+    "bytes": 7299,
+    "hangul": 849,
+    "hangul_ratio": 0.41,
+    "queries": [
+      "금지"
+    ],
+    "description": "초경량 한국어 형태소 분석기 — 1MB 모델로 브라우저에서 실행(WASM). Ultra-lightweight Korean morphologica"
+  },
+  {
+    "id": "kimsanguine__AI_PM",
+    "repo": "kimsanguine/AI_PM",
+    "path": "CLAUDE.md",
+    "stars": 53,
+    "pinned_url": "https://raw.githubusercontent.com/kimsanguine/AI_PM/6bf9a52a7161400c9136531e1c5c33cd5b28bdfe/CLAUDE.md",
+    "sha256": "50bf47f011ba9d4abeca69379526d50535369af993898bbc249264f179843e1e",
+    "bytes": 4679,
+    "hangul": 712,
+    "hangul_ratio": 0.37,
+    "queries": [
+      "금지"
+    ],
+    "description": "AI PM 실전 가이드 — Claude Code로 PM 워크플로우를 재설계하는 8파트 커리큘럼"
+  },
+  {
+    "id": "yhk1038__claude-code-gui-jetbrains",
+    "repo": "yhk1038/claude-code-gui-jetbrains",
+    "path": "CLAUDE.md",
+    "stars": 46,
+    "pinned_url": "https://raw.githubusercontent.com/yhk1038/claude-code-gui-jetbrains/977b2fbb1185ec47294bfb89232e44eff842ec74/CLAUDE.md",
+    "sha256": "993a9f0d1fa6c19c1cc3082ff13ea867f604d9a75ff61308bce8dc1a3d4274a1",
+    "bytes": 19259,
+    "hangul": 3927,
+    "hangul_ratio": 0.55,
+    "queries": [
+      "금지"
+    ],
+    "description": "Claude Code GUI Plugin for Jetbrains IDE"
+  },
+  {
+    "id": "choisungwook__portfolio__aws_codebuild_github_action_CLAUDE.md",
+    "repo": "choisungwook/portfolio",
+    "path": "aws/codebuild/github_action/CLAUDE.md",
+    "stars": 26,
+    "pinned_url": "https://raw.githubusercontent.com/choisungwook/portfolio/df7b5fa452a0af5dfc3a62948cf8245190a2e748/aws/codebuild/github_action/CLAUDE.md",
+    "sha256": "924db425a9259b26d5ad4c134e16a013eaecf1396fe8b7cb2312a7ecfbb1e2fc",
+    "bytes": 7766,
+    "hangul": 1430,
+    "hangul_ratio": 0.45,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": "portfolio"
+  },
+  {
+    "id": "choisungwook__portfolio__kubernetes_gatewayAPI_CLAUDE.md",
+    "repo": "choisungwook/portfolio",
+    "path": "kubernetes/gatewayAPI/CLAUDE.md",
+    "stars": 26,
+    "pinned_url": "https://raw.githubusercontent.com/choisungwook/portfolio/df7b5fa452a0af5dfc3a62948cf8245190a2e748/kubernetes/gatewayAPI/CLAUDE.md",
+    "sha256": "e948e9c12ca511fcde111b40dc4def0c2381c9cccafbdc319695523a234c034e",
+    "bytes": 2279,
+    "hangul": 360,
+    "hangul_ratio": 0.4,
+    "queries": [
+      "하지 마세요"
+    ],
+    "description": "portfolio"
+  },
+  {
+    "id": "notadev-iamaura__meeting-transcriber",
+    "repo": "notadev-iamaura/meeting-transcriber",
+    "path": "CLAUDE.md",
+    "stars": 17,
+    "pinned_url": "https://raw.githubusercontent.com/notadev-iamaura/meeting-transcriber/6522f15cb3a5ac779dc301ceb8abadb3fb870f4c/CLAUDE.md",
+    "sha256": "31acec9cdc010ae4af0a81c32062b82422c67eaa4f6f9ad91e34f07356575050",
+    "bytes": 36104,
+    "hangul": 4254,
+    "hangul_ratio": 0.43,
+    "queries": [
+      "하지 마세요"
+    ],
+    "description": "한국어 로컬 AI 회의 전사 시스템 — 100% 오프라인, Apple Silicon 최적화"
+  },
+  {
+    "id": "Sungmin-Cho__skill-legal-kr",
+    "repo": "Sungmin-Cho/skill-legal-kr",
+    "path": "CLAUDE.md",
+    "stars": 11,
+    "pinned_url": "https://raw.githubusercontent.com/Sungmin-Cho/skill-legal-kr/eca963d86108c9a309789add445b619023b59896/CLAUDE.md",
+    "sha256": "0564017fb12cb796ffb6029a48fb11a926ff5b43e077ca3387317220ae62767a",
+    "bytes": 8769,
+    "hangul": 1245,
+    "hangul_ratio": 0.6,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": "대한민국 법령/판례 기반 변호사 스킬 (Claude Code 프로젝트 스킬)"
+  },
+  {
+    "id": "treylom__claude-agent-teams-setup",
+    "repo": "treylom/claude-agent-teams-setup",
+    "path": "CLAUDE.md",
+    "stars": 10,
+    "pinned_url": "https://raw.githubusercontent.com/treylom/claude-agent-teams-setup/335fd54b62c2816bb752789fa99cf67b76b450a7/CLAUDE.md",
+    "sha256": "dd7c04f21701d985429927d280dd5b0a792e0d006184c653ece75676fac4a967",
+    "bytes": 30161,
+    "hangul": 2412,
+    "hangul_ratio": 0.58,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": "Windows에서 Claude Code Agent Teams + tmux split pane 자동 설정 가이드"
+  },
+  {
+    "id": "coolhero__spec-kit-skills",
+    "repo": "coolhero/spec-kit-skills",
+    "path": "CLAUDE.md",
+    "stars": 2,
+    "pinned_url": "https://raw.githubusercontent.com/coolhero/spec-kit-skills/d91c8273480c465582eb65c233a10261284b6377/CLAUDE.md",
+    "sha256": "fcee7fb9f4810569f6ebd8d21880f09f2ed73c07299bbb9a697603940dc4b646",
+    "bytes": 23320,
+    "hangul": 3886,
+    "hangul_ratio": 0.39,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": "Four Claude Code skills (code-explore, reverse-spec, smart-sdd, domain-extend) t"
+  },
+  {
+    "id": "Coinyak__oncology-ai-wiki__.claude_CLAUDE.md",
+    "repo": "Coinyak/oncology-ai-wiki",
+    "path": ".claude/CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/Coinyak/oncology-ai-wiki/45299f874ac4463acf5ebe3238f2e637d62fa6ab/.claude/CLAUDE.md",
+    "sha256": "b2e475eb1f9bdf7807d56fb8a8b43e9684a419d3224a5deca9aeb3cb45e49669",
+    "bytes": 2798,
+    "hangul": 376,
+    "hangul_ratio": 0.38,
+    "queries": [
+      "하지 마세요"
+    ],
+    "description": ""
+  },
+  {
+    "id": "Jaedong95__AutoReport",
+    "repo": "Jaedong95/AutoReport",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/Jaedong95/AutoReport/2f616d210e4126778ca98a3bcf4309f07ff887fc/CLAUDE.md",
+    "sha256": "d15758b4acd274dbf2200998f439893959c8fd73b9f81c35fea362f0f601b227",
+    "bytes": 6851,
+    "hangul": 885,
+    "hangul_ratio": 0.46,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": ""
+  },
+  {
+    "id": "UnripePlum__nubjuk",
+    "repo": "UnripePlum/nubjuk",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/UnripePlum/nubjuk/4bcccf2271d88ea49a315ba55d06f39aec462730/CLAUDE.md",
+    "sha256": "253886a11121738861b1d64e4df4ed6bfb61fbd237ee4ae715a906d4f54fb93d",
+    "bytes": 7242,
+    "hangul": 1222,
+    "hangul_ratio": 0.43,
+    "queries": [
+      "하지 마세요"
+    ],
+    "description": "NUBJUK — voice-controlled robot. Meta repo with submodules for mcu/viewer/brain."
+  },
+  {
+    "id": "UpstageAI__sw-maestro-project__projects_team60-newspick_CLAUDE.md",
+    "repo": "UpstageAI/sw-maestro-project",
+    "path": "projects/team60-newspick/CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/UpstageAI/sw-maestro-project/a067a1baa3b48e887d41db618f75e31fe92891d0/projects/team60-newspick/CLAUDE.md",
+    "sha256": "1bb89b1d582cf9cf4e9cf3dbf1d1f795e6090e3947406bfa15d0d50d80549742",
+    "bytes": 2796,
+    "hangul": 739,
+    "hangul_ratio": 0.98,
+    "queries": [
+      "하지 마세요"
+    ],
+    "description": ""
+  },
+  {
+    "id": "aquisto535__mind-palette-project",
+    "repo": "aquisto535/mind-palette-project",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/aquisto535/mind-palette-project/a285efbe39c98437eb1e6d87077a322fab495629/CLAUDE.md",
+    "sha256": "ab81142d48e1261b66f8e2c99a3379148fa7bd7e527fc2b300da910818683cd6",
+    "bytes": 3492,
+    "hangul": 929,
+    "hangul_ratio": 0.93,
+    "queries": [
+      "하지 마세요"
+    ],
+    "description": ""
+  },
+  {
+    "id": "ehdgurckdgnl__claude-nextjs-starterkit",
+    "repo": "ehdgurckdgnl/claude-nextjs-starterkit",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/ehdgurckdgnl/claude-nextjs-starterkit/d60bfca3fbbe094c8695fa48a0eeb08c879ee07a/CLAUDE.md",
+    "sha256": "5b55e9cb10cf0c3bd292e14b44c1d123b83a1a1e7f5674f3d2a8339461e8a808",
+    "bytes": 3070,
+    "hangul": 387,
+    "hangul_ratio": 0.33,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": "nextjs 스타터킷"
+  },
+  {
+    "id": "ku1207__new_quotation",
+    "repo": "ku1207/new_quotation",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/ku1207/new_quotation/a37f9a967f29d1972632f6485b984285ade76eac/CLAUDE.md",
+    "sha256": "8d2b5f583e5d56dc5289340f4beeef306e2145073bbda3b015b7877b527c5a10",
+    "bytes": 6663,
+    "hangul": 1317,
+    "hangul_ratio": 0.62,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": ""
+  },
+  {
+    "id": "seungyeop-lee__easycmd",
+    "repo": "seungyeop-lee/easycmd",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/seungyeop-lee/easycmd/dba79a6ed0f9191a41ac6517dad9b6ed86d09e4b/CLAUDE.md",
+    "sha256": "bfb1ca86922dc9d21a5d34c61ee980fcc88b4cbca2bc1c2a982be1145e6b1582",
+    "bytes": 3426,
+    "hangul": 689,
+    "hangul_ratio": 0.56,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": "A simple Go library for executing external commands with flexible I/O control, t"
+  },
+  {
+    "id": "signspark__sistech-AI-Survey00",
+    "repo": "signspark/sistech-AI-Survey00",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/signspark/sistech-AI-Survey00/ff5971b320236a260d3271d8d6bb44f5ec889791/CLAUDE.md",
+    "sha256": "f48728869a60f957636516e6761ca280add6eac4752f2fe73d5e456199e6c712",
+    "bytes": 5258,
+    "hangul": 977,
+    "hangul_ratio": 0.5,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": "SISTECH AI 활용 설문 앱"
+  },
+  {
+    "id": "skr9877__couple-app-project",
+    "repo": "skr9877/couple-app-project",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/skr9877/couple-app-project/d4b88eb5ce9f163957782c161dc445b3376f281f/CLAUDE.md",
+    "sha256": "39f6208a46ed7eed03a63046bd75133286955c3105f1299e036a2c6e1972cf56",
+    "bytes": 3417,
+    "hangul": 945,
+    "hangul_ratio": 0.93,
+    "queries": [
+      "하지 마세요"
+    ],
+    "description": ""
+  },
+  {
+    "id": "skyfe79__ComposeStore",
+    "repo": "skyfe79/ComposeStore",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/skyfe79/ComposeStore/ce4796db1c32b0149dda5aacceb350d2a741e186/CLAUDE.md",
+    "sha256": "13807d0de6c8e8ed14ba8d93675c6d5982d778b202c58c2df1d9a79eb1bd2351",
+    "bytes": 6598,
+    "hangul": 553,
+    "hangul_ratio": 0.56,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": "A modern Swift state management library built on Apple's Observation framework."
+  },
+  {
+    "id": "soo-kate-yeon__framingui",
+    "repo": "soo-kate-yeon/framingui",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/soo-kate-yeon/framingui/fac263dd2b3ab394ff5a6496f62ec07c4a3e255c/CLAUDE.md",
+    "sha256": "0c161477248d26065e3e36ee98b197a9fe0f5ce6eb366d212b39e93249afcda8",
+    "bytes": 15613,
+    "hangul": 3506,
+    "hangul_ratio": 0.64,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": ""
+  },
+  {
+    "id": "teams-jh__give-me-the-money",
+    "repo": "teams-jh/give-me-the-money",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/teams-jh/give-me-the-money/44fd758a4b915dec8414a367585e80ae34bb6c5a/CLAUDE.md",
+    "sha256": "d473de304866999030fee0df23a0ff9ad830637dbaed2601e4bcd00fcbf5d395",
+    "bytes": 3223,
+    "hangul": 628,
+    "hangul_ratio": 0.58,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": ""
+  },
+  {
+    "id": "wnsgml7838__blog",
+    "repo": "wnsgml7838/blog",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/wnsgml7838/blog/30c4c6707e490f4234c06b1eb33c2512eb1ef002/CLAUDE.md",
+    "sha256": "cc53160d58205985e8c6520d99a7c89d5400276d004d2d57bb183067cb4689e0",
+    "bytes": 4871,
+    "hangul": 540,
+    "hangul_ratio": 0.68,
+    "queries": [
+      "하지 마세요"
+    ],
+    "description": ""
+  },
+  {
+    "id": "yarang__WebRTC-Lite",
+    "repo": "yarang/WebRTC-Lite",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/yarang/WebRTC-Lite/8e1fa6c14834585afe6b65ffe42a0ac85ba1ad63/CLAUDE.md",
+    "sha256": "d461f9216420b1e72cf3b42981d86f168b60fdad7a2a550a7fdf26bc93020f19",
+    "bytes": 14347,
+    "hangul": 3284,
+    "hangul_ratio": 0.62,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": ""
+  },
+  {
+    "id": "yarang__chatbot_ai_assistant_v2",
+    "repo": "yarang/chatbot_ai_assistant_v2",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/yarang/chatbot_ai_assistant_v2/d89d979f4b5bb7781c25d073d89f7983b1db93f9/CLAUDE.md",
+    "sha256": "839af2f617bfe5178123d48b5d3c97de5cc367db995e8196ce13dc2c458c6c2a",
+    "bytes": 14366,
+    "hangul": 3284,
+    "hangul_ratio": 0.62,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": ""
+  },
+  {
+    "id": "yarang__fastapi-error-code",
+    "repo": "yarang/fastapi-error-code",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/yarang/fastapi-error-code/99419694c41fd8775c1fe494148da4ac7ffac069/CLAUDE.md",
+    "sha256": "c001b94b9b2158833fa52af9830db4f75f439f9f081c7cafc103bbf5303a3ba3",
+    "bytes": 14366,
+    "hangul": 3284,
+    "hangul_ratio": 0.62,
+    "queries": [
+      "해야 합니다"
+    ],
+    "description": ""
+  },
+  {
+    "id": "yubina1004-collab__home",
+    "repo": "yubina1004-collab/home",
+    "path": "CLAUDE.md",
+    "stars": 0,
+    "pinned_url": "https://raw.githubusercontent.com/yubina1004-collab/home/bcc99ed585404a26014e51b8f9aa71ba763e0dbe/CLAUDE.md",
+    "sha256": "2477bb9fed5bb9384e19549e5c690e4a9819492e82829f814cbe2744f26624db",
+    "bytes": 3268,
+    "hangul": 787,
+    "hangul_ratio": 0.72,
+    "queries": [
+      "하지 마세요"
+    ],
+    "description": ""
+  }
+]

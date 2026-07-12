@@ -1,0 +1,620 @@
+[
+  {
+    "repo": "3dollar-in-my-pocket/3dollars-in-my-pocket-ios",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "Coinyak/oncology-ai-wiki",
+    "path": ".claude/CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "Dayoung3460/piou_fleur",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "DeukNet/DeukNet-BE",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "DmNote-App/DmNote",
+    "path": ".claude/CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "Insajin/autopus-adk",
+    "path": "CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "Jaedong95/AutoReport",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "Jason-hub-star/unityctl",
+    "path": "docs/internal/status-CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "JeonghunLee/local-ai-agent-mcp",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "Mineru98/architecture-study",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "Mineru98/architecture-study",
+    "path": "packages/react-headless/CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "Mineru98/fruit-game",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "NERDHEAD-lab/POE2-unofficial-launcher",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "Orbiters-dev/SE",
+    "path": "Claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "Seo-garden/PinIt",
+    "path": "Claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "Sungmin-Cho/skill-legal-kr",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "UnripePlum/nubjuk",
+    "path": "CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "UpstageAI/sw-maestro-project",
+    "path": "projects/team60-newspick/CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "agisw/wpa_claude",
+    "path": ".claude/CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "aquisto535/mind-palette-project",
+    "path": "CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "bagle-ggul/Bagel-Frontend",
+    "path": "claude.md",
+    "queries": [
+      "하지 마세요",
+      "금지"
+    ]
+  },
+  {
+    "repo": "bitjaru/codesyncer",
+    "path": "src/templates/ko/claude.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "boostcampwm-snu-2026-1/conveniencestore-YewonDanaLee",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "capitalparser/notebooklm-wiki-pipeline",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "cation98/bedrock-claude-admin",
+    "path": "container-image/config/CLAUDE.md.minimal",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "cerulean85/coplow",
+    "path": "co-biz-anlyzer/CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "cerulean85/coplow",
+    "path": "co-service-planner/CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "cerulean85/coplow",
+    "path": "co-ux-designer/CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "chan-wung/deckLog",
+    "path": "claude.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "chanwoo-lee-cw/crawling-recruit",
+    "path": "Claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "choisungwook/portfolio",
+    "path": "aws/codebuild/github_action/CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "choisungwook/portfolio",
+    "path": "kubernetes/gatewayAPI/CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "cmblir/Memex",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "coolhero/spec-kit-skills",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "derob98/ailmanac",
+    "path": "i18n/ko/docusaurus-plugin-content-docs/current/prompting/prompting-claude.mdx",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "derob98/ailmanac",
+    "path": "i18n/ko/docusaurus-plugin-content-docs/current/start-here/which-claude.mdx",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "devwinsoft/devian",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "diegosouzapw/OmniRoute",
+    "path": "docs/i18n/ko/CLAUDE.md",
+    "queries": [
+      "하지 마세요",
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "domafordarwin/obsidian",
+    "path": "5. Zettelkasten/00. Inbox/claude.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "duwlsssss/Promeet",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "ehdgurckdgnl/claude-nextjs-starterkit",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "hegunhee/Expense-Diary",
+    "path": "CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "hujii0711/ObsidianDevNote",
+    "path": "04. AI Native/04-03. 에이전틱 엔지니어링/01. 구성 요소/01. CLAUDE.md/01. CLAUDE.md.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "hypro2/hypro2.github.io",
+    "path": "_posts/2026-02-14-pieces_os_claude.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "jacking75/edu_claude_code",
+    "path": "claude-code-agent-workflow-principles-boris-cherny-claude.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "jojoldu/blog-code",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "junh0328/prepare_frontend_interview",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "kimsanguine/AI_PM",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "kjh0209/kevin-mini-otl",
+    "path": "CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "ku1207/new_quotation",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "leehydev/pagelet-api",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "lshdainty/porest-hr-front",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "miyo99/AI_Survey_practice",
+    "path": "Claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "modern-agile-team/modern-kit",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "moregorenine/moregorenine.github.io",
+    "path": "_posts/dev/2025-11-16-ubuntu-deployment-guide-claude.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "netwaif/multi-agent-starter",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "not-for-me/self-boost-8week-project",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "notadev-iamaura/meeting-transcriber",
+    "path": "CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "ongjin/garu",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "paradomi/tooktar",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "pinpoint-apm/pinpoint",
+    "path": "web-frontend/src/main/v3/.claude/CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "scpark98/Test_SCColorTheme",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "seilk/claude-code-docs",
+    "path": "08_CLAUDE.md설정.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "seokiis/2026_BNK_HACKATHON",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "seolcoding/humetro-ai-assistant",
+    "path": "docs/04_project_docs/guides/rag_implementation_claude.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "seungyeop-lee/easycmd",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "signspark/sistech-AI-Survey00",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "siontext/Harness-Marketplace",
+    "path": "templates/claude/CLAUDE.md.hbs",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "skr9877/couple-app-project",
+    "path": "CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "skyfe79/ComposeStore",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "solapi/solapi-nodejs",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "soo-kate-yeon/framingui",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "soulduse/ai-token-monitor",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "studioKjm/ai-harness-template",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "teams-jh/give-me-the-money",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "tokamak-network/tokamak-agent-teams",
+    "path": "templates/CLAUDE.md.template",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "treylom/claude-agent-teams-setup",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "ujajuck/mlcc_graph_poc",
+    "path": "claude.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "warizi/project-jarvis",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "whiteys1/LoL_AGENT",
+    "path": "CLAUDE.MD",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "wnsgml7838/blog",
+    "path": "CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "yarang/WebRTC-Lite",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "yarang/chatbot_ai_assistant_v2",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "yarang/fastapi-error-code",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "yas-zoa/risumari",
+    "path": "resources/project-CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  },
+  {
+    "repo": "yeonjulee1005/dewdew_v5",
+    "path": "CLAUDE.md",
+    "queries": [
+      "해야 합니다"
+    ]
+  },
+  {
+    "repo": "yhk1038/claude-code-gui-jetbrains",
+    "path": "CLAUDE.md",
+    "queries": [
+      "금지"
+    ]
+  },
+  {
+    "repo": "yubina1004-collab/home",
+    "path": "CLAUDE.md",
+    "queries": [
+      "하지 마세요"
+    ]
+  }
+]
