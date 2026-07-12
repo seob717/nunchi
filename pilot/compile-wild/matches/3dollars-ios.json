@@ -1,0 +1,147 @@
+{
+  "doc": "3dollars-ios",
+  "lang": "ko",
+  "judge": "llm:codex-1.0(gpt-5)",
+  "matches": [
+    {
+      "gold_id": "g1",
+      "output_rule": "run-make-project-before-xcodebuild",
+      "rationale": "Both are Bash rules triggered by an Xcode build and require running make project first."
+    },
+    {
+      "gold_id": "g5",
+      "output_rule": "no-direct-xcodeproj-edit",
+      "rationale": "Both block direct editing of generated .xcodeproj files with the Edit tool."
+    },
+    {
+      "gold_id": "g10",
+      "output_rule": "code-based-ui-only-no-storyboard-xib",
+      "rationale": "The Write trigger for storyboard or XIB creation targets the code-only UI requirement. It covers the code-based-UI clause but omits the compound requirement to use SnapKit for Auto Layout."
+    },
+    {
+      "gold_id": "g11",
+      "output_rule": "snapkit-leading-trailing-over-left-right",
+      "rationale": "Both target Edit operations that introduce left/right horizontal constraints in Swift and require leading/trailing instead."
+    },
+    {
+      "gold_id": "g12",
+      "output_rule": "designsystem-only-colors-fonts-icons",
+      "rationale": "Both are Edit rules targeting direct UI resource usage in Swift. The extraction explicitly detects direct UIColor and UIFont usage and is narrower than the gold rule's colors, fonts, icons, buttons, and similar resources."
+    },
+    {
+      "gold_id": "g16",
+      "output_rule": "network-naming-matches-server",
+      "rationale": "Both are Edit rules governing names of API, Repository, and Model-related declarations so they match server-defined names."
+    },
+    {
+      "gold_id": "g17",
+      "output_rule": "collectionviewcell-base-class",
+      "rationale": "Both are Write rules for new collection-view cell files and require BaseCollectionViewCell inheritance."
+    },
+    {
+      "gold_id": "g18",
+      "output_rule": "no-registerid-static-property",
+      "rationale": "Both block adding static registerId or reuseIdentifier properties to collection-view cells with Edit."
+    }
+  ],
+  "misses": [
+    {
+      "gold_id": "g2",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"Debug/Release 빌드용 스킴 이름 안내 — 참고 정보일 뿐 위반 가능한 규칙 아님\". No Bash rule enforces the Debug scheme."
+    },
+    {
+      "gold_id": "g3",
+      "category": "other",
+      "note": "Compiler self-reported skip: \"Debug/Release 빌드용 스킴 이름 안내 — 참고 정보일 뿐 위반 가능한 규칙 아님\". No Bash rule enforces the Release scheme."
+    },
+    {
+      "gold_id": "g4",
+      "category": "other",
+      "note": "The only SwiftLint extraction uses Edit, while the gold rule is Bash; same-tool matching is mandatory."
+    },
+    {
+      "gold_id": "g6",
+      "category": "other",
+      "note": "The ViewModel structure extraction uses Edit, while the gold rule is Write; same-tool matching is mandatory."
+    },
+    {
+      "gold_id": "g7",
+      "category": "other",
+      "note": "The ViewController pattern extraction uses Edit, while the gold rule is Write; same-tool matching is mandatory."
+    },
+    {
+      "gold_id": "g8",
+      "category": "structure",
+      "note": "No extracted Edit rule targets initializer injection of a ViewModel into a ViewController."
+    },
+    {
+      "gold_id": "g9",
+      "category": "structure",
+      "note": "No extracted Edit rule targets separating route handling into an extension."
+    },
+    {
+      "gold_id": "g13",
+      "category": "other",
+      "note": "The no-then extraction uses Edit, while the gold rule is Write; same-tool matching is mandatory."
+    },
+    {
+      "gold_id": "g14",
+      "category": "other",
+      "note": "The API structure extraction uses Edit, while the gold rule is Write; same-tool matching is mandatory."
+    },
+    {
+      "gold_id": "g15",
+      "category": "other",
+      "note": "The repository structure extraction uses Edit, while the gold rule is Write; same-tool matching is mandatory."
+    },
+    {
+      "gold_id": "g19",
+      "category": "other",
+      "note": "The UIKit-only extraction uses Edit, while the gold rule is Write; same-tool matching is mandatory."
+    }
+  ],
+  "unmatched_extracted": [
+    {
+      "output_rule": "run-swiftlint-after-code-changes",
+      "class": "gold-miss",
+      "note": "This is a real Edit-bindable requirement to run SwiftLint after Swift code changes, but gold contains only the Bash-side validation rule."
+    },
+    {
+      "output_rule": "viewmodel-structure-pattern",
+      "class": "gold-miss",
+      "note": "This is a real Edit-bindable ViewModel structure rule, whereas gold lists only its Write form."
+    },
+    {
+      "output_rule": "viewcontroller-mvvm-pattern",
+      "class": "gold-miss",
+      "note": "This is a real Edit-bindable BaseViewController/import Common rule, whereas gold lists only its Write form."
+    },
+    {
+      "output_rule": "no-then-library-in-new-code",
+      "class": "gold-miss",
+      "note": "This is a real Edit-bindable prohibition on introducing .then, whereas gold lists only its Write form."
+    },
+    {
+      "output_rule": "api-enum-requesttype-structure",
+      "class": "gold-miss",
+      "note": "This is a real Edit-bindable API structure rule, whereas gold lists only its Write form."
+    },
+    {
+      "output_rule": "repository-protocol-impl-structure",
+      "class": "gold-miss",
+      "note": "This is a real Edit-bindable repository structure rule, whereas gold lists only its Write form."
+    },
+    {
+      "output_rule": "commit-message-convention",
+      "class": "gold-miss",
+      "note": "The document explicitly requires feat/fix/docs-style commit-message conventions, and this is a real Bash-bindable rule omitted by gold."
+    },
+    {
+      "output_rule": "uikit-only-no-swiftui",
+      "class": "gold-miss",
+      "note": "This is a real Edit-bindable prohibition on importing SwiftUI, whereas gold lists only its Write form."
+    }
+  ],
+  "gold_amendments": []
+}

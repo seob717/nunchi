@@ -1,0 +1,58 @@
+{
+  "doc": "token-monitor",
+  "rules": [
+    {
+      "name": "conventional-commit-format",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "변경사항을 논리적 단위별로 나눠서 커밋 (conventional commit 형식)"
+    },
+    {
+      "name": "pr-target-main-branch",
+      "tool": "Bash",
+      "pattern": "gh\\s+pr\\s+create",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "현재 브랜치에서 main으로 PR 생성"
+    },
+    {
+      "name": "no-merge-before-ci-passes",
+      "tool": "Bash",
+      "pattern": "gh\\s+pr\\s+merge",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "PR 생성 직후 바로 머지하지 말 것 — 항상 CI 상태를 확인한 후 머지"
+    },
+    {
+      "name": "release-workflow-watch-status",
+      "tool": "Bash",
+      "pattern": "gh\\s+workflow\\s+run\\s+Release",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "릴리즈 워크플로우 실행 후 `gh run watch`로 상태 확인"
+    },
+    {
+      "name": "package-json-manual-version-sync",
+      "tool": "Edit",
+      "pattern": "package\\.json$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "로컬에서 수동 변경 시: `package.json` 수정 후 `node scripts/sync-version.mjs` 실행"
+    }
+  ],
+  "uncompilable": [
+    "릴리즈 키워드(패치/마이너/메이저 출시해줘) 매핑 표 — 채팅 메시지 키워드 트리거이며 특정 tool 호출에 바인딩되지 않음",
+    "결과 보고: PR URL + Release 워크플로우 상태 보고 — 특정 tool 호출에 묶이지 않는 보고 형식 지침",
+    "Release 트리거는 workflow_dispatch만 사용되고 main push로는 릴리스되지 않는다는 설명 — 시스템 동작 설명일 뿐 에이전트 행동 규칙이 아님",
+    "이미 main 브랜치에 있고 변경사항이 없으면 릴리즈만 실행 — 조건부 워크플로우 분기 로직으로 단일 tool 트리거로 표현 불가",
+    "Release 워크플로우가 자동으로 수행하는 단계(버전 bump, 체인지로그 생성, 커밋+태그+push, 빌드+릴리즈) 목록 — 시스템이 자동으로 하는 일에 대한 설명일 뿐 에이전트 행동 지침 아님",
+    "package.json의 version이 기준이며 sync 스크립트가 tauri.conf.json, Cargo.toml에 반영한다는 설명 — 사실 정보이며 행동 규칙 아님"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "doc": "dmnote",
+  "rules": [
+    {
+      "name": "agent-plan-before-code-edit",
+      "tool": "Edit",
+      "pattern": "\\.(rs|ts|tsx|js|jsx)$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "무조건 첫 번째 도구 호출로 `Skill` 도구를 사용하여 `/agent-plan`을 실행해야 합니다"
+    },
+    {
+      "name": "agent-plan-before-code-write",
+      "tool": "Write",
+      "pattern": "\\.(rs|ts|tsx|js|jsx)$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "이것은 이 프로젝트의 **절대 규칙**입니다: ... 구현 요청이면 → 즉시 `Skill(skill: \"agent-plan\", ...)`을 호출한다"
+    },
+    {
+      "name": "agent-review-before-final-commit",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "최종 커밋(작업 완료 커밋) 전에는 반드시 `/agent-review`를 실행한다 (절대 규칙)"
+    },
+    {
+      "name": "verify-before-commit",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "리뷰 요청 전에 검증을 먼저 통과시키고, 리뷰어에게는 도구가 못 잡는 로직/동작에 집중하도록 합니다."
+    }
+  ],
+  "uncompilable": [
+    "협업 상대가 외부 CLI가 아니라 자체 서브에이전트임을 밝히는 배경 설명 — 규칙이 아님",
+    "핵심 코드 수정은 메인 에이전트가 직접 수행하고 소넷 위임은 예외 조건 충족 시만 허용 — Agent 도구 위임 판단이라 Bash/Edit/Write로 트리거 불가",
+    "서브에이전트 모델 선택 가이드 표(opus/sonnet/model 생략 등 역할별 매핑) — 의무·금지·순서가 붙지 않은 사용 카탈로그",
+    "기계적 구현 위임 조건(패턴 완전 확정, worktree 격리, diff 직접 검수 등) — Agent 도구 위임에 관한 판단이라 트리거 불가",
+    "복잡한 로직에 TDD(Red-Green-Refactor) 방법론 적용 — '복잡한 로직' 여부가 주관적 판단이라 특정 파일/커맨드에 결정적으로 못 묶음",
+    "한 번에 모든 변경을 하지 않고 논리적 단위로 나눠 구현·커밋 — 일반적 작업 스타일 가이드",
+    "중간 단계의 /agent-review는 재량껏 결정 — 권고성이며 Agent 도구라 트리거 불가",
+    "커밋 메시지는 변경 내용에 맞게 작성하고 히스토리를 깔끔하게 유지 — 구체적 포맷 규칙이 없는 일반 스타일 가이드",
+    "최종 보고 시 변경 파일 목록·커밋 요약·리뷰 반영 여부·잔여 리스크 명시 — 도구 호출이 아닌 응답 포맷 가이드",
+    "버그 원인 추적 시 /agent-debug 사용 — 권고성 Agent 도구 사용 가이드, 트리거 불가",
+    "사소한 변경(오타/포맷팅/import 정리/번역)과 긴급 핫픽스는 plan·review 생략 가능 — 규칙 1·2의 예외 조건일 뿐 별도 트리거 액션이 아님"
+  ]
+}

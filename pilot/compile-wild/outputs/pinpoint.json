@@ -1,0 +1,47 @@
+{
+  "doc": "pinpoint",
+  "rules": [
+    {
+      "name": "no-direct-commit-to-master",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+commit",
+      "field": null,
+      "path": null,
+      "strength": "block",
+      "evidence": "master에는 절대 직접 커밋하지 않습니다."
+    },
+    {
+      "name": "qa-pr-before-commit",
+      "tool": "Bash",
+      "pattern": "git(\\s+-\\S+(\\s+\\S+)?)*\\s+(commit|push)",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "커밋/푸시 전에 반드시 `/qa-pr` 스킬을 실행하세요. QA 판정이 FAIL이면 커밋하지 마세요."
+    },
+    {
+      "name": "pinpoint-ui-deep-import-path",
+      "tool": "Edit",
+      "pattern": "from\\s+['\\\"]@pinpoint-fe/ui['\\\"]",
+      "field": "new_string",
+      "path": "\\.(ts|tsx)$",
+      "strength": "require-read",
+      "evidence": "`@pinpoint-fe/ui`의 임포트는 딥 패스 사용: `@pinpoint-fe/ui/src/constants`, `@pinpoint-fe/ui/src/hooks` 등"
+    },
+    {
+      "name": "lazy-load-new-page",
+      "tool": "Write",
+      "pattern": "apps/web/src/pages/(?!ServerMap)[^/]*\\.tsx$",
+      "field": null,
+      "path": null,
+      "strength": "require-read",
+      "evidence": "ServerMap(기본 라우트)을 제외한 모든 페이지는 `React.lazy()`로 지연 로딩"
+    }
+  ],
+  "uncompilable": [
+    "코드 스타일: Prettier 100자 너비/작은따옴표/후행 쉼표/세미콜론 규칙 — 도구가 자동 적용하는 일반 코드 스타일이라 특정 액션에 안 묶임",
+    "코드 스타일: ESLint flat config, TypeScript strict/ESNext 타겟, react-jsx 변환 — 일반 프로젝트 설정 설명이라 특정 액션에 안 묶임",
+    "아키텍처: 페이지→컴포넌트→훅 패턴 (페이지는 얇게, 로직은 packages/ui에) — 서술적 아키텍처 가이드로 특정 도구 호출에 안 묶임",
+    ".claude/ 리소스를 cwd에서 못 찾으면 상위 디렉토리로 올라가며 탐색하는 일반 검색 전략 — 특정 액션 트리거로 바인딩하기 어려움"
+  ]
+}
