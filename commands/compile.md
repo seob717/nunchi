@@ -30,7 +30,9 @@ A Bash rule's pattern matches against the command string; an Edit/Write rule's p
 
 ## 4. Decide strength
 - The default is `require-read` (block once per session with the rule as the reason, let the retry through — guarantees a read at the cost of one retry).
-- Only actions a document explicitly marks as "absolutely forbidden" get `block`.
+- Actions the document explicitly prohibits get `block`. **Judge by the speech act — advice, obligation, or prohibition — not by surface wording, in whatever language the document is written.** An imperative form can still be advice: "avoid barrel files" recommends, it does not ban. Calibration examples:
+  - Prohibition (`block`): "Never …", "Do NOT …" (en) · "절대 …하지 마세요", "…금지" (ko) · "絶対に〜しないでください" (ja) · "NUNCA …", "No uses …" (es)
+  - Recommendation (stays `require-read` or `inject`): "avoid …", "prefer …" (en) · "…은 피하세요", "…지양" (ko) · "〜は避けてください" (ja) · "Evita …", "prefiere …" (es)
 - Use `inject` for advisory rules where even one blocked attempt is overkill (style reminders, soft conventions): the rule is delivered alongside the tool call with zero friction, but compliance is left to the model's judgment rather than forced by a retry.
 
 ## 5. Generate rule files
