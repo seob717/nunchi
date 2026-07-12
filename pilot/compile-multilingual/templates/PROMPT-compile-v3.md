@@ -1,18 +1,19 @@
+# 컴파일 세션 프롬프트 v3 (sonnet 서브에이전트, 셀당 1개)
+
+DESIGN-edit-write-binding §2. PROMPT-compile-v2.md와 동일하되 §3만
+`commands/compile.md` 개정본(#16 처치, 이중 바인딩)으로 교체.
+플레이스홀더: `{DOC_PATH}`, `{DOC_ID}`.
+재시도 규칙: JSON 스키마 불일치 시 같은 프롬프트에 "Your previous output
+failed schema validation: <오류 1문장>"을 덧붙여 1회 재요청, 두 번째 출력 채택.
+
 ---
-description: Extract rules from CLAUDE.md and its referenced documents and compile them into trigger-bound rule files
-argument-hint: "[document path (omit for CLAUDE.md and all its @references)]"
----
 
-# /nunchi:compile
-
-Compile rules with the following procedure.
-
-## 1. Collect input
-- Argument: $ARGUMENTS
-- If an argument is given, read only that document; otherwise read the project CLAUDE.md and every `@path` document it references.
+You are benchmarking a rule-compilation instruction. Read the document at
+{DOC_PATH}, then extract rules from it by following the instructions below
+exactly (they are §2–§4 of the compiler spec).
 
 ## 2. Extract rules
-From each document, extract only rules that "are effective when recalled right before a specific action." Criteria:
+From the document, extract only rules that "are effective when recalled right before a specific action." Criteria:
 - Can it be tied to a specific tool call? (creating a PR, committing, editing a specific file, running a specific command)
 - General guidance that can't be tied to an action (tone, coding style at large) is **not a compilation target** — skip it and report it at the end as a list of "uncompilable rules."
 - **Tables, fenced code blocks, and list items are rule candidates on equal footing with prose.** A constraint doesn't stop being a rule because it sits in a table row or next to a code sample. But distinguish usage catalogs from constraints: a commands table that only lists what you *can* run is documentation, not a rule — it becomes a rule only when the document attaches an obligation, prohibition, or ordering to the action (must / never / before / after / only).
@@ -36,40 +37,14 @@ A Bash rule's pattern matches against the command string; an Edit/Write rule's p
   - Recommendation (stays `require-read` or `inject`): "avoid …", "prefer …" (en) · "…은 피하세요", "…지양" (ko) · "〜は避けてください" (ja) · "Evita …", "prefiere …" (es)
 - Use `inject` for advisory rules where even one blocked attempt is overkill (style reminders, soft conventions): the rule is delivered alongside the tool call with zero friction, but compliance is left to the model's judgment rather than forced by a retry.
 
-## 5. Generate rule files
-For each rule, create `.claude/rules/<kebab-case-name>.md`. If there is an original document, put its project-relative path in `source` and write only a **one-line summary** in the body. Two reasons, both hard requirements: the original is read at delivery time (so a pasted copy would drift), and Claude Code's native `.claude/rules/` loader injects the body at session start (so a long body would enter context twice — the body is the always-on declaration, the source is the JIT payload):
+Instead of generating rule files (later sections of the spec do not apply here), return the same information as pure JSON. Your final message must be ONLY this JSON object — no markdown fence, no commentary:
 
-**Recompiling over existing rules**: a rule file that already matches its source document is kept — but "matches the document" is not enough. Also check every kept rule against the current trigger guidance (content rules must carry `path:`; git patterns must allow global options). If a kept rule violates it, don't keep it silently: include it in the review table with a proposed upgraded trigger, marked as an upgrade.
+{
+  "doc": "{DOC_ID}",
+  "rules": [
+    {"name": "<short-kebab-case-name>", "tool": "Bash|Edit|Write", "pattern": "<python regex>", "field": null, "path": null, "strength": "block|require-read|inject", "evidence": "<short verbatim quote from the document grounding the strength decision>"}
+  ],
+  "uncompilable": ["one-line summary of each skipped non-action-bindable rule", "..."]
+}
 
-Filename convention: base the filename on the source document's filename in kebab-case (e.g. `docs/pr-rules.md` → `pr-rules.md`). If a single document yields multiple rules, append a content-based suffix to disambiguate (e.g. `pr-rules-title.md`, `pr-rules-reviewer.md`); a dual-bound pair (§3) disambiguates as `-edit` / `-write` (e.g. `no-console-log-edit.md`, `no-console-log-write.md`). If the resulting filename collides with an existing rule file, confirm with the user before overwriting it.
-
-```markdown
----
-name: pr-rules
-trigger:
-  tool: Bash
-  pattern: gh\s+pr\s+create
-source: docs/pr-rules.md
-strength: require-read
-enabled: true
----
-PR creation rules — title format, required sections, reviewer assignment.
-```
-
-## 5.5 Propose dropping covered `@references`
-
-If every rule extracted from an `@referenced` document was compiled (nothing from it landed in the uncompilable list), tell the user the `@path` line in CLAUDE.md can be removed: the document will then load just-in-time via the rule's `source` instead of at every session start (measured: `pilot/PROBE-context-economics.md`). If the document also produced uncompilable always-on guidance, do NOT propose removing it — say which part still needs the `@reference`.
-
-## 6. User review
-Show the list of generated rule files as a table (name / trigger / strength / source), and along with the list of uncompilable rules, ask "is there anything to fix?" An overly broad regex becomes a false positive, so scoping it conservatively narrow is the default.
-
-If the user requests a change, edit only the affected rule file(s) and show the table again for another round of review. If the user requests no changes, treat the compilation as complete.
-
-## 7. Closing lines
-If at least one generated rule has a `source` document, show a one-line before/after right after the review is settled — byte-based, with tokens only as a rough estimate (tokenizers differ):
-
-> always-on 컨텍스트: <sum of source doc bytes> → <sum of one-line rule bodies> (−N%), 상세 문서는 트리거 시에만 배달 — §5.5에서 @참조를 제거한 경우 기준.
-
-Only if at least one rule file was generated, end the final message with this single line (once — never repeat it later in the session):
-
-> Setup complete. If nunchi is useful, a ⭐ helps others find it: https://github.com/seob717/nunchi
+`field` and `path` stay null unless the rule needs them per §3. Every regex must compile under Python `re`. A dual-bound pair (§3) is two entries in `rules` — name them with `-edit` / `-write` suffixes.
