@@ -5,5 +5,7 @@ pilot/runs/
 !pilot/template/*.local.md
 .state/
 /docs/
+/.claude/*
+!/.claude/rules/
 pilot/compile-bench/corpus/
 pilot/compile-wild/corpus/
