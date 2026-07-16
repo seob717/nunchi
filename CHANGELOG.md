@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.2](https://github.com/seob717/nunchi/compare/v0.7.1...v0.7.2) (2026-07-16)
+
+
+### Features
+
+* compile 스킵 보고를 3분류로 — 절차는 스킬 후보로 라우팅 ([#20](https://github.com/seob717/nunchi/issues/20)) ([#22](https://github.com/seob717/nunchi/issues/22)) ([c667db0](https://github.com/seob717/nunchi/commit/c667db0d48c48b7543df832ec1dca8e6e396d126))
+* 룰 원본 문서 변경·신설의 재컴파일 신호 추가 ([#17](https://github.com/seob717/nunchi/issues/17)) ([#18](https://github.com/seob717/nunchi/issues/18)) ([6757550](https://github.com/seob717/nunchi/commit/67575502c00463605cd75633d16a9cc4da63b256))
+* 중복 배달 축약 — block 재매칭·공유 source는 본문+기배달 참조만 ([#23](https://github.com/seob717/nunchi/issues/23)) ([#24](https://github.com/seob717/nunchi/issues/24)) ([fc0e4ac](https://github.com/seob717/nunchi/commit/fc0e4ac91f90d555ce09371d011d9676e88550cc))
+
+
+### Docs
+
+* README 비교 표·FAQ에 Claude Code Skills 추가 ([#19](https://github.com/seob717/nunchi/issues/19)) ([#21](https://github.com/seob717/nunchi/issues/21)) ([4d608b2](https://github.com/seob717/nunchi/commit/4d608b24c1d0575b0a5c4ab4f1c0cbcc583a6e75))
+
 ## [0.7.1](https://github.com/seob717/nunchi/compare/v0.7.0...v0.7.1) (2026-07-13)
 
 
