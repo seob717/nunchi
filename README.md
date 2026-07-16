@@ -77,6 +77,14 @@ A rule you write in CLAUDE.md is loaded once, at t=0 when the session starts, an
 
 ## Rule file format
 
+Compilation, end to end — this line in your CLAUDE.md:
+
+```markdown
+All PRs follow the checklist in @docs/pr-rules.md.
+```
+
+becomes `.claude/rules/pr-rules.md`, bound to the action it governs:
+
 ```markdown
 ---
 name: pr-rules
@@ -120,7 +128,26 @@ Changes to a rule's *content* need nothing from you — the `source` document is
 
 The one gap none of these catch is trigger drift with no document change at all (the team switches `gh` → `glab` and the PR rules doc never mentions tooling) — that surfaces as a dead rule in `/nunchi:report` (delivered 0 times), which is why the report flags never-triggered rules.
 
+## Command reference
+
+| Command | Purpose | Argument |
+|---|---|---|
+| `/nunchi:compile` | Extract rules from CLAUDE.md and its `@referenced` documents; write trigger-bound `.claude/rules/*.md`. Skipped content is reported too, split into skill candidates (procedures) and always-on guidance (stays in CLAUDE.md). | Optional document path — recompile just that one document (this is the command the edit-time reminder names). |
+| `/nunchi:report` | Aggregate the delivery log into a table: per-rule delivery counts, dead (never-triggered) rules, recompile candidates, and the estimated context savings for your repo. | None. |
+
 ## Measured results
+
+Every claim in this section is measured; designs and raw results are preserved in `pilot/` so they can be re-run. The map — each row is a rearrangement of the detail paragraphs below, not a new claim:
+
+| Experiment | Headline result | Details |
+|---|---|---|
+| JIT delivery E2E (5 conditions) | nunchi 3/3 all-pass; a block that withholds the reason (hookify block) 0/3 | table just below |
+| Pressure re-verification (24 rules, ~268KB context) | baseline ceiling held (40/40) — comparison gate not met, so no superiority claim | `pilot/RESULTS-pressure.md` |
+| Compaction pressure | first observed baseline violation (2/3 all-pass) — gate still not met; re-arm worked 3/3 | `pilot/RESULTS-compaction.md` |
+| Compaction follow-up | baseline violation rate 1/12 (~8%); re-arm survives double compaction (2/2) | `pilot/RESULTS-compaction-followup.md` |
+| Context economics | −42.5% prompt tokens at session start (79,683 → 45,808) | `pilot/PROBE-context-economics.md` |
+| Compile benchmark (12 wild CLAUDE.md files) | 100% valid format, zero fabricated rules, 35% micro-recall (measured, not hidden) | `pilot/RESULTS-compile-bench.md`, `pilot/RESULTS-compile-recall.md` |
+| Multilingual compile (ko/ja/es) | no degradation vs. English; strength agreement 61% → 82%, wild Korean 88% | `pilot/RESULTS-compile-multilingual.md`, `pilot/RESULTS-strength-guidance.md`, `pilot/RESULTS-compile-wild-ko.md` |
 
 Measurement harness: a sandbox repo + a mock `gh` (captures PRs) + 4 machine-gradable PR rules + headless `claude -p` (sonnet), 3 runs per condition. (The full harness is preserved in the `pilot/` directory so it can be re-run.)
 
@@ -202,6 +229,8 @@ uvx pre-commit run --all-files # lint & format (ruff)
 ## Contributing
 
 Issues and PRs are welcome. Commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, …) — [release-please](https://github.com/googleapis/release-please) derives versions and the changelog from them.
+
+This repository dogfoods nunchi: its own issue and PR rules live in `.claude/rules/` and are delivered by the hook the moment you run `gh issue create` or `gh pr create` — you don't need to memorize them first.
 
 README translations are welcome too — this English README is canonical, and translations (e.g. [README.ko.md](README.ko.md)) are snapshots synced at release time, with the base commit noted at the top.
 
