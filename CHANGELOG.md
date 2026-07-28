@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.5](https://github.com/seob717/nunchi/compare/v0.7.4...v0.7.5) (2026-07-28)
+
+
+### Docs
+
+* 훅 오버헤드 수치를 실측으로 교체 — 측정 harness 추가 ([#44](https://github.com/seob717/nunchi/issues/44)) ([7a18c1c](https://github.com/seob717/nunchi/commit/7a18c1c35f07d8b9cded2be7f99cf88dcf1c8d85))
+
 ## [0.7.4](https://github.com/seob717/nunchi/compare/v0.7.3...v0.7.4) (2026-07-16)
 
 
