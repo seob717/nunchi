@@ -215,7 +215,7 @@ The table below is a **scope map, not a scoreboard** — an empty cell or a "by 
 
 ² Skills are model-invoked: the model matches the request against each skill's description. Nothing binds a skill to a tool call, and nothing forces it to fire before an action — invocation rides on the model's judgment, and the [official docs](https://code.claude.com/docs/en/skills) point to hooks when a guarantee is needed. See the FAQ entry above.
 
-Hook overhead, measured: ~24ms median per tool call (26ms when a rule is delivered). Rows verified against each tool's source or official docs as of July 2026 — corrections welcome via issue.
+Hook overhead, measured ([`pilot/PROBE-hook-overhead.md`](pilot/PROBE-hook-overhead.md)): nunchi adds a median of ~20ms per tool call on top of the ~36ms of Python interpreter startup that any command hook pays — ~56ms end to end. The matching logic itself is under 1ms, and whether a rule is delivered makes no measurable difference. Rows verified against each tool's source or official docs as of July 2026 — corrections welcome via issue.
 
 Credit where due: hookify pioneered markdown-frontmatter rules on Claude Code hooks and covers more hook events (PostToolUse, Stop, UserPromptSubmit); Skills are the right home for procedures — progressive disclosure at ~100 tokens per skill plus execution controls (`allowed-tools`, model/effort overrides, forked context) that nunchi doesn't have; Ruler and rulesync solve cross-agent distribution properly; Writ explores semantic retrieval-based delivery. nunchi's niche is deliberately narrow: deterministic, action-triggered delivery with delivery-state tracking — and only measured claims.
 
